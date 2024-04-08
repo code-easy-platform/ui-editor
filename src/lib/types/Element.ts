@@ -6,7 +6,8 @@ type THtml = {
   tag: IObservable<string>;
   type: IObservable<'html'>;
   children: IObservable<TElement[] | undefined>;
-  attributes: IObservable<Record<string, IObservable<string | number>> | undefined>;
+  style: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
+  attributes: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
 };
 
 type TSlot = {

@@ -1,10 +1,11 @@
 import { IObservable } from 'react-observing';
+import { DragAndDropProvider } from "react-use-drag-and-drop";
 
 import { InsertBarContextProvider } from './components/insert-bar';
-import { TComponent, TElement, TStyle } from './types';
-import { UIEditorContent } from './UiEditorContent';
 import { SelectBarContextProvider } from './components/select-bar';
 import { HoverBarContextProvider } from './components/hover-bar';
+import { TComponent, TElement, TStyle } from './types';
+import { UIEditorContent } from './UiEditorContent';
 
 
 interface IUIEditorProps {
@@ -16,12 +17,14 @@ interface IUIEditorProps {
 }
 export const UIEditor = (props: IUIEditorProps) => {
   return (
-    <InsertBarContextProvider>
-      <SelectBarContextProvider>
-        <HoverBarContextProvider>
-          <UIEditorContent {...props} />
-        </HoverBarContextProvider>
-      </SelectBarContextProvider>
-    </InsertBarContextProvider>
+    <DragAndDropProvider>
+      <InsertBarContextProvider>
+        <SelectBarContextProvider>
+          <HoverBarContextProvider>
+            <UIEditorContent {...props} />
+          </HoverBarContextProvider>
+        </SelectBarContextProvider>
+      </InsertBarContextProvider>
+    </DragAndDropProvider>
   );
 }

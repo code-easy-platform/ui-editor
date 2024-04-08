@@ -2,7 +2,7 @@ import { TElement } from '../../../types';
 
 
 interface IEditProps {
-  element: TElement;
+  element: TElement<'slot'>;
   parents: TElement[];
 }
 export const Edit = ({ element, parents }: IEditProps) => {

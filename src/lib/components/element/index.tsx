@@ -15,22 +15,33 @@ export const Element = ({ element, parents }: IElementProps) => {
 
   if (type === 'component') return (
     <Component
-      element={element}
       parents={parents}
+      element={element as TElement<'component'>}
     />
   );
 
   if (type === 'slot') return (
     <Slot
-      element={element}
       parents={parents}
+      element={element as TElement<'slot'>}
     />
   );
 
   return (
     <Html
-      element={element}
       parents={parents}
+      element={element as TElement<'html'>}
+
+      onDrop={() => { }}
+      onDragOver={() => { }}
+      onDragLeave={() => { }}
+
+      onSelect={() => { }}
+      onMouseOver={() => { }}
+      onMouseLeave={() => { }}
+
+      onHoverBar={() => { }}
+      onSelectBar={() => { }}
     />
   );
 };

@@ -17,16 +17,43 @@ export const App = () => {
         {
           id: observe('123'),
           type: observe('html'),
-          children: observe([]),
           tag: observe('button'),
-          attributes: observe(undefined),
+          style: observe(undefined),
+          attributes: observe([
+            { name: observe('hidden'), value: observe(false) },
+          ]),
+          children: observe([
+            {
+              tag: observe('a'),
+              id: observe('546'),
+              type: observe('html'),
+              style: observe(undefined),
+              children: observe(undefined),
+              attributes: observe([
+                { name: observe('text'), value: observe('button') },
+              ]),
+            },
+          ]),
         },
         {
           id: observe('456'),
           type: observe('html'),
-          children: observe([]),
           tag: observe('button'),
-          attributes: observe(undefined),
+          children: observe(undefined),
+          attributes: observe([
+            { name: observe('text'), value: observe('Clique me!') },
+          ]),
+          style: observe([
+            { name: observe('border'), value: observe('none') },
+            { name: observe('padding'), value: observe('8px') },
+            { name: observe('paddingLeft'), value: observe('16px') },
+            { name: observe('paddingRight'), value: observe('16px') },
+            { name: observe('margin'), value: observe('8px') },
+            { name: observe('borderRadius'), value: observe('4px') },
+            { name: observe('backgroundColor'), value: observe('green') },
+            { name: observe('color'), value: observe('white') },
+            { name: observe('boxShadow'), value: observe('0 0 1px 0px black') },
+          ]),
         },
       ]),
     };

@@ -5,7 +5,7 @@ import { View } from './View';
 
 
 interface ISlotProps {
-  element: TElement;
+  element: TElement<'slot'>;
   parents: TElement[];
 }
 export const Slot = ({ element, parents }: ISlotProps) => {

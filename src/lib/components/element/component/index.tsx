@@ -5,7 +5,7 @@ import { View } from './View';
 
 
 interface IComponentProps {
-  element: TElement;
+  element: TElement<'component'>;
   parents: TElement[];
 }
 export const Component = ({ element, parents }: IComponentProps) => {
