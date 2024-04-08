@@ -23,6 +23,9 @@ export const useHoverBar = () => {
 
 
   return {
+    hoveredId: context.id,
+    hover: context.onHover,
+
     updateHoverBarGetPosition: handleHover,
     updateHoverBarScroll: handleUpdateScroll,
     updateHoverBarPlaygroundSize: handleUpdatePlaygroundSize,

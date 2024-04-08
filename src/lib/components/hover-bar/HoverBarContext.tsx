@@ -1,4 +1,4 @@
-import { createContext, useRef } from "react";
+import { createContext, useEffect, useRef } from "react";
 import { IObservable, observe } from 'react-observing';
 
 
@@ -15,20 +15,33 @@ interface HoverBarContextProps {
   documentVerticalScroll: IObservable<number>;
 
   getPosition: IObservable<undefined | TGetPosition>;
+
+  id: IObservable<undefined | string>;
+  onHover: (id: string | undefined) => void;
 }
 export const HoverBarContext = createContext({} as HoverBarContextProps);
 
 interface IHoverBarContextProviderProps {
   children: React.ReactNode;
+  id: IObservable<string | undefined>;
+  onHover: (id: string | undefined) => void;
 }
-export const HoverBarContextProvider = ({ children }: IHoverBarContextProviderProps) => {
+export const HoverBarContextProvider = ({ children, id, onHover }: IHoverBarContextProviderProps) => {
   const store = useRef<HoverBarContextProps>({
     documentHorizontalScroll: observe(0),
     playgroundSize: observe(undefined),
     documentVerticalScroll: observe(0),
 
     getPosition: observe(undefined),
+    onHover,
+    id,
   });
+
+
+  useEffect(() => {
+    store.current.id = id;
+  }, [id]);
+
 
   return (
     <HoverBarContext.Provider value={store.current}>

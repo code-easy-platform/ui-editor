@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { IObservable, observe } from 'react-observing';
+import { observe } from 'react-observing';
 
 import { TElement } from 'ui-editor/src/lib/types';
 import { UIEditor } from 'ui-editor/src';
@@ -8,6 +8,8 @@ import './../styles.css';
 
 
 export const App = () => {
+  const hoveredId = useMemo(() => observe<string | undefined>(undefined), []);
+  const selectedId = useMemo(() => observe<string | undefined>(undefined), []);
 
   const values = useMemo(() => {
     return {
@@ -79,6 +81,11 @@ export const App = () => {
             styles={values.styles}
             onKeyDown={console.log}
             components={values.components}
+
+            hoveredId={hoveredId}
+            selectedId={selectedId}
+            onHover={(...rest) => console.log(rest)}
+            onSelect={(...rest) => console.log(rest)}
           />
         </div>
       </div>

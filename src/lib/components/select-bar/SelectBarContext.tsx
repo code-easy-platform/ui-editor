@@ -1,4 +1,4 @@
-import { createContext, useRef } from "react";
+import { createContext, useEffect, useRef } from "react";
 import { IObservable, observe } from 'react-observing';
 
 
@@ -15,20 +15,33 @@ interface SelectBarContextProps {
   documentVerticalScroll: IObservable<number>;
 
   getPosition: IObservable<undefined | TGetPosition>;
+
+  id: IObservable<undefined | string>;
+  onSelect: (id: string | undefined) => void;
 }
 export const SelectBarContext = createContext({} as SelectBarContextProps);
 
 interface ISelectBarContextProviderProps {
   children: React.ReactNode;
+  id: IObservable<string | undefined>;
+  onSelect: (id: string | undefined) => void;
 }
-export const SelectBarContextProvider = ({ children }: ISelectBarContextProviderProps) => {
+export const SelectBarContextProvider = ({ children, id, onSelect }: ISelectBarContextProviderProps) => {
   const store = useRef<SelectBarContextProps>({
     documentHorizontalScroll: observe(0),
     playgroundSize: observe(undefined),
     documentVerticalScroll: observe(0),
 
     getPosition: observe(undefined),
+    onSelect,
+    id,
   });
+
+
+  useEffect(() => {
+    store.current.id = id;
+  }, [id]);
+
 
   return (
     <SelectBarContext.Provider value={store.current}>

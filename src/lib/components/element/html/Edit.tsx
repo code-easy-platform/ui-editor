@@ -6,6 +6,7 @@ import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
 import { useElementAttributes } from './UseElementAttributes';
 import { TDraggableElement, TElement } from '../../../types';
 import { getCustomDragLayer } from '../../../helpers';
+import { useInsertBar } from '../../insert-bar';
 import { DynamicTag } from './DynamicTag';
 import { Element } from '..';
 
@@ -37,6 +38,9 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const id = useObserverValue(element.id);
 
 
+  const { hideInsertBar } = useInsertBar();
+
+
   const elementChildren = useMemo(() => {
     if ((!children || children.length === 0) && Object.keys(elementSpecialProps).includes('text')) {
       return elementSpecialProps.text;
@@ -60,12 +64,13 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     id,
     canDrag: true,
     element: elementRef,
-    start: () => {/* showOutline() */ },
-    end: () => { /* hideInsertBar(); hideOutline(); */ },
+    end: () => hideInsertBar(),
     data: {
-
+      get(newParent, newBaseParent) {
+        return { element: newParent, parent: newBaseParent };
+      },
     },
-  }, [id]);
+  }, [id, hideInsertBar]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer('name dynamic here'),

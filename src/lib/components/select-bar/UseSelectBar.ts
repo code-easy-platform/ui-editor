@@ -23,6 +23,9 @@ export const useSelectBar = () => {
 
 
   return {
+    selectedId: context.id,
+    select: context.onSelect,
+
     updateSelectBarGetPosition: handleSelect,
     updateSelectBarScroll: handleUpdateScroll,
     updateSelectBarPlaygroundSize: handleUpdatePlaygroundSize,

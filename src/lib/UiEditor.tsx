@@ -14,13 +14,18 @@ interface IUIEditorProps {
   components: IObservable<TComponent[]>;
 
   onKeyDown: (event: KeyboardEvent) => void
+  onHover: (id: string | undefined) => void;
+  onSelect: (id: string | undefined) => void;
+
+  hoveredId: IObservable<string | undefined>;
+  selectedId: IObservable<string | undefined>;
 }
 export const UIEditor = (props: IUIEditorProps) => {
   return (
     <DragAndDropProvider>
       <InsertBarContextProvider>
-        <SelectBarContextProvider>
-          <HoverBarContextProvider>
+        <SelectBarContextProvider id={props.selectedId} onSelect={props.onSelect}>
+          <HoverBarContextProvider id={props.hoveredId} onHover={props.onHover}>
             <UIEditorContent {...props} />
           </HoverBarContextProvider>
         </SelectBarContextProvider>
