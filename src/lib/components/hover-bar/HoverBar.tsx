@@ -12,7 +12,7 @@ interface HoverBarProps {
 export const HoverBar: React.FC<HoverBarProps> = memo(({ zIndex = 0, top = -1000, left = -1000, width = 0, height = 0, color = '#4a87ee' }) => {
   return (
     <div
-      data-hoverBar
+      data-hover
       style={{
         top,
         left,

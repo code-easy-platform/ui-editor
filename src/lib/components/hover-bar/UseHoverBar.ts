@@ -8,8 +8,12 @@ export const useHoverBar = () => {
   const context = useContext(HoverBarContext);
 
 
-  const handleHover = useCallback((getPosition: TGetPosition) => {
-    set(context.getPosition, getPosition);
+  const handleHover = useCallback((id: string | undefined) => {
+    if (context.id.value !== id) context.onHover(id);
+  }, [context.id, context.getPosition]);
+
+  const handleUpdateGetPositionHover = useCallback((getPosition: TGetPosition) => {
+    set(context.getPosition, () => getPosition);
   }, [context.getPosition]);
 
   const handleUpdateScroll = useCallback((y: number, x: number) => {
@@ -23,11 +27,11 @@ export const useHoverBar = () => {
 
 
   return {
+    hover: handleHover,
     hoveredId: context.id,
-    hover: context.onHover,
 
-    updateHoverBarGetPosition: handleHover,
     updateHoverBarScroll: handleUpdateScroll,
+    updateHoverBarGetPosition: handleUpdateGetPositionHover,
     updateHoverBarPlaygroundSize: handleUpdatePlaygroundSize,
 
     hoverBarGetPosition: context.getPosition,

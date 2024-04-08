@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import { IObservable, useObserverValue } from 'react-observing';
 
-import { ContentFrame } from './components/custom-frame/ContentFrame';
-import { CustomFrame } from './components/custom-frame/CustomFrame';
 import { SelectBarWrapper, useSelectBar } from './components/select-bar';
+import { ContentFrame } from './components/custom-frame/ContentFrame';
 import { HoverBarWrapper, useHoverBar } from './components/hover-bar';
+import { CustomFrame } from './components/custom-frame/CustomFrame';
 import { TComponent, TElement, TStyle } from './types';
 import { InsertBar } from './components/insert-bar';
 import { Element } from './components/element';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { observe } from 'react-observing';
+import { observe, set } from 'react-observing';
 
 import { TElement } from 'ui-editor/src/lib/types';
 import { UIEditor } from 'ui-editor/src';
@@ -84,8 +84,8 @@ export const App = () => {
 
             hoveredId={hoveredId}
             selectedId={selectedId}
-            onHover={(...rest) => console.log(rest)}
-            onSelect={(...rest) => console.log(rest)}
+            onHover={id => set(hoveredId, id)}
+            onSelect={id => set(selectedId, id)}
           />
         </div>
       </div>

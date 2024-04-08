@@ -1,21 +1,26 @@
 import { memo, useMemo } from "react";
-import { useObserver } from "react-observing";
+import { useObserverValue } from "react-observing";
 
+import { useSelectBar } from '../select-bar';
 import { useHoverBar } from './UseHoverBar';
 import { HoverBar } from "./HoverBar";
 
 
 export const HoverBarWrapper: React.FC = memo(() => {
   const {
+    hoveredId: hoveredIdObservable,
     hoverBarGetPosition: hoverBarGetPositionObserver,
     hoverBarDocumentVerticalScroll: documentVerticalScrollObserver,
     hoverBarDocumentHorizontalScroll: documentHorizontalScrollObserver,
   } = useHoverBar();
+  const { selectedId: selectedIdObservable } = useSelectBar();
 
 
-  const [documentHorizontalScroll] = useObserver(documentHorizontalScrollObserver);
-  const [documentVerticalScroll] = useObserver(documentVerticalScrollObserver);
-  const [getPosition] = useObserver(hoverBarGetPositionObserver);
+  const documentHorizontalScroll = useObserverValue(documentHorizontalScrollObserver);
+  const documentVerticalScroll = useObserverValue(documentVerticalScrollObserver);
+  const getPosition = useObserverValue(hoverBarGetPositionObserver);
+  const selectedId = useObserverValue(selectedIdObservable);
+  const hoveredId = useObserverValue(hoveredIdObservable);
 
 
   const { width, height, top, left } = useMemo(() => {
@@ -35,14 +40,14 @@ export const HoverBarWrapper: React.FC = memo(() => {
   }, [documentHorizontalScroll, documentVerticalScroll, getPosition]);
 
 
-  if (!getPosition) return null;
+  if (!hoveredId || hoveredId === selectedId) return null;
 
   return (
     <HoverBar
       zIndex={1}
-      top={top}
-      left={left}
+      top={top - 1}
       width={width}
+      left={left - 1}
       height={height}
       color="#ed8b5f"
     />

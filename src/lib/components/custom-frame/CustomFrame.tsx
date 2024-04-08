@@ -36,7 +36,7 @@ export const CustomFrame = ({ children, styles, draggingHover, resetBody, onClic
             `html${draggingHover ? '' : ':hover'} body .frame-content *, html:focus body .frame-content * {`,
             `  outline: thin solid #80808050;`,
             `}`,
-            `[data-focusbar="true"], [data-focusbar="true"] * {`,
+            `[data-hover="true"], [data-select="true"] * {`,
             `  outline: none!important;`,
             `}`,
             `body {`,

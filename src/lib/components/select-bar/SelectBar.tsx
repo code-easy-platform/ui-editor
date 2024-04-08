@@ -29,7 +29,7 @@ export const SelectBar: React.FC<SelectBarProps> = memo(({ children, zIndex = 0,
 
   return (
     <div
-      data-hoverBar
+      data-select
       style={{
         top,
         left,

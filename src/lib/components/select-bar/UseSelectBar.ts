@@ -8,8 +8,12 @@ export const useSelectBar = () => {
   const context = useContext(SelectBarContext);
 
 
-  const handleSelect = useCallback((getPosition?: TGetPosition) => {
-    set(context.getPosition, getPosition);
+  const handleSelect = useCallback((id: string | undefined) => {
+    if (context.id.value !== id) context.onSelect(id);
+  }, [context.id, context.getPosition]);
+
+  const handleUpdateSelectGetPosition = useCallback((getPosition?: TGetPosition) => {
+    set(context.getPosition, () => getPosition);
   }, [context.getPosition]);
 
   const handleUpdateScroll = useCallback((y: number, x: number) => {
@@ -23,11 +27,11 @@ export const useSelectBar = () => {
 
 
   return {
+    select: handleSelect,
     selectedId: context.id,
-    select: context.onSelect,
 
-    updateSelectBarGetPosition: handleSelect,
     updateSelectBarScroll: handleUpdateScroll,
+    updateSelectBarGetPosition: handleUpdateSelectGetPosition,
     updateSelectBarPlaygroundSize: handleUpdatePlaygroundSize,
 
     selectBarGetPosition: context.getPosition,

@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { useObserver } from "react-observing";
+import { useObserverValue } from "react-observing";
 
 import { useSelectBar } from './UseSelectBar';
 import { SelectBar } from "./SelectBar";
@@ -7,15 +7,17 @@ import { SelectBar } from "./SelectBar";
 
 export const SelectBarWrapper: React.FC = memo(() => {
   const {
+    selectedId: selectedIdObservable,
     selectBarGetPosition: selectBarGetPositionObserver,
     selectBarDocumentVerticalScroll: documentVerticalScrollObserver,
     selectBarDocumentHorizontalScroll: documentHorizontalScrollObserver,
   } = useSelectBar();
 
 
-  const [documentHorizontalScroll] = useObserver(documentHorizontalScrollObserver);
-  const [documentVerticalScroll] = useObserver(documentVerticalScrollObserver);
-  const [getPosition] = useObserver(selectBarGetPositionObserver);
+  const documentHorizontalScroll = useObserverValue(documentHorizontalScrollObserver);
+  const documentVerticalScroll = useObserverValue(documentVerticalScrollObserver);
+  const getPosition = useObserverValue(selectBarGetPositionObserver);
+  const selectedId = useObserverValue(selectedIdObservable);
 
 
   const { width, height, top, left } = useMemo(() => {
@@ -35,16 +37,16 @@ export const SelectBarWrapper: React.FC = memo(() => {
   }, [documentHorizontalScroll, documentVerticalScroll, getPosition]);
 
 
-  if (!getPosition) return null;
+  if (!selectedId) return null;
 
   return (
     <SelectBar
       zIndex={1}
-      top={top}
-      left={left}
+      top={top - 1}
       width={width}
       height={height}
-      color="#ed8b5f"
+      left={left - 1}
+      color="blue"
     />
   );
 });

@@ -1,12 +1,14 @@
 import { MouseEvent, RefObject, useEffect, useMemo, useRef, useState } from 'react';
-import { TMonitor, useDrag } from 'react-use-drag-and-drop';
+import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
 import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
 import { useElementAttributes } from './UseElementAttributes';
 import { TDraggableElement, TElement } from '../../../types';
-import { getCustomDragLayer } from '../../../helpers';
+import { getCustomDragLayer, uuid } from '../../../helpers';
+import { useSelectBar } from '../../select-bar';
 import { useInsertBar } from '../../insert-bar';
+import { useHoverBar } from '../../hover-bar';
 import { DynamicTag } from './DynamicTag';
 import { Element } from '..';
 
@@ -37,8 +39,38 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const tag = useObserverValue(element.tag);
   const id = useObserverValue(element.id);
 
-
   const { hideInsertBar } = useInsertBar();
+  const { selectedId, select } = useSelectBar();
+  const { hoveredId, hover } = useHoverBar();
+
+
+  useEffect(() => {
+    if (hoveredId.value === id) {
+      onHoverBar(element, elementRef.current);
+    }
+
+    const subscription = hoveredId.subscribe((hoveringId) => {
+      if (hoveringId === undefined) return hover(undefined);
+      if (hoveringId !== id) return;
+
+      onHoverBar(element, elementRef.current);
+    });
+    return () => subscription.unsubscribe();
+  }, [id, hoveredId, element, hover]);
+
+  useEffect(() => {
+    if (selectedId.value === id) {
+      onSelectBar(element, elementRef.current);
+    }
+
+    const subscription = selectedId.subscribe((selectedId) => {
+      if (selectedId === undefined) return select(undefined);
+      if (selectedId !== id) return;
+
+      onSelectBar(element, elementRef.current);
+    });
+    return () => subscription.unsubscribe();
+  }, [element, id, selectedId, select]);
 
 
   const elementChildren = useMemo(() => {
@@ -77,6 +109,15 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
       (customDragLayer) => customDragLayer.remove(),
     );
   }, [preview]);
+
+  const droppableId = useRef({ id: uuid() });
+  useDrop({
+    element: elementRef,
+    id: droppableId.current.id,
+    drop: (data, monitor) => onDrop(data, monitor, element, parents, elementRef, droppableId.current.id),
+    hover: (data, monitor) => onDragOver(data, monitor, element, parents, elementRef, droppableId.current.id),
+    leave: (data, monitor) => onDragLeave(data, monitor, element, parents, elementRef, droppableId.current.id),
+  }, [element, parents, onDrop, onDragOver, onDragLeave]);
 
 
   return (

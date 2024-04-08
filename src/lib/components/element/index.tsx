@@ -16,8 +16,8 @@ interface IElementProps {
 export const Element = ({ element, parents }: IElementProps) => {
   const type = useObserverValue(element.type);
 
-  const { select } = useSelectBar();
-  const { hover } = useHoverBar();
+  const { select, updateSelectBarGetPosition } = useSelectBar();
+  const { hover, updateHoverBarGetPosition } = useHoverBar();
 
 
   const handleSelect = useCallback((event: React.MouseEvent, element: TElement) => {
@@ -48,6 +48,25 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [hover]);
 
 
+  const handleHoverBar = useCallback((_: TElement, htmlElement: HTMLElement | null) => {
+    updateHoverBarGetPosition(() => ({
+      top: htmlElement?.offsetTop || 0,
+      left: htmlElement?.offsetLeft || 0,
+      width: htmlElement?.getBoundingClientRect().width || 0,
+      height: htmlElement?.getBoundingClientRect().height || 0,
+    }));
+  }, [updateHoverBarGetPosition]);
+
+  const handleSelectBar = useCallback((_: TElement, htmlElement: HTMLElement | null) => {
+    updateSelectBarGetPosition(() => ({
+      top: htmlElement?.offsetTop || 0,
+      left: htmlElement?.offsetLeft || 0,
+      width: htmlElement?.getBoundingClientRect().width || 0,
+      height: htmlElement?.getBoundingClientRect().height || 0,
+    }));
+  }, [updateSelectBarGetPosition]);
+
+
   if (type === 'component') return (
     <Component
       parents={parents}
@@ -62,8 +81,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={() => { }}
-      onSelectBar={() => { }}
+      onHoverBar={handleHoverBar}
+      onSelectBar={handleSelectBar}
     />
   );
 
@@ -80,8 +99,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={() => { }}
-      onSelectBar={() => { }}
+      onHoverBar={handleHoverBar}
+      onSelectBar={handleSelectBar}
     />
   );
 
@@ -98,8 +117,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={() => { }}
-      onSelectBar={() => { }}
+      onHoverBar={handleHoverBar}
+      onSelectBar={handleSelectBar}
     />
   );
 };
