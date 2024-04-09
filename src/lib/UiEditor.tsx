@@ -1,35 +1,39 @@
 import { IObservable } from 'react-observing';
 import { DragAndDropProvider } from "react-use-drag-and-drop";
 
+import { IUiEditorContextProps, UiEditorContextProvider } from './UiEditorContext';
 import { InsertBarContextProvider } from './components/insert-bar';
 import { SelectBarContextProvider } from './components/select-bar';
 import { HoverBarContextProvider } from './components/hover-bar';
-import { TComponent, TElement, TStyle } from './types';
 import { UIEditorContent } from './UiEditorContent';
 
 
 interface IUIEditorProps {
-  styles: IObservable<TStyle[]>;
-  value: IObservable<TElement[]>;
-  components: IObservable<TComponent[]>;
+  value: IUiEditorContextProps['value'];
+  styles: IUiEditorContextProps['styles'];
+  components: IUiEditorContextProps['components'];
+  onDrop: IUiEditorContextProps['onDrop'];
+  onDragEnd: IUiEditorContextProps['onDragEnd'];
+  onKeyDown: IUiEditorContextProps['onKeyDown'];
+  onDragStart: IUiEditorContextProps['onDragStart'];
 
-  onKeyDown: (event: KeyboardEvent) => void
   onHover: (id: string | undefined) => void;
   onSelect: (id: string | undefined) => void;
-
   hoveredId: IObservable<string | undefined>;
   selectedId: IObservable<string | undefined>;
 }
-export const UIEditor = (props: IUIEditorProps) => {
+export const UIEditor = ({ onSelect, onHover, selectedId, hoveredId, ...props }: IUIEditorProps) => {
   return (
     <DragAndDropProvider>
-      <InsertBarContextProvider>
-        <SelectBarContextProvider id={props.selectedId} onSelect={props.onSelect}>
-          <HoverBarContextProvider id={props.hoveredId} onHover={props.onHover}>
-            <UIEditorContent {...props} />
-          </HoverBarContextProvider>
-        </SelectBarContextProvider>
-      </InsertBarContextProvider>
+      <UiEditorContextProvider {...props}>
+        <InsertBarContextProvider>
+          <SelectBarContextProvider id={selectedId} onSelect={onSelect}>
+            <HoverBarContextProvider id={hoveredId} onHover={onHover}>
+              <UIEditorContent />
+            </HoverBarContextProvider>
+          </SelectBarContextProvider>
+        </InsertBarContextProvider>
+      </UiEditorContextProvider>
     </DragAndDropProvider>
   );
 }

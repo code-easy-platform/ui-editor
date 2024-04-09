@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { observe, set } from 'react-observing';
 
-import { TElement } from 'ui-editor/src/lib/types';
+import { TElement, TStyle } from 'ui-editor/src/lib/types';
 import { UIEditor } from 'ui-editor/src';
 
 import './../styles.css';
@@ -13,7 +13,10 @@ export const App = () => {
 
   const values = useMemo(() => {
     return {
-      styles: observe([]),
+      styles: observe<TStyle[]>([
+        { id: observe('button'), content: observe('button { padding:8px; padding-left:16px;padding-right:16px; border:none; background-color:green; border-radius:4px; color:white; }') },
+        { id: observe('button:disabled'), content: observe('button:disabled { opacity: 0.5 }') }
+      ]),
       components: observe([]),
       value: observe<TElement[]>([
         {
@@ -44,17 +47,12 @@ export const App = () => {
           children: observe(undefined),
           attributes: observe([
             { name: observe('text'), value: observe('Clique me!') },
+            { name: observe('disabled'), value: observe(true) },
           ]),
           style: observe([
-            { name: observe('border'), value: observe('none') },
-            { name: observe('padding'), value: observe('8px') },
-            { name: observe('paddingLeft'), value: observe('16px') },
-            { name: observe('paddingRight'), value: observe('16px') },
-            { name: observe('margin'), value: observe('8px') },
-            { name: observe('borderRadius'), value: observe('4px') },
-            { name: observe('backgroundColor'), value: observe('green') },
-            { name: observe('color'), value: observe('white') },
-            { name: observe('boxShadow'), value: observe('0 0 1px 0px black') },
+            { name: observe('backgroundColor'), value: observe('transparent') },
+            { name: observe('color'), value: observe('black') },
+            { name: observe('border'), value: observe('thin solid') },
           ]),
         },
       ]),
@@ -86,6 +84,10 @@ export const App = () => {
             selectedId={selectedId}
             onHover={id => set(hoveredId, id)}
             onSelect={id => set(selectedId, id)}
+
+            onDrop={(...rest) => console.log('drop', ...rest)}
+            onDragEnd={(...rest) => console.log('end', ...rest)}
+            onDragStart={(...rest) => console.log('start', ...rest)}
           />
         </div>
       </div>

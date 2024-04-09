@@ -4,6 +4,7 @@ import { useObserverValue } from 'react-observing';
 
 import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
 import { useElementAttributes } from './UseElementAttributes';
+import { useUiEditorContext } from '../../../UiEditorContext';
 import { TDraggableElement, TElement } from '../../../types';
 import { getCustomDragLayer, uuid } from '../../../helpers';
 import { useSelectBar } from '../../select-bar';
@@ -39,10 +40,10 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const tag = useObserverValue(element.tag);
   const id = useObserverValue(element.id);
 
-  const { hideInsertBar } = useInsertBar();
+  const { onDragStart, onDragEnd } = useUiEditorContext();
   const { selectedId, select } = useSelectBar();
   const { hoveredId, hover } = useHoverBar();
-
+  const { hideInsertBar } = useInsertBar();
 
   useEffect(() => {
     if (hoveredId.value === id) {
@@ -72,6 +73,22 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     return () => subscription.unsubscribe();
   }, [element, id, selectedId, select]);
 
+  useEffect(() => {
+    setForceEnable(old => {
+      const hovered = hoveredId.value === id;
+      return hovered === old ? old : !old;
+    });
+
+    const subscription = hoveredId.subscribe(targetId => {
+      setForceEnable(old => {
+        const hovered = targetId === id;
+        return hovered === old ? old : !old;
+      });
+    });
+
+    return () => subscription.unsubscribe();
+  }, [id, hoveredId]);
+
 
   const elementChildren = useMemo(() => {
     if ((!children || children.length === 0) && Object.keys(elementSpecialProps).includes('text')) {
@@ -89,20 +106,18 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     ));
   }, [children, parents, element, elementSpecialProps.text]);
 
-  const allowContent = useMemo(() => children !== undefined, [children]);
+  const allowContent = useMemo(() => {
+    return children !== undefined;
+  }, [children]);
 
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
     id,
-    canDrag: true,
     element: elementRef,
-    end: () => hideInsertBar(),
-    data: {
-      get(newParent, newBaseParent) {
-        return { element: newParent, parent: newBaseParent };
-      },
-    },
-  }, [id, hideInsertBar]);
+    data: { element, parents, },
+    start: () => { select(id); onDragStart() },
+    end: () => { hideInsertBar(); onDragEnd(); },
+  }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer('name dynamic here'),
