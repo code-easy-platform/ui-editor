@@ -29,18 +29,13 @@ export const CustomFrame = ({ children, styles, draggingHover, resetBody, onClic
         {allStyles.map(style => createElement('style', { key: style.id }, style.content))}
         <style>
           {[
-            `* {`,
-            `  outline: none;`,
-            `}`,
-            '',
-            `html${draggingHover ? '' : ':hover'} body .frame-content *, html:focus body .frame-content * {`,
+            `* { outline: none; }`,
+            resetBody ? 'body { margin:0!important; }' : '',
+            `html${draggingHover ? '' : ':hover'} body .frame-content * {`,
             `  outline: thin solid #80808050;`,
             `}`,
             `[data-hover="true"], [data-select="true"] * {`,
             `  outline: none!important;`,
-            `}`,
-            `body {`,
-            `  ${resetBody ? 'margin:0!important;' : ''}`,
             `}`,
           ].join('\n')}
         </style>
