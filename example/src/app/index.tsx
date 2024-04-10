@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { observe, set } from 'react-observing';
 
-import { TElement, TStyle } from 'ui-editor/src/lib/types';
+// TODO: Transferir para o index.ts do src
+import { TDropFunctionProps, TElement, TStyle } from 'ui-editor/src/lib/types';
 import { UIEditor } from 'ui-editor/src';
 
 import './../styles.css';
@@ -23,6 +24,7 @@ export const App = () => {
           id: observe('123'),
           type: observe('html'),
           tag: observe('button'),
+          customData: { teste: 1 },
           style: observe(undefined),
           attributes: observe([
             { name: observe('hidden'), value: observe(false) },
@@ -32,6 +34,7 @@ export const App = () => {
               tag: observe('a'),
               id: observe('546'),
               type: observe('html'),
+              customData: { teste: 2 },
               style: observe(undefined),
               children: observe(undefined),
               attributes: observe([
@@ -44,6 +47,7 @@ export const App = () => {
           id: observe('456'),
           type: observe('html'),
           tag: observe('button'),
+          customData: { teste: 3 },
           children: observe(undefined),
           attributes: observe([
             { name: observe('text'), value: observe('Clique me!') },
@@ -55,9 +59,43 @@ export const App = () => {
             { name: observe('border'), value: observe('thin solid') },
           ]),
         },
+        {
+          id: observe('789'),
+          tag: observe('div'),
+          type: observe('html'),
+          children: observe([]),
+          customData: { teste: 4 },
+          attributes: observe([]),
+          style: observe([]),
+        },
       ]),
     };
   }, []);
+
+
+  const handleDrop = useCallback(({ element, from, to }: TDropFunctionProps) => {
+    if (from) {
+      set(from === 'root' ? values.value : from.element.children, oldContent => {
+        if (!oldContent) return oldContent;
+        return [...oldContent.filter(contentItem => contentItem.id.value !== element.id.value)];
+      });
+    }
+
+    if (to.element === 'root') {
+      set(values.value, oldContent => {
+        oldContent.splice(to.position, 0, element);
+        return [...oldContent];
+      });
+    } else {
+      set(to.element.children, oldContent => {
+        if (!oldContent) return oldContent;
+
+        oldContent.splice(to.position, 0, element);
+
+        return [...oldContent];
+      });
+    }
+  }, [values.value]);
 
 
   return (
@@ -85,7 +123,7 @@ export const App = () => {
             onHover={id => set(hoveredId, id)}
             onSelect={id => set(selectedId, id)}
 
-            onDrop={(...rest) => console.log('drop', ...rest)}
+            onDrop={handleDrop}
             onDragEnd={(...rest) => console.log('end', ...rest)}
             onDragStart={(...rest) => console.log('start', ...rest)}
           />

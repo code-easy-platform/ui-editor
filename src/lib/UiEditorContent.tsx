@@ -30,10 +30,17 @@ export const UIEditorContent = () => {
     hideInsertBar();
     if (!data) return;
 
+    const parent = data.parents?.slice(-1).at(0);
+
     onDrop({
-      to: null,
       element: data.element,
-      from: { parents: data.parents },
+      from: !parent ? null : {
+        element: parent
+      },
+      to: {
+        element: 'root',
+        position: value.value.length,
+      },
     });
   }, [value, select, hideInsertBar]);
 

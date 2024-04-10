@@ -1,7 +1,7 @@
 import { IObservable } from 'react-observing';
 
 
-type THtml = {
+type THtml<D = any> = {
   id: IObservable<string>;
   tag: IObservable<string>;
   type: IObservable<'html'>;
@@ -9,25 +9,27 @@ type THtml = {
   children: IObservable<TElement[] | undefined>;
   style: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
   attributes: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
+  customData?: D;
 };
 
-type TSlot = {
+type TSlot<D = any> = {
   id: IObservable<string>;
   type: IObservable<'slot'>;
   /** If this init undefined, the slot will be only a placeholder in the screen */
   children: IObservable<TElement[] | undefined>;
+  customData?: D;
 };
 
-type TComponent = {
+type TComponent<D = any> = {
   id: IObservable<string>;
   type: IObservable<'component'>;
   referenceId: IObservable<string>;
+  customData?: D;
 };
 
 
-export type TElement<T extends 'html' | 'component' | 'slot' = 'html' | 'component' | 'slot'> = T extends 'html'
-  ? THtml
+export type TElement<T extends 'html' | 'component' | 'slot' = 'html' | 'component' | 'slot', D = any> = T extends 'html'
+  ? THtml<D>
   : T extends 'slot'
-  ? TSlot
-  : TComponent
-
+  ? TSlot<D>
+  : TComponent<D>

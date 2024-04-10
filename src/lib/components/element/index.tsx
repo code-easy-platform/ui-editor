@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { set, useObserverValue } from 'react-observing';
+import { useObserverValue } from 'react-observing';
 import { TMonitor } from 'react-use-drag-and-drop';
 
 import { getCanDrop, getDropPosition, getInsertBarPosition } from '../../helpers';
@@ -23,7 +23,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   const { select, updateSelectBarGetPosition } = useSelectBar();
   const { hover, updateHoverBarGetPosition } = useHoverBar();
   const { showInsertBar, hideInsertBar } = useInsertBar();
-  const { onDrop } = useUiEditorContext();
+  const { onDrop, value } = useUiEditorContext();
 
 
   const handleSelect = useCallback((event: React.MouseEvent, element: TElement) => {
@@ -92,65 +92,44 @@ export const Element = ({ element, parents }: IElementProps) => {
     });
   }, [showInsertBar, hover, hideInsertBar]);
 
-  const handleDrop = useCallback((data: TDraggableElement, monitor: TMonitor, elementDropTarget: TElement, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
-    const canDrop = getCanDrop(monitor, elementDropTarget, parents, elementRef, droppableId);
+  const handleDrop = useCallback((data: TDraggableElement, monitor: TMonitor, elementDropTarget: TElement, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+    const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
     if (!canDrop) return;
 
     const dropPosition = getDropPosition(monitor, elementDropTarget, elementRef);
     if (!dropPosition) return;
 
-
     const isDropToParent = dropPosition.isOverStart || dropPosition.isOverEnd;
     if (!isDropToParent && elementDropTarget.type.value === 'component') return;
 
-    onDrop({
-      element: data.element,
-      from: { parents: data.parents },
-      to: {
-        parents: parents,
-        element: elementDropTarget,
-      }
-    });
-
-
-    /*const handleRemoveFromOldParent = (oldParent: TElement<'html' | 'slot'>) => {
-      set(oldParent.children, oldContent => {
-        if (!oldContent) return oldContent;
-        return [...oldContent.filter(contentItem => contentItem.id.value !== droppedData.element.id.value)];
-      });
-    }
-
-    const handleDropToParent = (parentToDrop: TElement<'html' | 'slot'>) => {
-      set(parentToDrop.children, oldContent => {
-        if (!oldContent) return oldContent;
-
-        const index = oldContent.findIndex(contentItem => contentItem.id.value === elementDropTarget.id.value);
-        oldContent.splice(dropPosition.isOverStart ? index : index + 1, 0, droppedData.element)
-        return [...oldContent];
-      });
-    }
-
-    const handleDrop = (elementToDrop: TElement<'html' | 'slot'>) => {
-      set(elementToDrop.children, oldContent => {
-        if (!oldContent) return oldContent;
-        return [...oldContent, droppedData.element];
-      });
-    }
-
-
-    const droppedData = data.get();
-    if (droppedData.parent) {
-      handleRemoveFromOldParent(droppedData.parent);
-    }
+    const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
 
     if (isDropToParent) {
-      const elementDropTargetParent = parents.length === 0 ? 123 : parents[parents.length - 1];
-      if (elementDropTargetParent.type.value === 'component') return;
+      const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot'> | undefined;
+      const index = parent
+        ? parent.children.value?.findIndex(child => child.id.value === elementDropTarget.id.value) || -1
+        : value.value.findIndex(child => child.id.value === elementDropTarget.id.value) || -1
 
-      handleDropToParent(elementDropTargetParent as TElement<'html' | 'slot'>);
+      onDrop({
+        element: data.element,
+        from: !parentToRemoveTheElement ? 'root' : { element: parentToRemoveTheElement },
+        to: {
+          position: index,
+          element: parent ? parent : 'root',
+        }
+      });
     } else {
-      handleDrop(elementDropTarget as TElement<'html' | 'slot'>);
-    } */
+      const index = (elementDropTarget as TElement<'html' | 'slot'>).children.value?.length || -1;
+
+      onDrop({
+        element: data.element,
+        from: !parentToRemoveTheElement ? 'root' : { element: parentToRemoveTheElement },
+        to: {
+          element: elementDropTarget as TElement<'html' | 'slot'>,
+          position: dropPosition.isOverStart ? index : index + 1,
+        }
+      });
+    }
   }, [select, onDrop]);
 
 
