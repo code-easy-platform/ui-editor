@@ -8,8 +8,9 @@ export type TDraggableElement = {
 
 export type TDropFunctionProps = {
   element: TElement;
-  from: null | 'root' | {
-    element: TElement<'html' | 'slot'>;
+  from: {
+    position: number;
+    element: null | 'root' | TElement<'html' | 'slot'>;
   };
   to: {
     position: number;

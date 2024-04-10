@@ -68,29 +68,54 @@ export const App = () => {
           attributes: observe([]),
           style: observe([]),
         },
+        {
+          id: observe('654'),
+          tag: observe('div'),
+          type: observe('html'),
+          customData: { teste: 4 },
+          attributes: observe([]),
+          style: observe([]),
+          children: observe([
+            {
+              id: observe('wer'),
+              style: observe([]),
+              tag: observe('input'),
+              type: observe('html'),
+              attributes: observe([]),
+              customData: { teste: 4 },
+              children: observe(undefined),
+            },
+          ]),
+        },
       ]),
     };
   }, []);
 
 
   const handleDrop = useCallback(({ element, from, to }: TDropFunctionProps) => {
-    if (from) {
-      set(from === 'root' ? values.value : from.element.children, oldContent => {
+    if (from.element) {
+      set(from.element === 'root' ? values.value : from.element.children, oldContent => {
         if (!oldContent) return oldContent;
         return [...oldContent.filter(contentItem => contentItem.id.value !== element.id.value)];
       });
     }
 
+    // É preciso calcular o position antes porque pode haver conflitos com o remover
+
     if (to.element === 'root') {
+      const position = (from.element === to.element) && (from.position < to.position) ? to.position - 1 : to.position;
+
       set(values.value, oldContent => {
-        oldContent.splice(to.position, 0, element);
+        oldContent.splice(position, 0, element);
         return [...oldContent];
       });
     } else {
+      const position = (from.element !== 'root' && from.element?.id.value === to.element.id.value) && (from.position < to.position) ? to.position - 1 : to.position;
+
       set(to.element.children, oldContent => {
         if (!oldContent) return oldContent;
 
-        oldContent.splice(to.position, 0, element);
+        oldContent.splice(position, 0, element);
 
         return [...oldContent];
       });

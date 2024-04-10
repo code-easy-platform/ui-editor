@@ -31,11 +31,13 @@ export const UIEditorContent = () => {
     if (!data) return;
 
     const parent = data.parents?.slice(-1).at(0);
+    const indexToRemove = parent?.children.value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
 
     onDrop({
       element: data.element,
-      from: !parent ? null : {
-        element: parent
+      from: {
+        position: indexToRemove,
+        element: !parent ? null : parent,
       },
       to: {
         element: 'root',

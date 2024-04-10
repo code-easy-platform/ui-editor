@@ -104,29 +104,36 @@ export const Element = ({ element, parents }: IElementProps) => {
 
     const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
 
+    const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
+    const indexToRemove = (elementFrom === 'root' ? value : elementFrom.children).value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
+
     if (isDropToParent) {
       const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot'> | undefined;
-      const index = parent
-        ? parent.children.value?.findIndex(child => child.id.value === elementDropTarget.id.value) || -1
-        : value.value.findIndex(child => child.id.value === elementDropTarget.id.value) || -1
+      const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
 
       onDrop({
         element: data.element,
-        from: !parentToRemoveTheElement ? 'root' : { element: parentToRemoveTheElement },
+        from: {
+          element: elementFrom,
+          position: indexToRemove,
+        },
         to: {
-          position: index,
           element: parent ? parent : 'root',
+          position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
         }
       });
     } else {
-      const index = (elementDropTarget as TElement<'html' | 'slot'>).children.value?.length || -1;
+      const indexToAdd = (elementDropTarget as TElement<'html' | 'slot'>).children.value?.length || -1;
 
       onDrop({
         element: data.element,
-        from: !parentToRemoveTheElement ? 'root' : { element: parentToRemoveTheElement },
+        from: {
+          element: elementFrom,
+          position: indexToRemove,
+        },
         to: {
           element: elementDropTarget as TElement<'html' | 'slot'>,
-          position: dropPosition.isOverStart ? index : index + 1,
+          position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
         }
       });
     }
