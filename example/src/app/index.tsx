@@ -20,6 +20,28 @@ export const App = () => {
       ]),
       components: observe<TComponent[]>([
         {
+          id: observe('custom-input'),
+          content: observe<TElement[]>([
+            {
+              id: observe('1-custom-input'),
+              type: observe('html'),
+              tag: observe('input'),
+              customData: { teste: 1 },
+              children: observe(undefined),
+              attributes: observe([
+                { name: observe('placeholder'), value: observe('Type a email here...') },
+              ]),
+              style: observe([
+                { name: observe('padding'), value: observe(8) },
+                { name: observe('padding-left'), value: observe(16) },
+                { name: observe('padding-right'), value: observe(16) },
+                { name: observe('border'), value: observe('thin solid gray') },
+                { name: observe('border-radius'), value: observe(50) },
+              ]),
+            },
+          ]),
+        },
+        {
           id: observe('custom-button'),
           content: observe<TElement[]>([
             {
@@ -34,14 +56,46 @@ export const App = () => {
               children: observe([
                 {
                   tag: observe('a'),
-                  id: observe('546'),
+                  id: observe('2-custom-button'),
                   type: observe('html'),
                   customData: { teste: 2 },
                   style: observe(undefined),
                   children: observe(undefined),
                   attributes: observe([
-                    { name: observe('text'), value: observe('Clique me') },
+                    { name: observe('text'), value: observe('Send') },
                   ]),
+                },
+              ]),
+            },
+          ]),
+        },
+        {
+          id: observe('custom-send-email'),
+          content: observe<TElement[]>([
+            {
+              id: observe('1-custom-send-email'),
+              tag: observe('div'),
+              type: observe('html'),
+              customData: { teste: 1 },
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              style: observe([
+                { name: observe('padding'), value: observe(8) },
+                { name: observe('display'), value: observe('flex') },
+                { name: observe('gap'), value: observe(8) },
+                { name: observe('align-itens'), value: observe('center') },
+              ]),
+              children: observe([
+                {
+                  type: observe('component'),
+                  id: observe('custom-input-using'),
+                  referenceId: observe('custom-input'),
+                },
+                {
+                  type: observe('component'),
+                  id: observe('custom-button-using'),
+                  referenceId: observe('custom-button'),
                 },
               ]),
             },
@@ -118,9 +172,19 @@ export const App = () => {
         },
         {
           type: observe('component'),
+          id: observe('custom-input-using'),
+          referenceId: observe('custom-input'),
+        },
+        {
+          type: observe('component'),
           id: observe('custom-button-using'),
           referenceId: observe('custom-button'),
-        }
+        },
+        {
+          type: observe('component'),
+          id: observe('custom-send-email-using'),
+          referenceId: observe('custom-send-email'),
+        },
       ]),
     };
   }, []);
