@@ -20,9 +20,9 @@ interface IElementProps {
 export const Element = ({ element, parents }: IElementProps) => {
   const type = useObserverValue(element.type);
 
-  const { select, updateSelectBarGetPosition } = useSelectBar();
-  const { hover, updateHoverBarGetPosition } = useHoverBar();
   const { showInsertBar, hideInsertBar } = useInsertBar();
+  const { select, updateSelectBar } = useSelectBar();
+  const { hover, updateHoverBar } = useHoverBar();
   const { onDrop, value } = useUiEditorContext();
 
 
@@ -54,23 +54,23 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [hover]);
 
 
-  const handleHoverBar = useCallback((_: TElement, htmlElement: HTMLElement | null) => {
-    updateHoverBarGetPosition(() => ({
+  const handleHoverBar = useCallback((element: TElement, htmlElement: HTMLElement | null) => {
+    updateHoverBar(element, () => ({
       top: htmlElement?.offsetTop || 0,
       left: htmlElement?.offsetLeft || 0,
       width: htmlElement?.getBoundingClientRect().width || 0,
       height: htmlElement?.getBoundingClientRect().height || 0,
     }));
-  }, [updateHoverBarGetPosition]);
+  }, [updateHoverBar]);
 
-  const handleSelectBar = useCallback((_: TElement, htmlElement: HTMLElement | null) => {
-    updateSelectBarGetPosition(() => ({
+  const handleSelectBar = useCallback((element: TElement, htmlElement: HTMLElement | null) => {
+    updateSelectBar(element, () => ({
       top: htmlElement?.offsetTop || 0,
       left: htmlElement?.offsetLeft || 0,
       width: htmlElement?.getBoundingClientRect().width || 0,
       height: htmlElement?.getBoundingClientRect().height || 0,
     }));
-  }, [updateSelectBarGetPosition]);
+  }, [updateSelectBar]);
 
 
   const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {

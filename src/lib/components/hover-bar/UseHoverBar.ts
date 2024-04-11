@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react"
 import { set } from 'react-observing';
 
 import { HoverBarContext, TGetPosition } from "./HoverBarContext";
+import { TElement } from '../../types';
 
 
 export const useHoverBar = () => {
@@ -12,8 +13,9 @@ export const useHoverBar = () => {
     if (context.id.value !== id) context.onHover(id);
   }, [context.id]);
 
-  const handleUpdateGetPositionHover = useCallback((getPosition: TGetPosition) => {
+  const handleUpdateHoverBar = useCallback((element: TElement, getPosition: TGetPosition) => {
     set(context.getPosition, () => getPosition);
+    set(context.element, element);
   }, [context.getPosition]);
 
   const handleUpdateScroll = useCallback((y: number, x: number) => {
@@ -29,9 +31,10 @@ export const useHoverBar = () => {
   return {
     hover: handleHover,
     hoveredId: context.id,
+    hoveredElement: context.element,
 
+    updateHoverBar: handleUpdateHoverBar,
     updateHoverBarScroll: handleUpdateScroll,
-    updateHoverBarGetPosition: handleUpdateGetPositionHover,
     updateHoverBarPlaygroundSize: handleUpdatePlaygroundSize,
 
     hoverBarGetPosition: context.getPosition,

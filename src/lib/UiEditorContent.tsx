@@ -16,7 +16,7 @@ import { uuid } from './helpers';
 export const UIEditorContent = () => {
   const droppableId = useRef({ id: uuid() });
 
-  const { updateSelectBarGetPosition, updateSelectBarScroll, select } = useSelectBar();
+  const { updateSelectBar, updateSelectBarScroll, select } = useSelectBar();
   const { value, styles, onDrop, onKeyDown } = useUiEditorContext();
   const { showInsertBar, hideInsertBar } = useInsertBar();
   const { updateHoverBarScroll, hover } = useHoverBar();
@@ -64,7 +64,7 @@ export const UIEditorContent = () => {
     });
   }, [frameDocumentRef?.lastElementChild, showInsertBar]);
 
-  const handleClick = useCallback(() => updateSelectBarGetPosition(undefined), [updateSelectBarGetPosition]);
+  const handleClick = useCallback(() => updateSelectBar(undefined), [updateSelectBar]);
 
   const handleScroll = useCallback((y: number, x: number) => {
     updateSelectBarScroll(y, x);

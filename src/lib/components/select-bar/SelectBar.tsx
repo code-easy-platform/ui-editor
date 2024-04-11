@@ -39,8 +39,10 @@ export const SelectBar: React.FC<SelectBarProps> = memo(({ children, zIndex = 0,
 
         width,
         height,
+        fontSize: 14,
         zIndex: 5 + zIndex,
         borderColor: color,
+        fontFamily: 'sans-serif',
       }}
     >
       <span
@@ -48,10 +50,18 @@ export const SelectBar: React.FC<SelectBarProps> = memo(({ children, zIndex = 0,
         style={{
           zIndex: 5,
           height: 20,
+          color: 'white',
+          paddingLeft: 8,
+          borderRadius: 4,
+          paddingRight: 8,
+          outline: 'none',
+          display: 'flex',
           left: detailsLeft,
           userSelect: 'none',
           position: 'absolute',
+          alignItems: 'center',
           pointerEvents: 'none',
+          backgroundColor: color,
           top: top - 20 < 0 ? (height + 20) >= 500 ? 0 : height : -20,
         }}
       >

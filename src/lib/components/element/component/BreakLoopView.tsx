@@ -10,7 +10,7 @@ export const BreakLoopView = ({ element }: IBreakLoopViewProps) => {
 
 
   return (
-    <div style={{ cursor: 'default', userSelect: 'none', pointerEvents: 'none', outline: 'none', border: '2px solid orange' }}>
+    <div style={{ cursor: 'default', userSelect: 'none', pointerEvents: 'none', outline: 'none', border: '2px solid orange', fontFamily: 'sans-serif' }}>
       This component "<b style={{ fontWeight: 'bold', outline: 'none', pointerEvents: 'none' }}>{name}</b>" introduces a infinite loop.
     </div>
   );

@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { useObserverValue } from "react-observing";
+import { useObserverValue, useSelectorValue } from "react-observing";
 
 import { useSelectBar } from './UseSelectBar';
 import { SelectBar } from "./SelectBar";
@@ -8,6 +8,7 @@ import { SelectBar } from "./SelectBar";
 export const SelectBarWrapper: React.FC = memo(() => {
   const {
     selectedId: selectedIdObservable,
+    selectedElement: selectedElementObservable,
     selectBarGetPosition: selectBarGetPositionObserver,
     selectBarDocumentVerticalScroll: documentVerticalScrollObserver,
     selectBarDocumentHorizontalScroll: documentHorizontalScrollObserver,
@@ -17,7 +18,12 @@ export const SelectBarWrapper: React.FC = memo(() => {
   const documentHorizontalScroll = useObserverValue(documentHorizontalScrollObserver);
   const documentVerticalScroll = useObserverValue(documentVerticalScrollObserver);
   const getPosition = useObserverValue(selectBarGetPositionObserver);
+  const selectedElement = useObserverValue(selectedElementObservable);
   const selectedId = useObserverValue(selectedIdObservable);
+  const name = useSelectorValue(({ get }) => {
+    if (!selectedElement) return '';
+    return get(selectedElement.name);
+  }, [selectedElement]);
 
 
   const { width, height, top, left } = useMemo(() => {
@@ -46,7 +52,11 @@ export const SelectBarWrapper: React.FC = memo(() => {
       width={width}
       height={height}
       left={left - 1}
-      color="blue"
-    />
+      color="#4a87ee"
+    >
+      <div>
+        {name}
+      </div>
+    </SelectBar>
   );
 });

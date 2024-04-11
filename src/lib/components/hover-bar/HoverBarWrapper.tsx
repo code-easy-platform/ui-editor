@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { useObserverValue } from "react-observing";
+import { useObserverValue, useSelectorValue } from "react-observing";
 
 import { useSelectBar } from '../select-bar';
 import { useHoverBar } from './UseHoverBar';
@@ -7,20 +7,26 @@ import { HoverBar } from "./HoverBar";
 
 
 export const HoverBarWrapper: React.FC = memo(() => {
+  const { selectedId: selectedIdObservable } = useSelectBar();
   const {
     hoveredId: hoveredIdObservable,
+    hoveredElement: hoveredElementObservable,
     hoverBarGetPosition: hoverBarGetPositionObserver,
     hoverBarDocumentVerticalScroll: documentVerticalScrollObserver,
     hoverBarDocumentHorizontalScroll: documentHorizontalScrollObserver,
   } = useHoverBar();
-  const { selectedId: selectedIdObservable } = useSelectBar();
 
 
   const documentHorizontalScroll = useObserverValue(documentHorizontalScrollObserver);
   const documentVerticalScroll = useObserverValue(documentVerticalScrollObserver);
   const getPosition = useObserverValue(hoverBarGetPositionObserver);
+  const hoveredElement = useObserverValue(hoveredElementObservable);
   const selectedId = useObserverValue(selectedIdObservable);
   const hoveredId = useObserverValue(hoveredIdObservable);
+  const name = useSelectorValue(({ get }) => {
+    if (!hoveredElement) return '';
+    return get(hoveredElement.name);
+  }, [hoveredElement]);
 
 
   const { width, height, top, left } = useMemo(() => {
@@ -50,6 +56,10 @@ export const HoverBarWrapper: React.FC = memo(() => {
       left={left - 1}
       height={height}
       color="#ed8b5f"
-    />
+    >
+      <div>
+        {name}
+      </div>
+    </HoverBar>
   );
 });

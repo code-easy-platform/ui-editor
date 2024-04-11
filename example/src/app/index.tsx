@@ -26,6 +26,7 @@ export const App = () => {
               id: observe('1-custom-input'),
               type: observe('html'),
               tag: observe('input'),
+              name: observe('input'),
               customData: { teste: 1 },
               children: observe(undefined),
               attributes: observe([
@@ -48,6 +49,7 @@ export const App = () => {
               id: observe('1-custom-button'),
               type: observe('html'),
               tag: observe('button'),
+              name: observe('button'),
               customData: { teste: 1 },
               style: observe(undefined),
               attributes: observe([
@@ -58,6 +60,7 @@ export const App = () => {
                   tag: observe('a'),
                   id: observe('2-custom-button'),
                   type: observe('html'),
+                  name: observe('a'),
                   customData: { teste: 2 },
                   style: observe(undefined),
                   children: observe(undefined),
@@ -76,6 +79,7 @@ export const App = () => {
               id: observe('1-custom-send-email'),
               tag: observe('div'),
               type: observe('html'),
+              name: observe('div'),
               customData: { teste: 1 },
               attributes: observe([
                 { name: observe('hidden'), value: observe(false) },
@@ -117,6 +121,7 @@ export const App = () => {
           tag: observe('button'),
           customData: { teste: 1 },
           style: observe(undefined),
+          name: observe('button'),
           attributes: observe([
             { name: observe('hidden'), value: observe(false) },
           ]),
@@ -124,6 +129,7 @@ export const App = () => {
             {
               tag: observe('a'),
               id: observe('546'),
+              name: observe('a'),
               type: observe('html'),
               customData: { teste: 2 },
               style: observe(undefined),
@@ -139,6 +145,7 @@ export const App = () => {
           type: observe('html'),
           tag: observe('button'),
           customData: { teste: 3 },
+          name: observe('button'),
           children: observe(undefined),
           attributes: observe([
             { name: observe('text'), value: observe('Clique me!') },
@@ -157,6 +164,7 @@ export const App = () => {
           children: observe([]),
           customData: { teste: 4 },
           attributes: observe([]),
+          name: observe('div'),
           style: observe([]),
         },
         {
@@ -165,11 +173,13 @@ export const App = () => {
           type: observe('html'),
           customData: { teste: 4 },
           attributes: observe([]),
+          name: observe('div'),
           style: observe([]),
           children: observe([
             {
               id: observe('wer'),
               style: observe([]),
+              name: observe('input'),
               tag: observe('input'),
               type: observe('html'),
               attributes: observe([]),

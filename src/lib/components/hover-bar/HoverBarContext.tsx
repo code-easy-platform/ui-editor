@@ -1,6 +1,8 @@
 import { createContext, useEffect, useRef } from "react";
 import { IObservable, observe } from 'react-observing';
 
+import { TElement } from '../../types';
+
 
 export type TGetPosition = () => {
   top: number;
@@ -14,6 +16,7 @@ interface HoverBarContextProps {
   documentHorizontalScroll: IObservable<number>;
   documentVerticalScroll: IObservable<number>;
 
+  element: IObservable<undefined | TElement>;
   getPosition: IObservable<undefined | TGetPosition>;
 
   id: IObservable<undefined | string>;
@@ -33,6 +36,7 @@ export const HoverBarContextProvider = ({ children, id, onHover }: IHoverBarCont
     documentVerticalScroll: observe(0),
 
     getPosition: observe(undefined),
+    element: observe(undefined),
     onHover,
     id,
   });
