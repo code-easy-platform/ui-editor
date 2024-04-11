@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { selector, useObserverValue } from 'react-observing';
+import { useSelectorValue } from 'react-observing';
 
 import { TElement } from '../../types';
 
@@ -11,18 +10,12 @@ import { TElement } from '../../types';
  * @returns If it has or not view only
  */
 export const useHasViewOnly = (element: TElement, parents: TElement[]) => {
-  return useObserverValue(useMemo(() => {
-    return selector(({ get }) => {
-      for (let index = 0; index < parents.length; index++) {
-        const element = parents[index];
-        if (get(element.type) !== 'component') return false;
-
-
-        //if (get(parent.referenceId) === element.baseParent.id.value) return false;
-      }
-      return false;
-
-      //return parents.some(parent => (get(parent.type) === 'component' && parent.referenceId.value === element.baseParent.id.value));
-    })
-  }, [element, parents]));
+  return useSelectorValue(({ get }) => {
+    return parents.some(parent => {
+      return (
+        get(parent.type) === 'component'
+        // Para permitir que o slot seja editável ou esteja em modo view pode ser possível olhar para o parent que é um componente que está renderizando ele, o parente que renderiza um slot em modo view(que aceita drop dentro) deverá ver junto com o referenceId uma prop slots, ali dentro terá o id do slot em questão
+      );
+    });
+  }, [parents, element]);
 }

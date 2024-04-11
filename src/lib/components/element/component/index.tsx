@@ -2,7 +2,9 @@ import { MouseEvent, RefObject } from 'react';
 import { TMonitor } from 'react-use-drag-and-drop';
 
 import { TDraggableElement, TElement } from '../../../types';
+import { useHasInfinityLoop } from './UseHasInfinityLoop';
 import { useHasViewOnly } from '../UseHasViewOnly';
+import { BreakLoopView } from './BreakLoopView';
 import { Edit } from './Edit';
 import { View } from './View';
 
@@ -24,8 +26,14 @@ interface IComponentProps {
   onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
 export const Component = ({ element, parents, ...rest }: IComponentProps) => {
+  const hasInfinityLoop = useHasInfinityLoop(element, parents);
   const hasViewOnly = useHasViewOnly(element, parents);
 
+  
+  if (hasInfinityLoop) {
+    /* When infinite loop, when have only view for break loop */
+    return <BreakLoopView element={element} />;
+  }
 
   if (hasViewOnly) return (
     <View
@@ -33,6 +41,7 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
       parents={parents}
     />
   );
+
 
   return (
     <Edit

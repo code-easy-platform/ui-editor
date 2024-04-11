@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { observe, set } from 'react-observing';
 
 // TODO: Transferir para o index.ts do src
-import { TDropFunctionProps, TElement, TStyle } from 'ui-editor/src/lib/types';
+import { TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src/lib/types';
 import { UIEditor } from 'ui-editor/src';
 
 import './../styles.css';
@@ -18,7 +18,36 @@ export const App = () => {
         { id: observe('button'), content: observe('button { padding:8px; padding-left:16px;padding-right:16px; border:none; background-color:green; border-radius:4px; color:white; }') },
         { id: observe('button:disabled'), content: observe('button:disabled { opacity: 0.5 }') }
       ]),
-      components: observe([]),
+      components: observe<TComponent[]>([
+        {
+          id: observe('custom-button'),
+          content: observe<TElement[]>([
+            {
+              id: observe('1-custom-button'),
+              type: observe('html'),
+              tag: observe('button'),
+              customData: { teste: 1 },
+              style: observe(undefined),
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              children: observe([
+                {
+                  tag: observe('a'),
+                  id: observe('546'),
+                  type: observe('html'),
+                  customData: { teste: 2 },
+                  style: observe(undefined),
+                  children: observe(undefined),
+                  attributes: observe([
+                    { name: observe('text'), value: observe('Clique me') },
+                  ]),
+                },
+              ]),
+            },
+          ]),
+        }
+      ]),
       value: observe<TElement[]>([
         {
           id: observe('123'),
@@ -87,6 +116,11 @@ export const App = () => {
             },
           ]),
         },
+        {
+          type: observe('component'),
+          id: observe('custom-button-using'),
+          referenceId: observe('custom-button'),
+        }
       ]),
     };
   }, []);
