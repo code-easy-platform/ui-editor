@@ -21,7 +21,7 @@ export const getCanDrop = (monitor: TMonitor, element: TElement, parents: TEleme
 export const getDropPosition = (monitor: TMonitor, element: TElement, elementRef: React.RefObject<HTMLElement>) => {
   if (!elementRef.current) return null;
 
-  if (element.type.value === 'slot') {
+  if (element.type.value === 'slot' && Array.isArray((element as TElement<'slot'>).children.value)) {
     return { isOverCurrentStart: false, isOverCurrentEnd: false, isOverEnd: false, isOverStart: false };
   }
 
@@ -67,7 +67,7 @@ export const getInsertBarPosition = (monitor: TMonitor, element: TElement, eleme
 
   const targetDomRect = elementRef.current.getBoundingClientRect();
 
-  if (element.type.value === 'slot') {
+  if (element.type.value === 'slot' && Array.isArray((element as TElement<'slot'>).children.value)) {
     return {
       isHorizontal: true,
       left: targetDomRect.left,

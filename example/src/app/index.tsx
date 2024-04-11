@@ -207,6 +207,12 @@ export const App = () => {
           name: observe('CustomSendEmail'),
           referenceId: observe('custom-send-email'),
         },
+        {
+          id: observe(v4()),
+          type: observe('slot'),
+          name: observe('SlotElement'),
+          children: observe(undefined),
+        }
       ]),
     };
   }, []);
