@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { observe, set } from 'react-observing';
+import { v4 } from 'uuid';
 
 // TODO: Transferir para o index.ts do src
 import { TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src/lib/types';
@@ -15,15 +16,15 @@ export const App = () => {
   const values = useMemo(() => {
     return {
       styles: observe<TStyle[]>([
-        { id: observe('button'), content: observe('button { padding:8px; padding-left:16px;padding-right:16px; border:none; background-color:green; border-radius:4px; color:white; }') },
-        { id: observe('button:disabled'), content: observe('button:disabled { opacity: 0.5 }') }
+        { id: observe(v4()), content: observe('button { padding:8px; padding-left:16px;padding-right:16px; border:none; background-color:green; border-radius:4px; color:white; }') },
+        { id: observe(v4()), content: observe('button:disabled { opacity: 0.5 }') }
       ]),
       components: observe<TComponent[]>([
         {
           id: observe('custom-input'),
           content: observe<TElement[]>([
             {
-              id: observe('1-custom-input'),
+              id: observe(v4()),
               type: observe('html'),
               tag: observe('input'),
               name: observe('input'),
@@ -46,7 +47,7 @@ export const App = () => {
           id: observe('custom-button'),
           content: observe<TElement[]>([
             {
-              id: observe('1-custom-button'),
+              id: observe(v4()),
               type: observe('html'),
               tag: observe('button'),
               name: observe('button'),
@@ -58,7 +59,7 @@ export const App = () => {
               children: observe([
                 {
                   tag: observe('a'),
-                  id: observe('2-custom-button'),
+                  id: observe(v4()),
                   type: observe('html'),
                   name: observe('a'),
                   customData: { teste: 2 },
@@ -76,7 +77,7 @@ export const App = () => {
           id: observe('custom-send-email'),
           content: observe<TElement[]>([
             {
-              id: observe('1-custom-send-email'),
+              id: observe(v4()),
               tag: observe('div'),
               type: observe('html'),
               name: observe('div'),
@@ -92,21 +93,21 @@ export const App = () => {
               ]),
               children: observe([
                 {
+                  id: observe(v4()),
                   type: observe('component'),
                   name: observe('CustomInput'),
-                  id: observe('custom-input-using'),
                   referenceId: observe('custom-input'),
                 },
                 {
+                  id: observe(v4()),
                   type: observe('component'),
                   name: observe('CustomButton'),
-                  id: observe('custom-button-using'),
                   referenceId: observe('custom-button'),
                 },
                 {
+                  id: observe(v4()),
                   type: observe('component'),
                   name: observe('CustomSendEmail'),
-                  id: observe('custom-send-email-using'),
                   referenceId: observe('custom-send-email'),
                 },
               ]),
@@ -116,7 +117,7 @@ export const App = () => {
       ]),
       value: observe<TElement[]>([
         {
-          id: observe('123'),
+          id: observe(v4()),
           type: observe('html'),
           tag: observe('button'),
           customData: { teste: 1 },
@@ -128,7 +129,7 @@ export const App = () => {
           children: observe([
             {
               tag: observe('a'),
-              id: observe('546'),
+              id: observe(v4()),
               name: observe('a'),
               type: observe('html'),
               customData: { teste: 2 },
@@ -141,7 +142,7 @@ export const App = () => {
           ]),
         },
         {
-          id: observe('456'),
+          id: observe(v4()),
           type: observe('html'),
           tag: observe('button'),
           customData: { teste: 3 },
@@ -158,7 +159,7 @@ export const App = () => {
           ]),
         },
         {
-          id: observe('789'),
+          id: observe(v4()),
           tag: observe('div'),
           type: observe('html'),
           children: observe([]),
@@ -168,7 +169,7 @@ export const App = () => {
           style: observe([]),
         },
         {
-          id: observe('654'),
+          id: observe(v4()),
           tag: observe('div'),
           type: observe('html'),
           customData: { teste: 4 },
@@ -177,7 +178,7 @@ export const App = () => {
           style: observe([]),
           children: observe([
             {
-              id: observe('wer'),
+              id: observe(v4()),
               style: observe([]),
               name: observe('input'),
               tag: observe('input'),
@@ -189,21 +190,21 @@ export const App = () => {
           ]),
         },
         {
+          id: observe(v4()),
           type: observe('component'),
           name: observe('CustomInput'),
-          id: observe('custom-input-using'),
           referenceId: observe('custom-input'),
         },
         {
+          id: observe(v4()),
           type: observe('component'),
           name: observe('CustomButton'),
-          id: observe('custom-button-using'),
           referenceId: observe('custom-button'),
         },
         {
+          id: observe(v4()),
           type: observe('component'),
           name: observe('CustomSendEmail'),
-          id: observe('custom-send-email-using'),
           referenceId: observe('custom-send-email'),
         },
       ]),
@@ -212,6 +213,8 @@ export const App = () => {
 
 
   const handleDrop = useCallback(({ element, from, to }: TDropFunctionProps) => {
+    console.log(element, from, to);
+
     if (from.element) {
       set(from.element === 'root' ? values.value : from.element.children, oldContent => {
         if (!oldContent) return oldContent;
@@ -259,8 +262,8 @@ export const App = () => {
           <UIEditor
             value={values.value}
             styles={values.styles}
-            onKeyDown={console.log}
             components={values.components}
+            onKeyDown={(...rest) => console.log('end', ...rest)}
 
             hoveredId={hoveredId}
             selectedId={selectedId}
@@ -270,6 +273,9 @@ export const App = () => {
             onDrop={handleDrop}
             onDragEnd={(...rest) => console.log('end', ...rest)}
             onDragStart={(...rest) => console.log('start', ...rest)}
+
+            onRemove={(...rest) => console.log('remove', ...rest)}
+            onDuplicate={(...rest) => console.log('duplicate', ...rest)}
           />
         </div>
       </div>

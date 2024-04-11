@@ -56,7 +56,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
       onHoverBar(element, elementRef.current);
     });
     return () => subscription.unsubscribe();
-  }, [id, hoveredId, element]);
+  }, [id, hoveredId, element, onHoverBar]);
 
   useEffect(() => {
     if (selectedId.value === id) {
@@ -69,7 +69,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
       onSelectBar(element, elementRef.current);
     });
     return () => subscription.unsubscribe();
-  }, [element, id, selectedId]);
+  }, [element, id, selectedId, onSelectBar]);
 
   useEffect(() => {
     setForceEnable(old => {

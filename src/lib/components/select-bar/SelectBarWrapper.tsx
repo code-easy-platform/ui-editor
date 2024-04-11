@@ -1,23 +1,34 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
+import { VscArrowUp, VscTrash, VscMove, VscFiles } from "react-icons/vsc";
 import { useObserverValue, useSelectorValue } from "react-observing";
+import { useDrag } from 'react-use-drag-and-drop';
 
+import { useUiEditorContext } from '../../UiEditorContext';
+import { getCustomDragLayer } from '../../helpers';
+import { TDraggableElement } from '../../types';
 import { useSelectBar } from './UseSelectBar';
+import { useInsertBar } from '../insert-bar';
 import { SelectBar } from "./SelectBar";
 
 
 export const SelectBarWrapper: React.FC = memo(() => {
+  const refToDrag = useRef<HTMLDivElement>(null);
+
+
+  const { onDragStart, onDragEnd, onDuplicate, onRemove } = useUiEditorContext();
+  const { hideInsertBar } = useInsertBar();
   const {
+    select,
     selectedId: selectedIdObservable,
     selectedElement: selectedElementObservable,
     selectBarGetPosition: selectBarGetPositionObserver,
+    selectedElementParents: selectedElementParentsObservable,
     selectBarDocumentVerticalScroll: documentVerticalScrollObserver,
     selectBarDocumentHorizontalScroll: documentHorizontalScrollObserver,
   } = useSelectBar();
 
 
-  const documentHorizontalScroll = useObserverValue(documentHorizontalScrollObserver);
-  const documentVerticalScroll = useObserverValue(documentVerticalScrollObserver);
-  const getPosition = useObserverValue(selectBarGetPositionObserver);
+  const selectedElementParents = useObserverValue(selectedElementParentsObservable);
   const selectedElement = useObserverValue(selectedElementObservable);
   const selectedId = useObserverValue(selectedIdObservable);
   const name = useSelectorValue(({ get }) => {
@@ -26,7 +37,12 @@ export const SelectBarWrapper: React.FC = memo(() => {
   }, [selectedElement]);
 
 
-  const { width, height, top, left } = useMemo(() => {
+  const { width, height, top, left } = useSelectorValue(({ get }) => {
+    const documentHorizontalScroll = get(documentHorizontalScrollObserver);
+    const documentVerticalScroll = get(documentVerticalScrollObserver);
+    const getPosition = get(selectBarGetPositionObserver);
+
+
     if (!getPosition) return {
       top: 0,
       left: 0,
@@ -39,8 +55,42 @@ export const SelectBarWrapper: React.FC = memo(() => {
       height: getPosition().height,
       top: getPosition().top - documentVerticalScroll,
       left: getPosition().left - documentHorizontalScroll,
-    }
-  }, [documentHorizontalScroll, documentVerticalScroll, getPosition]);
+    };
+  }, [documentHorizontalScrollObserver, documentVerticalScrollObserver, selectBarGetPositionObserver]);
+
+
+  const handleSelectParent = useCallback(() => {
+    const parent = selectedElementParents?.slice(-1).at(0);
+
+    if (parent) select(parent.id.value);
+  }, [select, selectedElementParents]);
+
+  const handleRemove = useCallback(() => {
+    if (selectedElement) onRemove(selectedElement);
+  }, [onRemove, selectedElement]);
+
+  const handleDuplicate = useCallback(() => {
+    if (selectedElement) onDuplicate(selectedElement);
+  }, [onDuplicate, selectedElement]);
+
+
+  const { preview, isDragging } = useDrag<TDraggableElement>({
+    element: refToDrag,
+    id: selectedId || 'default',
+    start: () => { onDragStart() },
+    end: () => { hideInsertBar(); onDragEnd(); },
+    canDrag: !!selectedElement && Array.isArray(selectedElementParents),
+    data: {
+      element: selectedElement,
+      parents: selectedElementParents
+    } as TDraggableElement,
+  }, [selectedId, selectedElement, selectedElementParents, hideInsertBar, onDragStart, onDragEnd]);
+  useEffect(() => {
+    preview(
+      () => getCustomDragLayer(name.toLocaleUpperCase()),
+      (customDragLayer) => customDragLayer.remove(),
+    );
+  }, [preview, name]);
 
 
   if (!selectedId) return null;
@@ -54,8 +104,19 @@ export const SelectBarWrapper: React.FC = memo(() => {
       left={left - 1}
       color="#4a87ee"
     >
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {name}
+
+        {!isDragging && (
+          <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
+            {selectedElementParents && selectedElementParents.length > 0 && <VscArrowUp title="Select parent" onClick={handleSelectParent} style={{ cursor: 'pointer', width: 14, height: 14 }} />}
+            <VscTrash title="Remove element" onClick={handleRemove} style={{ cursor: 'pointer', width: 14, height: 14 }} />
+            <VscFiles title="Duplicate element and children" onClick={handleDuplicate} style={{ cursor: 'pointer', width: 14, height: 14 }} />
+            <span ref={refToDrag} title="Drag element" style={{ display: 'flex', cursor: 'move' }}>
+              <VscMove style={{ width: 14, height: 14, pointerEvents: 'none' }} />
+            </span>
+          </div>
+        )}
       </div>
     </SelectBar>
   );

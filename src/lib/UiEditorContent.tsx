@@ -30,14 +30,15 @@ export const UIEditorContent = () => {
     hideInsertBar();
     if (!data) return;
 
-    const parent = data.parents?.slice(-1).at(0);
-    const indexToRemove = parent?.children.value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
+    const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
+    const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
+    const indexToRemove = parentToRemoveTheElement?.children.value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
 
     onDrop({
       element: data.element,
       from: {
+        element: elementFrom,
         position: indexToRemove,
-        element: !parent ? null : parent,
       },
       to: {
         element: 'root',
@@ -64,8 +65,6 @@ export const UIEditorContent = () => {
     });
   }, [frameDocumentRef?.lastElementChild, showInsertBar]);
 
-  const handleClick = useCallback(() => updateSelectBar(undefined), [updateSelectBar]);
-
   const handleScroll = useCallback((y: number, x: number) => {
     updateSelectBarScroll(y, x);
     updateHoverBarScroll(y, x);
@@ -85,13 +84,12 @@ export const UIEditorContent = () => {
     <CustomFrame
       styles={styles}
       resetBody={true}
-      onClick={handleClick}
       draggingHover={isDraggingOver || isDraggingOverCurrent}
     >
       <ContentFrame onRef={setFrameDocumentRef} onScroll={handleScroll} onKeyDown={onKeyDown}>
-        <SelectBarWrapper />
-        <HoverBarWrapper />
         <InsertBar />
+        <HoverBarWrapper />
+        <SelectBarWrapper />
 
         {content.map((element) => (
           <Element
@@ -100,6 +98,14 @@ export const UIEditorContent = () => {
             key={element.id.value}
           />
         ))}
+
+        {content.length === 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: "center", margin: 24, padding: 24, backgroundColor: 'lightgray', borderRadius: 8, outline: 'none' }}>
+            <span style={{ fontFamily: 'sans-serif', fontSize: 14, opacity: 0.5, userSelect: 'none', outline: 'none' }}>
+              Drag and drop here to start
+            </span>
+          </div>
+        )}
       </ContentFrame>
     </CustomFrame>
   );

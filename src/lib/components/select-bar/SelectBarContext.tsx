@@ -17,6 +17,7 @@ interface SelectBarContextProps {
   documentVerticalScroll: IObservable<number>;
 
   element: IObservable<undefined | TElement>;
+  parents: IObservable<undefined | TElement[]>;
   getPosition: IObservable<undefined | TGetPosition>;
 
   id: IObservable<undefined | string>;
@@ -36,6 +37,7 @@ export const SelectBarContextProvider = ({ children, id, onSelect }: ISelectBarC
     documentVerticalScroll: observe(0),
 
     getPosition: observe(undefined),
+    parents: observe(undefined),
     element: observe(undefined),
     onSelect,
     id,

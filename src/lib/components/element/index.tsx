@@ -64,13 +64,13 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [updateHoverBar]);
 
   const handleSelectBar = useCallback((element: TElement, htmlElement: HTMLElement | null) => {
-    updateSelectBar(element, () => ({
+    updateSelectBar(element, parents, () => ({
       top: htmlElement?.offsetTop || 0,
       left: htmlElement?.offsetLeft || 0,
       width: htmlElement?.getBoundingClientRect().width || 0,
       height: htmlElement?.getBoundingClientRect().height || 0,
     }));
-  }, [updateSelectBar]);
+  }, [updateSelectBar, parents]);
 
 
   const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {

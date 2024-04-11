@@ -11,6 +11,8 @@ export interface IUiEditorContextProps {
 
   onDragEnd: () => void;
   onDragStart: () => void;
+  onRemove: (element: TElement) => void;
+  onDuplicate: (element: TElement) => void;
   onKeyDown: (event: KeyboardEvent) => void
   onDrop: (props: TDropFunctionProps) => void;
 }

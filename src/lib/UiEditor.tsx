@@ -8,15 +8,7 @@ import { HoverBarContextProvider } from './components/hover-bar';
 import { UIEditorContent } from './UiEditorContent';
 
 
-interface IUIEditorProps {
-  value: IUiEditorContextProps['value'];
-  styles: IUiEditorContextProps['styles'];
-  components: IUiEditorContextProps['components'];
-  onDrop: IUiEditorContextProps['onDrop'];
-  onDragEnd: IUiEditorContextProps['onDragEnd'];
-  onKeyDown: IUiEditorContextProps['onKeyDown'];
-  onDragStart: IUiEditorContextProps['onDragStart'];
-
+interface IUIEditorProps extends Pick<IUiEditorContextProps, 'components' | 'styles' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown' | 'onDuplicate' | 'onRemove'> {
   onHover: (id: string | undefined) => void;
   onSelect: (id: string | undefined) => void;
   hoveredId: IObservable<string | undefined>;

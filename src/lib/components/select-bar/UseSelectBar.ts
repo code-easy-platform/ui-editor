@@ -13,8 +13,9 @@ export const useSelectBar = () => {
     context.onSelect(id);
   }, [context.id]);
 
-  const handleUpdateSelectBar = useCallback((element: TElement | undefined, getPosition?: TGetPosition) => {
+  const handleUpdateSelectBar = useCallback((element: TElement | undefined, parents?: TElement[], getPosition?: TGetPosition) => {
     set(context.getPosition, () => getPosition);
+    set(context.parents, parents);
     set(context.element, element);
   }, [context.getPosition]);
 
@@ -32,6 +33,7 @@ export const useSelectBar = () => {
     select: handleSelect,
     selectedId: context.id,
     selectedElement: context.element,
+    selectedElementParents: context.parents,
 
     updateSelectBar: handleUpdateSelectBar,
     updateSelectBarScroll: handleUpdateScroll,

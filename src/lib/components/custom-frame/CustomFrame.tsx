@@ -6,13 +6,12 @@ import { TStyle } from '../../types';
 
 
 interface ICustomFrameProps {
-  onClick(): void;
   resetBody: boolean;
   draggingHover: boolean;
   children: React.ReactNode;
   styles: IObservable<TStyle[]>;
 }
-export const CustomFrame = ({ children, styles, draggingHover, resetBody, onClick }: ICustomFrameProps) => {
+export const CustomFrame = ({ children, styles, draggingHover, resetBody }: ICustomFrameProps) => {
   const allStyles = useObserverValue(
     useMemo(() => selector(({ get }) => {
       return get(styles).map(style => ({
@@ -48,7 +47,6 @@ export const CustomFrame = ({ children, styles, draggingHover, resetBody, onClic
     <Frame
       tabIndex={-1}
       head={iframeHead}
-      onClick={onClick}
       mountTarget="body"
       onContextMenu={(e: any) => e.preventDefault()}
       className="w-full h-full bg-white border-none outline-none"
