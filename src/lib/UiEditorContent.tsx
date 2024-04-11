@@ -44,6 +44,8 @@ export const UIEditorContent = () => {
         position: value.value.length,
       },
     });
+
+    select(data.element.id.value);
   }, [value, select, hideInsertBar]);
 
   const handleDragHover = useCallback((_: TDraggableElement | undefined, __: TMonitor) => {

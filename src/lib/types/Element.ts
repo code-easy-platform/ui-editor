@@ -22,6 +22,7 @@ type TSlot<D = any> = {
 
 type TComponent<D = any> = {
   id: IObservable<string>;
+  name: IObservable<string>;
   type: IObservable<'component'>;
   referenceId: IObservable<string>;
   customData?: D;

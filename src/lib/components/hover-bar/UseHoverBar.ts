@@ -10,7 +10,7 @@ export const useHoverBar = () => {
 
   const handleHover = useCallback((id: string | undefined) => {
     if (context.id.value !== id) context.onHover(id);
-  }, [context.id, context.getPosition]);
+  }, [context.id]);
 
   const handleUpdateGetPositionHover = useCallback((getPosition: TGetPosition) => {
     set(context.getPosition, () => getPosition);

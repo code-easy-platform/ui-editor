@@ -41,9 +41,9 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const id = useObserverValue(element.id);
 
   const { onDragStart, onDragEnd } = useUiEditorContext();
-  const { selectedId, select } = useSelectBar();
-  const { hoveredId, hover } = useHoverBar();
   const { hideInsertBar } = useInsertBar();
+  const { selectedId } = useSelectBar();
+  const { hoveredId } = useHoverBar();
 
   useEffect(() => {
     if (hoveredId.value === id) {
@@ -51,13 +51,12 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     }
 
     const subscription = hoveredId.subscribe((hoveringId) => {
-      if (hoveringId === undefined) return hover(undefined);
       if (hoveringId !== id) return;
 
       onHoverBar(element, elementRef.current);
     });
     return () => subscription.unsubscribe();
-  }, [id, hoveredId, element, hover]);
+  }, [id, hoveredId, element]);
 
   useEffect(() => {
     if (selectedId.value === id) {
@@ -65,13 +64,12 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     }
 
     const subscription = selectedId.subscribe((selectedId) => {
-      if (selectedId === undefined) return select(undefined);
       if (selectedId !== id) return;
 
       onSelectBar(element, elementRef.current);
     });
     return () => subscription.unsubscribe();
-  }, [element, id, selectedId, select]);
+  }, [element, id, selectedId]);
 
   useEffect(() => {
     setForceEnable(old => {
@@ -115,7 +113,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     id,
     element: elementRef,
     data: { element, parents, },
-    start: () => { select(id); onDragStart() },
+    start: () => { onDragStart() },
     end: () => { hideInsertBar(); onDragEnd(); },
   }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {

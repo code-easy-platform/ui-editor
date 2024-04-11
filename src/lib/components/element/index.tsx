@@ -137,6 +137,8 @@ export const Element = ({ element, parents }: IElementProps) => {
         }
       });
     }
+
+    select(data.element.id.value);
   }, [select, onDrop]);
 
 

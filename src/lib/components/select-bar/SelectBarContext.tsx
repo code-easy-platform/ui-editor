@@ -42,6 +42,10 @@ export const SelectBarContextProvider = ({ children, id, onSelect }: ISelectBarC
     store.current.id = id;
   }, [id]);
 
+  useEffect(() => {
+    store.current.onSelect = onSelect;
+  }, [onSelect]);
+
 
   return (
     <SelectBarContext.Provider value={store.current}>

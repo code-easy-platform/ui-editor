@@ -9,8 +9,8 @@ export const useSelectBar = () => {
 
 
   const handleSelect = useCallback((id: string | undefined) => {
-    if (context.id.value !== id) context.onSelect(id);
-  }, [context.id, context.getPosition]);
+    context.onSelect(id);
+  }, [context.id]);
 
   const handleUpdateSelectGetPosition = useCallback((getPosition?: TGetPosition) => {
     set(context.getPosition, () => getPosition);

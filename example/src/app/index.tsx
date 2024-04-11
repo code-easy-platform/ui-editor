@@ -89,13 +89,21 @@ export const App = () => {
               children: observe([
                 {
                   type: observe('component'),
+                  name: observe('CustomInput'),
                   id: observe('custom-input-using'),
                   referenceId: observe('custom-input'),
                 },
                 {
                   type: observe('component'),
+                  name: observe('CustomButton'),
                   id: observe('custom-button-using'),
                   referenceId: observe('custom-button'),
+                },
+                {
+                  type: observe('component'),
+                  name: observe('CustomSendEmail'),
+                  id: observe('custom-send-email-using'),
+                  referenceId: observe('custom-send-email'),
                 },
               ]),
             },
@@ -172,16 +180,19 @@ export const App = () => {
         },
         {
           type: observe('component'),
+          name: observe('CustomInput'),
           id: observe('custom-input-using'),
           referenceId: observe('custom-input'),
         },
         {
           type: observe('component'),
+          name: observe('CustomButton'),
           id: observe('custom-button-using'),
           referenceId: observe('custom-button'),
         },
         {
           type: observe('component'),
+          name: observe('CustomSendEmail'),
           id: observe('custom-send-email-using'),
           referenceId: observe('custom-send-email'),
         },

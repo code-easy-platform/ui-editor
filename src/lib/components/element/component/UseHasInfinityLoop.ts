@@ -13,11 +13,10 @@ export const useHasInfinityLoop = (element: TElement<'component'>, parents: TEle
 
   /* This can prevent all types of loop in components */
   return useSelectorValue(({ get }) => {
-    return false;
-    /* if (!get(element.referenceId)) return false;
+    return parents.some(parentItem => {
+      if (get(parentItem.type) !== 'component') return false;
 
-    return parents
-      .map(parentItem => get(parentItem.referenceId))
-      .includes(get(element.referenceId)); */
+      return get((parentItem as TElement<'component'>).referenceId) === get(element.referenceId)
+    });
   }, [element, parents]);
 }

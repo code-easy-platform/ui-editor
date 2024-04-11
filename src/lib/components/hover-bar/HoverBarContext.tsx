@@ -42,6 +42,10 @@ export const HoverBarContextProvider = ({ children, id, onHover }: IHoverBarCont
     store.current.id = id;
   }, [id]);
 
+  useEffect(() => {
+    store.current.onHover = onHover;
+  }, [onHover]);
+
 
   return (
     <HoverBarContext.Provider value={store.current}>
