@@ -16,7 +16,7 @@ export const useHasInfinityLoop = (element: TElement<'component'>, parents: TEle
     return parents.some(parentItem => {
       if (get(parentItem.type) !== 'component') return false;
 
-      return get((parentItem as TElement<'component'>).referenceId) === get(element.referenceId)
+      return get((parentItem as TElement<'component'>).referenceComponentId) === get(element.referenceComponentId)
     });
   }, [element, parents]);
 }

@@ -3,6 +3,8 @@ import { TMonitor } from 'react-use-drag-and-drop';
 
 import { TDraggableElement, TElement } from '../../../types';
 import { useHasViewOnly } from '../UseHasViewOnly';
+import { useSlotRender } from './UseSlotRender';
+import { Render } from './Render';
 import { Edit } from './Edit';
 import { View } from './View';
 
@@ -24,7 +26,25 @@ interface ISlotProps {
 }
 export const Slot = ({ element, parents, ...rest }: ISlotProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
+  const isRender = useSlotRender(element, parents);
 
+
+  if (isRender) return (
+    <Render
+      element={element}
+      parents={parents}
+
+      onDrop={rest.onDrop}
+      onDragOver={rest.onDragOver}
+      onDragLeave={rest.onDragLeave}
+
+      onMouseOver={rest.onMouseOver}
+      onMouseLeave={rest.onMouseLeave}
+
+      onHoverBar={rest.onHoverBar}
+      onSelectBar={rest.onSelectBar}
+    />
+  );
 
   if (hasViewOnly) return (
     <View

@@ -39,7 +39,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
   const id = useObserverValue(element.id);
   const children = useSelectorValue(({ get }) => {
-    const component = get(components).find(component => get(component.id) === get(element.referenceId));
+    const component = get(components).find(component => get(component.id) === get(element.referenceComponentId));
     if (!component) return [];
 
     return get(component.content);

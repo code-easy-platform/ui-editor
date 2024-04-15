@@ -10,12 +10,22 @@ import { TElement } from '../../types';
  * @returns If it has or not view only
  */
 export const useHasViewOnly = (element: TElement, parents: TElement[]) => {
-  return useSelectorValue(({ get }) => {
-    return parents.some(parent => {
-      return (
-        get(parent.type) === 'component'
-        // Para permitir que o slot seja editável ou esteja em modo view pode ser possível olhar para o parent que é um componente que está renderizando ele, o parente que renderiza um slot em modo view(que aceita drop dentro) deverá ver junto com o referenceId uma prop slots, ali dentro terá o id do slot em questão
-      );
-    });
+
+  const isViewOnly = useSelectorValue(({ get }) => {
+    for (let index = parents.length - 1; index >= 0; index--) {
+      const parentElement = parents[index];
+
+      if (get(parentElement.type) === 'slot') {
+        return false;
+      }
+
+      if (get(parentElement.type) === 'component') {
+        return true;
+      }
+    }
+
+    return false;
   }, [parents, element]);
+
+  return isViewOnly;
 }

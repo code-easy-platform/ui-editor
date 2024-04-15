@@ -7,17 +7,17 @@ import { ContentFrame } from './components/custom-frame/ContentFrame';
 import { HoverBarWrapper, useHoverBar } from './components/hover-bar';
 import { CustomFrame } from './components/custom-frame/CustomFrame';
 import { InsertBar, useInsertBar } from './components/insert-bar';
+import { getParentToRemoveChildren, uuid } from './helpers';
 import { useUiEditorContext } from './UiEditorContext';
 import { Element } from './components/element';
 import { TDraggableElement } from './types';
-import { uuid } from './helpers';
 
 
 export const UIEditorContent = () => {
   const droppableId = useRef({ id: uuid() });
 
-  const { updateSelectBar, updateSelectBarScroll, select } = useSelectBar();
   const { value, styles, onDrop, onKeyDown } = useUiEditorContext();
+  const { updateSelectBarScroll, select } = useSelectBar();
   const { showInsertBar, hideInsertBar } = useInsertBar();
   const { updateHoverBarScroll, hover } = useHoverBar();
 
@@ -30,7 +30,7 @@ export const UIEditorContent = () => {
     hideInsertBar();
     if (!data) return;
 
-    const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
+    const parentToRemoveTheElement = getParentToRemoveChildren(data.parents);
     const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
     const indexToRemove = parentToRemoveTheElement?.children.value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
 

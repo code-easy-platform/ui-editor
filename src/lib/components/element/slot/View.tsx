@@ -3,12 +3,12 @@ import { TElement } from '../../../types';
 import { Element } from '..';
 
 
-interface IEditProps {
+interface IViewProps {
   element: TElement<'slot'>;
   parents: TElement[];
 }
-export const View = ({ element, parents }: IEditProps) => {
-  const [content] = useSlotContent(element, parents);
+export const View = ({ element, parents }: IViewProps) => {
+  const [content = []] = useSlotContent(element, parents);
 
 
   return (

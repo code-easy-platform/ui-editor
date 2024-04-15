@@ -2,9 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { observe, set } from 'react-observing';
 import { v4 } from 'uuid';
 
-// TODO: Transferir para o index.ts do src
-import { TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src/lib/types';
-import { UIEditor } from 'ui-editor/src';
+import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src';
 
 import './../styles.css';
 
@@ -44,71 +42,57 @@ export const App = () => {
           ]),
         },
         {
-          id: observe('custom-button'),
+          id: observe('slot-level-1'),
           content: observe<TElement[]>([
             {
               id: observe(v4()),
               type: observe('html'),
-              tag: observe('button'),
-              name: observe('button'),
-              customData: { teste: 1 },
-              style: observe(undefined),
+              tag: observe('div'),
+              name: observe('div'),
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
               attributes: observe([
                 { name: observe('hidden'), value: observe(false) },
               ]),
-              children: observe([
+              children: observe<TElement[]>([
                 {
-                  tag: observe('a'),
-                  id: observe(v4()),
-                  type: observe('html'),
-                  name: observe('a'),
-                  customData: { teste: 2 },
-                  style: observe(undefined),
-                  children: observe(undefined),
-                  attributes: observe([
-                    { name: observe('text'), value: observe('Send') },
-                  ]),
+                  id: observe('slot-level-1-slot'),
+                  type: observe('slot'),
+                  name: observe('Slot1'),
+                  componentId: observe('slot-level-1'),
                 },
               ]),
+            },
+            {
+              type: observe('slot'),
+              name: observe('SlotElement'),
+              children: observe(undefined),
+              id: observe('id-slot-element'),
+              componentId: observe('custom-button'),
             },
           ]),
         },
         {
-          id: observe('custom-send-email'),
+          id: observe('slot-level-2'),
           content: observe<TElement[]>([
             {
               id: observe(v4()),
-              tag: observe('div'),
               type: observe('html'),
+              tag: observe('div'),
               name: observe('div'),
-              customData: { teste: 1 },
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
               attributes: observe([
                 { name: observe('hidden'), value: observe(false) },
               ]),
-              style: observe([
-                { name: observe('padding'), value: observe(8) },
-                { name: observe('display'), value: observe('flex') },
-                { name: observe('gap'), value: observe(8) },
-                { name: observe('align-itens'), value: observe('center') },
-              ]),
-              children: observe([
+              children: observe<TElement[]>([
                 {
-                  id: observe(v4()),
-                  type: observe('component'),
-                  name: observe('CustomInput'),
-                  referenceId: observe('custom-input'),
-                },
-                {
-                  id: observe(v4()),
-                  type: observe('component'),
-                  name: observe('CustomButton'),
-                  referenceId: observe('custom-button'),
-                },
-                {
-                  id: observe(v4()),
-                  type: observe('component'),
-                  name: observe('CustomSendEmail'),
-                  referenceId: observe('custom-send-email'),
+                  id: observe('slot-level-2-slot'),
+                  type: observe('slot'),
+                  name: observe('Slot1'),
+                  componentId: observe('slot-level-2'),
                 },
               ]),
             },
@@ -141,7 +125,7 @@ export const App = () => {
             },
           ]),
         },
-        {
+        /* {
           id: observe(v4()),
           type: observe('html'),
           tag: observe('button'),
@@ -198,21 +182,64 @@ export const App = () => {
         {
           id: observe(v4()),
           type: observe('component'),
-          name: observe('CustomButton'),
-          referenceId: observe('custom-button'),
-        },
+          name: observe('CustomSendEmail'),
+          referenceId: observe('custom-send-email'),
+        } */
         {
           id: observe(v4()),
           type: observe('component'),
-          name: observe('CustomSendEmail'),
-          referenceId: observe('custom-send-email'),
+          name: observe('slot-level-1'),
+          referenceComponentId: observe('slot-level-1'),
+          slots: observe<TElement<'slot-content'>[]>([
+            {
+              id: observe(v4()),
+              type: observe('slot-content'),
+              referenceSlotId: observe('slot-level-1-slot'),
+              children: observe([
+                {
+                  id: observe(v4()),
+                  type: observe('component'),
+                  name: observe('slot-level-2'),
+                  referenceComponentId: observe('slot-level-2'),
+                  slots: observe<TElement<'slot-content'>[]>([
+                    {
+                      id: observe(v4()),
+                      type: observe('slot-content'),
+                      referenceSlotId: observe('slot-level-2-slot'),
+                      children: observe([
+                        {
+                          id: observe(v4()),
+                          type: observe('html'),
+                          tag: observe('button'),
+                          customData: { teste: 1 },
+                          style: observe(undefined),
+                          name: observe('button'),
+                          attributes: observe([
+                            { name: observe('hidden'), value: observe(false) },
+                          ]),
+                          children: observe([
+                            {
+                              tag: observe('a'),
+                              id: observe(v4()),
+                              name: observe('a'),
+                              type: observe('html'),
+                              customData: { teste: 2 },
+                              style: observe(undefined),
+                              children: observe(undefined),
+                              attributes: observe([
+                                { name: observe('text'), value: observe('button') },
+                              ]),
+                            },
+                          ]),
+                        },
+                      ]),
+                    }
+                  ]),
+                },
+              ]),
+            }
+          ]),
         },
-        {
-          id: observe(v4()),
-          type: observe('slot'),
-          name: observe('SlotElement'),
-          children: observe(undefined),
-        }
       ]),
     };
   }, []);
@@ -238,7 +265,9 @@ export const App = () => {
         return [...oldContent];
       });
     } else {
-      const position = (from.element !== 'root' && from.element?.id.value === to.element.id.value) && (from.position < to.position) ? to.position - 1 : to.position;
+      const position = (from.element !== 'root' && from.element?.id.value === to.element.id.value) && (from.position < to.position)
+        ? to.position - 1
+        : to.position;
 
       set(to.element.children, oldContent => {
         if (!oldContent) return oldContent;
@@ -279,6 +308,7 @@ export const App = () => {
             onDrop={handleDrop}
             onDragEnd={(...rest) => console.log('end', ...rest)}
             onDragStart={(...rest) => console.log('start', ...rest)}
+            onAddSlotContent={(...rest) => console.log('end', ...rest)}
 
             onRemove={(...rest) => console.log('remove', ...rest)}
             onDuplicate={(...rest) => console.log('duplicate', ...rest)}

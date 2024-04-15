@@ -14,7 +14,7 @@ export const View = ({ element, parents }: IEditProps) => {
 
 
   const content = useSelectorValue(({ get }) => {
-    const component = get(components).find(component => get(component.id) === get(element.referenceId));
+    const component = get(components).find(component => get(component.id) === get(element.referenceComponentId));
     if (!component) return [];
 
     return get(component.content);

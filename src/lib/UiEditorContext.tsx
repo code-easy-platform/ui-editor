@@ -15,6 +15,7 @@ export interface IUiEditorContextProps {
   onDuplicate: (element: TElement) => void;
   onKeyDown: (event: KeyboardEvent) => void
   onDrop: (props: TDropFunctionProps) => void;
+  onAddSlotContent: (element: TElement, referenceComponent: TElement<'component'>) => void;
 }
 
 const UiEditorContext = createContext({} as IUiEditorContextProps);
