@@ -1,8 +1,8 @@
 import { useContext } from "react"
 
-import { InsertBarContext } from "./InsertBarContext";
+import { IInsertBarContextProps, InsertBarContext } from "./InsertBarContext";
 
 
-export const useInsertBar = () => {
+export const useInsertBar = (): IInsertBarContextProps => {
   return useContext(InsertBarContext);
 }

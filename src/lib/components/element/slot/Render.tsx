@@ -33,7 +33,7 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
   const { hoveredId } = useHoverBar();
 
 
-  const name = useObserverValue(element.name);
+//  const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
 
 

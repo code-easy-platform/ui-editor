@@ -11,7 +11,7 @@ interface IEventData {
   isHorizontal?: boolean;
 }
 
-interface IInsertBarContextProps {
+export interface IInsertBarContextProps {
   hideInsertBar: () => void;
   showInsertBar: (data: IEventData) => void;
   observables: {

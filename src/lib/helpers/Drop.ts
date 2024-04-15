@@ -18,10 +18,10 @@ export const getCanDrop = (monitor: TMonitor, element: TElement, parents: TEleme
   return true;
 };
 
-export const getDropPosition = (monitor: TMonitor, element: TElement, elementRef: React.RefObject<HTMLElement>) => {
+export const getDropPosition = (monitor: TMonitor, element: TElement<'component' | 'html' | 'slot' | 'slot-content'>, elementRef: React.RefObject<HTMLElement>) => {
   if (!elementRef.current) return null;
 
-  if (element.type.value === 'slot' && Array.isArray((element as TElement<'slot'>).children.value)) {
+  if (element.type.value === 'slot-content' && Array.isArray((element as TElement<'slot-content'>).children.value)) {
     return { isOverCurrentStart: false, isOverCurrentEnd: false, isOverEnd: false, isOverStart: false };
   }
 
@@ -62,12 +62,12 @@ export const getDropPosition = (monitor: TMonitor, element: TElement, elementRef
   return { isOverCurrentStart, isOverCurrentEnd, isOverEnd, isOverStart };
 };
 
-export const getInsertBarPosition = (monitor: TMonitor, element: TElement, elementRef: React.RefObject<HTMLElement>) => {
+export const getInsertBarPosition = (monitor: TMonitor, element: TElement<'component' | 'html' | 'slot' | 'slot-content'>, elementRef: React.RefObject<HTMLElement>) => {
   if (!elementRef.current) return null;
 
   const targetDomRect = elementRef.current.getBoundingClientRect();
 
-  if (element.type.value === 'slot' && Array.isArray((element as TElement<'slot'>).children.value)) {
+  if (element.type.value === 'slot-content' && Array.isArray((element as TElement<'slot-content'>).children.value)) {
     return {
       isHorizontal: true,
       left: targetDomRect.left,

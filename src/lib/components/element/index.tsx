@@ -105,17 +105,18 @@ export const Element = ({ element, parents }: IElementProps) => {
     const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
 
     const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
-    const indexToRemove = (elementFrom === 'root' ? value : elementFrom.children).value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
+    if (elementFrom !== 'root' && (elementFrom.type.value === 'component' || elementFrom.type.value === 'slot')) return;
+    const indexToRemove = (elementFrom === 'root' ? value : (elementFrom as TElement<'html' | 'slot-content'>).children).value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
 
     if (isDropToParent) {
-      const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot'> | undefined;
+      const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
       const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
 
       onDrop({
         element: data.element,
         from: {
-          element: elementFrom,
           position: indexToRemove,
+          element: elementFrom as TElement<'html' | 'slot-content'>,
         },
         to: {
           element: parent ? parent : 'root',
@@ -123,16 +124,16 @@ export const Element = ({ element, parents }: IElementProps) => {
         }
       });
     } else {
-      const indexToAdd = (elementDropTarget as TElement<'html' | 'slot'>).children.value?.length || -1;
+      const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
 
       onDrop({
         element: data.element,
         from: {
-          element: elementFrom,
           position: indexToRemove,
+          element: elementFrom as TElement<'html' | 'slot-content'>,
         },
         to: {
-          element: elementDropTarget as TElement<'html' | 'slot'>,
+          element: elementDropTarget as TElement<'html' | 'slot-content'>,
           position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
         }
       });
