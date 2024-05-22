@@ -3,6 +3,7 @@ import { TMonitor, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
 import { SelectBarWrapper, useSelectBar } from './components/select-bar';
+import { TDraggableElement, TExternalDraggableElement } from './types';
 import { ContentFrame } from './components/custom-frame/ContentFrame';
 import { HoverBarWrapper, useHoverBar } from './components/hover-bar';
 import { CustomFrame } from './components/custom-frame/CustomFrame';
@@ -10,7 +11,6 @@ import { InsertBar, useInsertBar } from './components/insert-bar';
 import { getParentToRemoveChildren, uuid } from './helpers';
 import { useUiEditorContext } from './UiEditorContext';
 import { Element } from './components/element';
-import { TDraggableElement } from './types';
 
 
 export const UIEditorContent = () => {
@@ -26,27 +26,46 @@ export const UIEditorContent = () => {
   const content = useObserverValue(value);
 
 
-  const handleDrop = useCallback((data: TDraggableElement | undefined, _: TMonitor) => {
+  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement | undefined, _: TMonitor) => {
     hideInsertBar();
     if (!data) return;
 
-    const parentToRemoveTheElement = getParentToRemoveChildren(data.parents);
-    const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
-    const indexToRemove = parentToRemoveTheElement?.children.value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
+    if (Object.keys(data).includes('id')) {
+      const droppedData = data as TExternalDraggableElement;
 
-    onDrop({
-      element: data.element,
-      from: {
-        element: elementFrom,
-        position: indexToRemove,
-      },
-      to: {
-        element: 'root',
-        position: value.value.length,
-      },
-    });
+      onDrop({
+        element: droppedData.id,
+        from: {
+          position: -1,
+          element: null,
+        },
+        to: {
+          element: 'root',
+          position: value.value.length,
+        },
+      });
+    } else {
+      const droppedData = data as TDraggableElement;
 
-    select(data.element.id.value);
+      const parentToRemoveTheElement = getParentToRemoveChildren(droppedData.parents);
+      const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
+      const indexToRemove = parentToRemoveTheElement?.children.value?.findIndex(child => child.id.value === droppedData.element.id.value) ?? -1;
+
+      onDrop({
+        element: droppedData.element,
+        from: {
+          element: elementFrom,
+          position: indexToRemove,
+        },
+        to: {
+          element: 'root',
+          position: value.value.length,
+        },
+      });
+
+      select(droppedData.element.id.value);
+    }
+
   }, [value, select, hideInsertBar]);
 
   const handleDragHover = useCallback((_: TDraggableElement | undefined, __: TMonitor) => {

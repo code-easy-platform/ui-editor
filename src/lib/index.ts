@@ -1,2 +1,2 @@
-export type { TStyle, TComponent, TDraggableElement, TDropFunctionProps, TElement } from './types';
+export type { TStyle, TComponent, TDraggableElement, TDropFunctionProps, TExternalDraggableElement, TElement } from './types';
 export * from './UiEditor';

@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { useObserverValue } from 'react-observing';
 import { TMonitor } from 'react-use-drag-and-drop';
 
+import { TDraggableElement, TElement, TExternalDraggableElement } from '../../types';
 import { getCanDrop, getDropPosition, getInsertBarPosition } from '../../helpers';
 import { useUiEditorContext } from '../../UiEditorContext';
-import { TDraggableElement, TElement } from '../../types';
 import { useInsertBar } from '../insert-bar';
 import { useSelectBar } from '../select-bar';
 import { useHoverBar } from '../hover-bar';
@@ -92,7 +92,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     });
   }, [showInsertBar, hover, hideInsertBar]);
 
-  const handleDrop = useCallback((data: TDraggableElement, monitor: TMonitor, elementDropTarget: TElement, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
     if (!canDrop) return;
 
@@ -102,45 +102,78 @@ export const Element = ({ element, parents }: IElementProps) => {
     const isDropToParent = dropPosition.isOverStart || dropPosition.isOverEnd;
     if (!isDropToParent && elementDropTarget.type.value === 'component') return;
 
-    const parentToRemoveTheElement = data.parents?.slice(-1).at(0);
 
-    const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
-    if (elementFrom !== 'root' && (elementFrom.type.value === 'component' || elementFrom.type.value === 'slot')) return;
-    const indexToRemove = (elementFrom === 'root' ? value : (elementFrom as TElement<'html' | 'slot-content'>).children).value?.findIndex(child => child.id.value === data.element.id.value) ?? -1;
+    if (Object.keys(data).includes('id')) {
+      const droppedData = data as TExternalDraggableElement;
 
-    if (isDropToParent) {
       const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
       const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
-
-      onDrop({
-        element: data.element,
-        from: {
-          position: indexToRemove,
-          element: elementFrom as TElement<'html' | 'slot-content'>,
-        },
-        to: {
-          element: parent ? parent : 'root',
-          position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
-        }
-      });
+      
+      if (isDropToParent) {
+        onDrop({
+          element: droppedData.id,
+          from: { position: -1, element: null },
+          to: {
+            element: parent ? parent : 'root',
+            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+          }
+        });
+      } else {
+        onDrop({
+          element: droppedData.id,
+          from: { position: -1, element: null },
+          to: {
+            element: elementDropTarget as TElement<'html' | 'slot-content'>,
+            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+          }
+        });
+      }
     } else {
-      const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
+      const droppedData = data as TDraggableElement;
 
-      onDrop({
-        element: data.element,
-        from: {
-          position: indexToRemove,
-          element: elementFrom as TElement<'html' | 'slot-content'>,
-        },
-        to: {
-          element: elementDropTarget as TElement<'html' | 'slot-content'>,
-          position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
-        }
-      });
+      const parentToRemoveTheElement = droppedData.parents?.slice(-1).at(0);
+
+      const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
+      if (elementFrom !== 'root' && (elementFrom.type.value === 'component' || elementFrom.type.value === 'slot')) return;
+      const indexToRemove = (elementFrom === 'root' ? value : (elementFrom as TElement<'html' | 'slot-content'>).children).value?.findIndex(child => child.id.value === droppedData.element.id.value) ?? -1;
+
+
+      if (isDropToParent) {
+        const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
+        const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
+
+        onDrop({
+          element: droppedData.element,
+          from: {
+            position: indexToRemove,
+            element: elementFrom as TElement<'html' | 'slot-content'>,
+          },
+          to: {
+            element: parent ? parent : 'root',
+            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+          }
+        });
+      } else {
+        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
+
+        onDrop({
+          element: droppedData.element,
+          from: {
+            position: indexToRemove,
+            element: elementFrom as TElement<'html' | 'slot-content'>,
+          },
+          to: {
+            element: elementDropTarget as TElement<'html' | 'slot-content'>,
+            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+          }
+        });
+      }
+
+      select(droppedData.element.id.value);
     }
 
-    select(data.element.id.value);
-  }, [select, onDrop]);
+    hideInsertBar();
+  }, [select, onDrop, hideInsertBar]);
 
 
   if (type === 'component') return (

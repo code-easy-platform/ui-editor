@@ -13,7 +13,7 @@ type THtml<D = any> = {
     }[] | undefined>;
     attributes: IObservable<{
         name: IObservable<string>;
-        value: IObservable<string | number | boolean>;
+        value: IObservable<string | number | boolean | undefined | null>;
     }[] | undefined>;
     customData?: D;
 };

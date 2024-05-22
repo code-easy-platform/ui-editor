@@ -13,8 +13,8 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
         const attributes = get(attributesObservable);
         if (!attributes) return [{}, {}];
 
-        const props: Record<string, string | number | boolean> = {};
-        const specialProps: Record<string, string | number | boolean> = {};
+        const props: Record<string, string | number | boolean | undefined | null> = {};
+        const specialProps: Record<string, string | number | boolean | undefined | null> = {};
 
         attributes.forEach(attribute => {
           const name = get(attribute.name);

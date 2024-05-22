@@ -9,7 +9,7 @@ type THtml<D = any> = {
   /** If this init undefined, this will not receive children, drop inside will throw a error */
   children: IObservable<TElement[] | undefined>;
   style: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
-  attributes: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean> }[] | undefined>;
+  attributes: IObservable<{ name: IObservable<string>, value: IObservable<string | number | boolean | undefined | null> }[] | undefined>;
   customData?: D;
 };
 
