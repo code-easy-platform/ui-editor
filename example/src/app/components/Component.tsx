@@ -4,19 +4,20 @@ import { useDrag } from 'react-use-drag-and-drop';
 import { TExternalDraggableElement } from 'ui-editor/src';
 
 
-interface IHtmlProps {
-  tag: string;
+interface IComponentProps {
+  id: string;
+  name: string;
 }
-export const Html = ({ tag }: IHtmlProps) => {
+export const Component = ({ id, name }: IComponentProps) => {
   const htmlRef = useRef<HTMLElement>(null);
 
 
   useDrag<TExternalDraggableElement>({
-    id: tag,
+    id: id,
     element: htmlRef,
-    data: { id: tag },
-  }, [tag]);
+    data: { id },
+  }, [id]);
 
 
-  return createElement('div', { ref: htmlRef, style: { border: 'thin solid', padding: 4 } }, tag);
+  return createElement('div', { ref: htmlRef, style: { border: 'thin solid', padding: 4 } }, name);
 };

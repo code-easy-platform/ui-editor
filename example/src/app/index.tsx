@@ -4,6 +4,7 @@ import { observe, set } from 'react-observing';
 import { v4 } from 'uuid';
 
 import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src';
+import { Component } from './components/Component';
 import { Html } from './components/Html';
 import './../styles.css';
 
@@ -19,8 +20,8 @@ export const App = () => {
         { id: observe(v4()), content: observe('button:disabled { opacity: 0.5 }') }
       ]),
       components: observe<TComponent[]>([
-        {
-          id: observe('custom-input'),
+        { // Custom input
+          id: observe('simple-component'),
           content: observe<TElement[]>([
             {
               id: observe(v4()),
@@ -42,8 +43,8 @@ export const App = () => {
             },
           ]),
         },
-        {
-          id: observe('slot-level-1'),
+        { // Component with a slot
+          id: observe('component-with-slot'),
           content: observe<TElement[]>([
             {
               id: observe(v4()),
@@ -58,24 +59,29 @@ export const App = () => {
               ]),
               children: observe<TElement[]>([
                 {
-                  id: observe('slot-level-1-slot'),
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  type: observe('html'),
+                  children: observe([]),
+                  customData: { teste: 4 },
+                  attributes: observe([
+                    { name: observe('text'), value: observe('Slot below:') },
+                  ]),
+                  name: observe('p'),
+                  style: observe([]),
+                },
+                {
+                  id: observe('slot-component-with-slot'),
                   type: observe('slot'),
                   name: observe('Slot1'),
-                  componentId: observe('slot-level-1'),
+                  componentId: observe('component-with-slot'),
                 },
               ]),
             },
-            {
-              type: observe('slot'),
-              name: observe('SlotElement'),
-              children: observe(undefined),
-              id: observe('id-slot-element'),
-              componentId: observe('custom-button'),
-            },
           ]),
         },
-        {
-          id: observe('slot-level-2'),
+        { // Component with component with slot
+          id: observe('component-with-component-with-slot'),
           content: observe<TElement[]>([
             {
               id: observe(v4()),
@@ -90,10 +96,22 @@ export const App = () => {
               ]),
               children: observe<TElement[]>([
                 {
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  type: observe('html'),
+                  children: observe([]),
+                  customData: { teste: 4 },
+                  attributes: observe([
+                    { name: observe('text'), value: observe('Component with slot below:') },
+                  ]),
+                  name: observe('p'),
+                  style: observe([]),
+                },
+                {
                   id: observe('slot-level-2-slot'),
                   type: observe('slot'),
-                  name: observe('Slot1'),
-                  componentId: observe('slot-level-2'),
+                  name: observe('Component with slot'),
+                  componentId: observe('component-with-slot'),
                 },
               ]),
             },
@@ -246,7 +264,7 @@ export const App = () => {
   }, []);
 
 
-  const handleGetDropElement = useCallback((element: string | TElement): TElement => {
+  const handleGetDropElement = useCallback((element: string | TElement): TElement<"html" | "component" | "slot"> => {
     if (typeof element === 'object') return element;
 
     if (element === 'button') {
@@ -277,6 +295,43 @@ export const App = () => {
         attributes: observe([]),
         name: observe('div'),
         style: observe([]),
+      };
+    } else if (element === 'p') {
+      return {
+        id: observe(v4()),
+        tag: observe('p'),
+        type: observe('html'),
+        children: observe([]),
+        customData: { teste: 4 },
+        attributes: observe([
+          { name: observe('text'), value: observe('button') },
+        ]),
+        name: observe('p'),
+        style: observe([]),
+      };
+    } else if (element === 'simple-component') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('CustomInput'),
+        referenceComponentId: observe('simple-component'),
+      };
+    } else if (element === 'component-with-slot') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('component-with-slot'),
+        referenceComponentId: observe('component-with-slot'),
+      };
+    } else if (element === 'component-with-component-with-slot') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('component-with-component-with-slot'),
+        referenceComponentId: observe('component-with-component-with-slot'),
       };
     }
 
@@ -327,8 +382,21 @@ export const App = () => {
 
 
           <div className='h-[90vh] w-[10vw] border rounded'>
-            <Html tag='button' />
-            <Html tag='div' />
+            <section className='p-2 flex flex-col gap-2'>
+              <legend>Native</legend>
+
+              <Html tag='p' />
+              <Html tag='div' />
+              <Html tag='button' />
+            </section>
+
+            <section className='p-2 flex flex-col gap-2'>
+              <legend>Components</legend>
+
+              <Component id='simple-component' name="simple-component" />
+              <Component id='component-with-slot' name="component-with-slot" />
+              <Component id='component-with-component-with-slot' name="component-with-component-with-slot" />
+            </section>
           </div>
         </div>
 
