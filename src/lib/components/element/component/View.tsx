@@ -1,12 +1,12 @@
 import { useSelectorValue } from 'react-observing';
 
 import { useUiEditorContext } from '../../../UiEditorContext';
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 import { Element } from '..';
 
 
 interface IEditProps {
-  parents: TElement[];
+  parents: TParentElement[];
   element: TElement<'component'>;
 }
 export const View = ({ element, parents }: IEditProps) => {

@@ -2,7 +2,7 @@ import { useCallback, useContext } from "react"
 import { set } from 'react-observing';
 
 import { SelectBarContext, TGetPosition } from "./SelectBarContext";
-import { TElement } from '../../types';
+import { TElement, TParentElement } from '../../types';
 
 
 export const useSelectBar = () => {
@@ -13,7 +13,7 @@ export const useSelectBar = () => {
     context.onSelect(id);
   }, [context.id]);
 
-  const handleUpdateSelectBar = useCallback((element: TElement | undefined, parents?: TElement[], getPosition?: TGetPosition) => {
+  const handleUpdateSelectBar = useCallback((element: TElement | undefined, parents?: TParentElement[], getPosition?: TGetPosition) => {
     set(context.getPosition, () => getPosition);
     set(context.parents, parents);
     set(context.element, element);

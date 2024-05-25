@@ -79,3 +79,9 @@ export type TElement<T extends 'html' | 'component' | 'slot' | 'slot-content' = 
   : T extends 'slot-content'
   ? TSlotContent<D>
   : TComponent<D>
+
+export type TParentElement<T extends 'html' | 'component' | 'slot-content' = 'html' | 'component' | 'slot-content', D = any> = T extends 'html'
+  ? THtml<D>
+  : T extends 'slot-content'
+  ? TSlotContent<D>
+  : TComponent<D>

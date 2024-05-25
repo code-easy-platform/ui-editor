@@ -1,10 +1,10 @@
 import { useSelectorValue } from 'react-observing';
 
 import { useUiEditorContext } from '../../../UiEditorContext';
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 
 
-export const useSlotContent = (element: TElement<'slot'>, parents: TElement[]): [] | [TElement[], TElement<'slot-content'>] => {
+export const useSlotContent = (element: TElement<'slot'>, parents: TParentElement[]): [] | [TElement[], TElement<'slot-content'>] => {
   const { onAddSlotContent } = useUiEditorContext();
 
 

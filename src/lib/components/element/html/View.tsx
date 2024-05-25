@@ -3,14 +3,14 @@ import { useObserverValue } from 'react-observing';
 
 import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
 import { useElementAttributes } from './UseElementAttributes';
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 import { DynamicTag } from './DynamicTag';
 import { Element } from '../';
 
 
 interface IEditProps {
   element: TElement<'html'>;
-  parents: TElement[];
+  parents: TParentElement[];
 }
 export const View = ({ element, parents }: IEditProps) => {
   const [elementProps, elementSpecialProps] = useElementAttributes(element.attributes);

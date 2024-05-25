@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useObserverValue } from 'react-observing';
 import { TMonitor } from 'react-use-drag-and-drop';
 
-import { TDraggableElement, TElement, TExternalDraggableElement } from '../../types';
+import { TDraggableElement, TElement, TExternalDraggableElement, TParentElement } from '../../types';
 import { getCanDrop, getDropPosition, getInsertBarPosition } from '../../helpers';
 import { useUiEditorContext } from '../../UiEditorContext';
 import { useInsertBar } from '../insert-bar';
@@ -15,7 +15,7 @@ import { Slot } from './slot';
 
 interface IElementProps {
   element: TElement;
-  parents: TElement[];
+  parents: TParentElement[];
 }
 export const Element = ({ element, parents }: IElementProps) => {
   const type = useObserverValue(element.type);
@@ -73,7 +73,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [updateSelectBar, parents]);
 
 
-  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, element, parents, elementRef, droppableId);
     if (!canDrop) return hover(undefined);
 
@@ -92,7 +92,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     });
   }, [showInsertBar, hover, hideInsertBar]);
 
-  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "slot-content">, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
     if (!canDrop) return;
 
@@ -108,7 +108,7 @@ export const Element = ({ element, parents }: IElementProps) => {
 
       const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
       const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
-      
+
       if (isDropToParent) {
         onDrop({
           element: droppedData.id,

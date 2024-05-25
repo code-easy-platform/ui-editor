@@ -302,8 +302,8 @@ export const App = () => {
         id: observe(v4()),
         tag: observe('p'),
         type: observe('html'),
-        children: observe([]),
         customData: { teste: 4 },
+        children: observe(undefined),
         attributes: observe([
           { name: observe('text'), value: observe('button') },
         ]),

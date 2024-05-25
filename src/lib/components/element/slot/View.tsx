@@ -1,23 +1,23 @@
 import { useSlotContent } from './UseSlotContent';
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 import { Element } from '..';
 
 
 interface IViewProps {
   element: TElement<'slot'>;
-  parents: TElement[];
+  parents: TParentElement[];
 }
 export const View = ({ element, parents }: IViewProps) => {
-  const [content = []] = useSlotContent(element, parents);
+  const [content = [], currentContentSlot] = useSlotContent(element, parents);
 
 
   return (
     <div style={{ outline: 'none' }}>
-      {content.map((contentItem) => (
+      {currentContentSlot && content.map((contentItem) => (
         <Element
           element={contentItem}
           key={contentItem.id.value}
-          parents={[...parents, element]}
+          parents={[...parents, currentContentSlot]}
         />
       ))}
     </div>

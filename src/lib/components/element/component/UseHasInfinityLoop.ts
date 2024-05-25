@@ -1,6 +1,6 @@
 import { useSelectorValue } from 'react-observing';
 
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 
 
 /**
@@ -9,7 +9,7 @@ import { TElement } from '../../../types';
  * @param parents Current element parents
  * @returns If it has or not a infinity loop through components
  */
-export const useHasInfinityLoop = (element: TElement<'component'>, parents: TElement[]) => {
+export const useHasInfinityLoop = (element: TElement<'component'>, parents: TParentElement[]) => {
 
   /* This can prevent all types of loop in components */
   return useSelectorValue(({ get }) => {

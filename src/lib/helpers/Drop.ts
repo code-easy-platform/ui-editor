@@ -1,9 +1,9 @@
 import { TMonitor } from 'react-use-drag-and-drop';
 
-import { TElement } from '../types';
+import { TElement, TParentElement } from '../types';
 
 
-export const getCanDrop = (monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+export const getCanDrop = (monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
   if (!elementRef.current) return false;
 
   /* Verify if the current drop action belongs to other droppable area  */

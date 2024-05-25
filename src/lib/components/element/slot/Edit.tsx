@@ -2,8 +2,8 @@ import { MouseEvent, RefObject, useEffect, useRef } from 'react';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
+import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useUiEditorContext } from '../../../UiEditorContext';
-import { TDraggableElement, TElement } from '../../../types';
 import { getCustomDragLayer, uuid } from '../../../helpers';
 import { useInsertBar } from '../../insert-bar';
 import { useSelectBar } from '../../select-bar';
@@ -12,11 +12,11 @@ import { useHoverBar } from '../../hover-bar';
 
 interface IEditProps {
   element: TElement<'slot'>;
-  parents: TElement[];
+  parents: TParentElement[];
 
-  onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
 
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'slot'>) => void;
