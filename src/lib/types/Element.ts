@@ -1,6 +1,10 @@
 import { IObservable } from 'react-observing';
 
 
+/**
+ * Used to render a native element
+ * - Allow or not content
+ */
 type THtml<D = any> = {
   /** This instance id */
   id: IObservable<string>;
@@ -16,6 +20,10 @@ type THtml<D = any> = {
   customData?: D;
 };
 
+/**
+ * Used to render a slot element
+ * - Do not allow content
+ */
 type TSlot<D = any> = {
   /** This instance id */
   id: IObservable<string>;
@@ -28,6 +36,10 @@ type TSlot<D = any> = {
   customData?: D;
 };
 
+/**
+ * Used to store the slot content
+ * - Allow content
+ */
 type TSlotContent<D = any> = {
   /** This instance id */
   id: IObservable<string>;
@@ -39,6 +51,10 @@ type TSlotContent<D = any> = {
   customData?: D;
 };
 
+/**
+ * Used to group native elements, slot and other components
+ * - Allow content
+ */
 type TComponent<D = any> = {
   /** This instance id */
   id: IObservable<string>;

@@ -108,10 +108,11 @@ export const App = () => {
                   style: observe([]),
                 },
                 {
-                  id: observe('slot-level-2-slot'),
-                  type: observe('slot'),
+                  id: observe(v4()),
+                  slots: observe([]),
+                  type: observe('component'),
                   name: observe('Component with slot'),
-                  componentId: observe('component-with-slot'),
+                  referenceComponentId: observe('component-with-slot'),
                 },
               ]),
             },
@@ -339,7 +340,7 @@ export const App = () => {
   }, []);
 
   const handleDrop = useCallback(({ element, from, to }: TDropFunctionProps) => {
-    console.log(element, from, to);
+    //console.log(element, from, to);
 
 
     if (from.element && typeof element !== 'string') {
@@ -372,6 +373,22 @@ export const App = () => {
       });
     }
   }, [values.value, handleGetDropElement]);
+
+  const handleRemove = useCallback((element: TElement) => {
+    console.log('remove', element);
+  }, []);
+
+  const handleAddSlot = useCallback((element: TElement, referenceComponent: TElement<'component'>) => {
+    set(referenceComponent.slots, old => [
+      ...(old || []),
+      {
+        id: observe(v4()),
+        children: observe([]),
+        referenceSlotId: observe(element.id.value),
+        type: observe<'slot-content'>('slot-content'),
+      },
+    ]);
+  }, []);
 
 
   return (
@@ -416,11 +433,11 @@ export const App = () => {
               onSelect={id => set(selectedId, id)}
 
               onDrop={handleDrop}
+              onAddSlotContent={handleAddSlot}
               onDragEnd={(...rest) => console.log('end', ...rest)}
               onDragStart={(...rest) => console.log('start', ...rest)}
-              onAddSlotContent={(...rest) => console.log('end', ...rest)}
 
-              onRemove={(...rest) => console.log('remove', ...rest)}
+              onRemove={handleRemove}
               onDuplicate={(...rest) => console.log('duplicate', ...rest)}
             />
           </div>

@@ -73,7 +73,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [updateSelectBar, parents]);
 
 
-  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, element, parents, elementRef, droppableId);
     if (!canDrop) return hover(undefined);
 
@@ -92,7 +92,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     });
   }, [showInsertBar, hover, hideInsertBar]);
 
-  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "slot-content">, elementDropTargetParents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
     if (!canDrop) return;
 

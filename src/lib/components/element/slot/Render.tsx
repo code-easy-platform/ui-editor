@@ -14,9 +14,9 @@ interface IRenderProps {
   element: TElement<'slot'>;
   parents: TElement[];
 
-  onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
 
   onMouseLeave: (event: MouseEvent) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
@@ -28,12 +28,12 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
   const elementRef = useRef<HTMLDivElement>(null);
 
 
-  const [content = []] = useSlotContent(element, parents);
+  const [content = [], currentSlotContent] = useSlotContent(element, parents);
   const { selectedId } = useSelectBar();
   const { hoveredId } = useHoverBar();
 
 
-//  const name = useObserverValue(element.name);
+  // const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
 
 
@@ -68,10 +68,10 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
   useDrop({
     element: elementRef,
     id: droppableId.current.id,
-    drop: (data, monitor) => onDrop(data, monitor, element, parents, elementRef, droppableId.current.id),
-    hover: (data, monitor) => onDragOver(data, monitor, element, parents, elementRef, droppableId.current.id),
-    leave: (data, monitor) => onDragLeave(data, monitor, element, parents, elementRef, droppableId.current.id),
-  }, [element, parents, onDrop, onDragOver, onDragLeave]);
+    drop: (data, monitor) => currentSlotContent ? onDrop(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
+    hover: (data, monitor) => currentSlotContent ? onDragOver(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
+    leave: (data, monitor) => currentSlotContent ? onDragLeave(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
+  }, [currentSlotContent, parents, onDrop, onDragOver, onDragLeave]);
 
 
   return (
@@ -79,18 +79,7 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
       ref={elementRef}
       onMouseLeave={onMouseLeave}
       onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      style={{
-        cursor: 'default',
-        userSelect: 'none',
-        pointerEvents: 'all',
-        display: content.length === 0 ? 'flex' : undefined,
-        minWidth: content.length === 0 ? '40px' : undefined,
-        minHeight: content.length === 0 ? '40px' : undefined,
-        alignItems: content.length === 0 ? 'center' : undefined,
-        justifyContent: content.length === 0 ? 'center' : undefined,
-        fontFamily: content.length === 0 ? 'sans-serif' : undefined,
-        backgroundColor: content.length === 0 ? '#80808020' : undefined,
-      }}
+      style={{ cursor: 'default', userSelect: 'none', pointerEvents: 'all',  outline: 'none', }}
     >
       {content.length > 0 && content.map((contentItem) => (
         <Element
@@ -100,9 +89,21 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
         />
       ))}
       {content.length === 0 && (
-        <span style={{ opacity: 0.5, pointerEvents: 'none', outline: 'none' }}>
+        <div
+          style={{
+            opacity: 0.5,
+            display: 'flex',
+            minWidth: '40px',
+            minHeight: '40px',
+            alignItems: 'center',
+            pointerEvents: 'none',
+            justifyContent: 'center',
+            fontFamily: 'sans-serif',
+            backgroundColor: '#80808020',
+          }}
+        >
           Drag and drop something here...
-        </span>
+        </div>
       )}
     </div>
   );
