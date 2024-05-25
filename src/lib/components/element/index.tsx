@@ -106,10 +106,10 @@ export const Element = ({ element, parents }: IElementProps) => {
     if (Object.keys(data).includes('id')) {
       const droppedData = data as TExternalDraggableElement;
 
-      const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
-      const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
-
       if (isDropToParent) {
+        const parent = elementDropTargetParents.slice(-1).at(0) as TElement<'html' | 'slot-content'> | undefined;
+        const indexToAdd = (parent ? parent.children : value).value?.findIndex(child => child.id.value === elementDropTarget.id.value) ?? -1;
+
         onDrop({
           element: droppedData.id,
           from: { position: -1, element: null },
@@ -119,6 +119,8 @@ export const Element = ({ element, parents }: IElementProps) => {
           }
         });
       } else {
+        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
+
         onDrop({
           element: droppedData.id,
           from: { position: -1, element: null },
