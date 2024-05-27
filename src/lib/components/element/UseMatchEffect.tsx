@@ -7,7 +7,7 @@ interface IUseMatchEffectProps {
   value?: IObservable<string | undefined>;
   matchWidthValue?: IObservable<string | undefined>;
 }
-export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchWitchValueObservable, effect }: IUseMatchEffectProps) => {
+export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchWitchValueObservable, effect }: IUseMatchEffectProps, deps: readonly any[]) => {
   const isHovered = useSelectorValue(({ get }) => {
     if (!valueObservable) return false;
     const value = get(valueObservable);
@@ -16,10 +16,11 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
     const matchWitchValue = get(matchWitchValueObservable);
 
     return value === matchWitchValue;
-  }, [valueObservable, matchWitchValueObservable]);
+  }, [...deps]);
 
 
   useEffect(() => {
+    console.log('effect');
     if (isHovered) effect();
-  }, [isHovered, effect]);
+  }, [isHovered]);
 };

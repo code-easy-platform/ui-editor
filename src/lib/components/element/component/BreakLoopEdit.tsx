@@ -32,13 +32,13 @@ export const BreakLoopEdit = ({ element, onHoverBar, onSelectBar, onMouseLeave, 
     value: hoveredId,
     matchWidthValue: element?.id,
     effect: () => onHoverBar(element, elementRef.current),
-  });
+  }, [hoveredId, element]);
 
   useMatchEffect({
     value: selectedId,
     matchWidthValue: element?.id,
     effect: () => onSelectBar(element, elementRef.current),
-  });
+  }, [selectedId, element]);
 
 
   return (

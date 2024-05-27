@@ -37,7 +37,7 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
       if (!currentSlotContent) return;
       onHoverBar(element, elementRef.current);
     },
-  });
+  }, [hoveredId, currentSlotContent?.id, element]);
 
 
   const droppableId = useRef({ id: uuid() });

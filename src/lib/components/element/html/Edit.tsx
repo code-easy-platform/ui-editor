@@ -51,13 +51,13 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     value: hoveredId,
     matchWidthValue: element?.id,
     effect: () => onHoverBar(element, elementRef.current),
-  });
+  }, [hoveredId, element]);
 
   useMatchEffect({
     value: selectedId,
     matchWidthValue: element?.id,
     effect: () => onSelectBar(element, elementRef.current),
-  });
+  }, [selectedId, element]);
 
 
   useEffect(() => {

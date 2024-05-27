@@ -10,7 +10,7 @@ export const useSlotRender = (element: TElement<'slot'>, parents: TParentElement
 
   return useSelectorValue(({ get }) => {
     const components = get(componentsObservable);
-    const reverseParents = parents.reverse();
+    const reverseParents = [...parents].reverse();
 
     const ownerIndex = reverseParents.findIndex((parent) => {
       if (get(parent.type) !== 'component') return false;
