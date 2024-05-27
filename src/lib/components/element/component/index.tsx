@@ -5,6 +5,7 @@ import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useHasInfinityLoop } from './UseHasInfinityLoop';
 import { useHasViewOnly } from '../UseHasViewOnly';
 import { BreakLoopView } from './BreakLoopView';
+import { BreakLoopEdit } from './BreakLoopEdit';
 import { Edit } from './Edit';
 import { View } from './View';
 
@@ -29,10 +30,21 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
   const hasInfinityLoop = useHasInfinityLoop(element, parents);
   const hasViewOnly = useHasViewOnly(element, parents);
 
-  
+
   if (hasInfinityLoop) {
     /* When infinite loop, when have only view for break loop */
-    return <BreakLoopView element={element} />;
+    if (hasViewOnly) return <BreakLoopView element={element} />;
+
+    return <BreakLoopEdit
+      element={element}
+
+      onSelect={rest.onSelect}
+      onMouseOver={rest.onMouseOver}
+      onMouseLeave={rest.onMouseLeave}
+
+      onHoverBar={rest.onHoverBar}
+      onSelectBar={rest.onSelectBar}
+    />;
   }
 
   if (hasViewOnly) return (
