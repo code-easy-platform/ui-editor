@@ -7,6 +7,7 @@ import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
 import { useElementAttributes } from './UseElementAttributes';
 import { useUiEditorContext } from '../../../UiEditorContext';
 import { getCustomDragLayer, uuid } from '../../../helpers';
+import { useMatchEffect } from '../UseMatchEffect';
 import { useSelectBar } from '../../select-bar';
 import { useInsertBar } from '../../insert-bar';
 import { useHoverBar } from '../../hover-bar';
@@ -45,31 +46,19 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const { selectedId } = useSelectBar();
   const { hoveredId } = useHoverBar();
 
-  useEffect(() => {
-    if (hoveredId.value === id) {
-      onHoverBar(element, elementRef.current);
-    }
 
-    const subscription = hoveredId.subscribe((hoveringId) => {
-      if (hoveringId !== id) return;
+  useMatchEffect({
+    value: hoveredId,
+    matchWidthValue: element?.id,
+    effect: () => onHoverBar(element, elementRef.current),
+  });
 
-      onHoverBar(element, elementRef.current);
-    });
-    return () => subscription.unsubscribe();
-  }, [id, hoveredId, element, onHoverBar]);
+  useMatchEffect({
+    value: selectedId,
+    matchWidthValue: element?.id,
+    effect: () => onSelectBar(element, elementRef.current),
+  });
 
-  useEffect(() => {
-    if (selectedId.value === id) {
-      onSelectBar(element, elementRef.current);
-    }
-
-    const subscription = selectedId.subscribe((selectedId) => {
-      if (selectedId !== id) return;
-
-      onSelectBar(element, elementRef.current);
-    });
-    return () => subscription.unsubscribe();
-  }, [element, id, selectedId, onSelectBar]);
 
   useEffect(() => {
     setForceEnable(old => {

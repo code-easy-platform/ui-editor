@@ -41,7 +41,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     hover(undefined);
   }, [select, hover]);
 
-  const handleMouseOver = useCallback((event: React.MouseEvent, element: TElement) => {
+  const handleMouseOver = useCallback((event: React.MouseEvent, element: TElement<'component' | 'html' | 'slot' | 'slot-content'>) => {
     event.stopPropagation();
 
     hover(element.id.value);
