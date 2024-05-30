@@ -19,5 +19,9 @@ export const Component = ({ id, name }: IComponentProps) => {
   }, [id]);
 
 
-  return createElement('div', { ref: htmlRef, style: { border: 'thin solid', padding: 4 } }, name);
+  return createElement('div', {
+    title: name,
+    ref: htmlRef,
+    style: { border: 'thin solid', padding: 4, whiteSpace: 'nowrap', overflow: 'hidden' }
+  }, name);
 };

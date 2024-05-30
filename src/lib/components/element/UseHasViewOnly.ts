@@ -14,19 +14,22 @@ export const useHasViewOnly = (element: TElement, parents: TParentElement[]) => 
   const isViewOnly = useSelectorValue(({ get }) => {
     const revercedParents = [...parents].reverse();
 
+    let result: boolean | undefined = undefined;
+
     for (let index = 0; index < revercedParents.length; index++) {
       const parentElement = revercedParents[index];
 
       if (get(parentElement.type) === 'slot-content') {
-        return false;
+        result = false;
       }
 
       if (get(parentElement.type) === 'component') {
-        return true;
+        if (!result) result = true;
+        else return true;
       }
     }
 
-    return false;
+    return !!result;
   }, [parents, element]);
 
   return isViewOnly;

@@ -117,7 +117,65 @@ export const App = () => {
               ]),
             },
           ]),
-        }
+        },
+        { // Component with component with slot with a child
+          id: observe('component-with-component-with-slot-with-child'),
+          content: observe<TElement[]>([
+            {
+              id: observe(v4()),
+              type: observe('html'),
+              tag: observe('div'),
+              name: observe('div'),
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              children: observe<TElement[]>([
+                {
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  type: observe('html'),
+                  children: observe([]),
+                  name: observe('p'),
+                  style: observe([]),
+                  customData: { teste: 4 },
+                  attributes: observe([
+                    { name: observe('text'), value: observe('Component with slot with child below:') },
+                  ]),
+                },
+                {
+                  id: observe(v4()),
+                  type: observe('component'),
+                  name: observe('Component with slot'),
+                  referenceComponentId: observe('component-with-slot'),
+                  slots: observe<TElement<'slot-content'>[]>([
+                    {
+                      id: observe(v4()),
+                      type: observe('slot-content'),
+                      referenceSlotId: observe('slot-component-with-slot'),
+                      children: observe([
+                        {
+                          id: observe(v4()),
+                          tag: observe('p'),
+                          type: observe('html'),
+                          children: observe([]),
+                          name: observe('p'),
+                          style: observe([]),
+                          customData: { teste: 4 },
+                          attributes: observe([
+                            { name: observe('text'), value: observe('Child of a component with slot in a component') },
+                          ]),
+                        },
+                      ]),
+                    }
+                  ]),
+                },
+              ]),
+            },
+          ]),
+        },
       ]),
       value: observe<TElement[]>([
         {
@@ -334,6 +392,14 @@ export const App = () => {
         name: observe('component-with-component-with-slot'),
         referenceComponentId: observe('component-with-component-with-slot'),
       };
+    } else if (element === 'component-with-component-with-slot-with-child') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('component-with-component-with-slot-with-child'),
+        referenceComponentId: observe('component-with-component-with-slot-with-child'),
+      };
     }
 
     throw new Error("Error on create the new element");
@@ -414,9 +480,10 @@ export const App = () => {
             <section className='p-2 flex flex-col gap-2'>
               <legend>Components</legend>
 
-              <Component id='simple-component' name="simple-component" />
-              <Component id='component-with-slot' name="component-with-slot" />
-              <Component id='component-with-component-with-slot' name="component-with-component-with-slot" />
+              <Component id='simple-component' name="c - simple-component" />
+              <Component id='component-with-slot' name="c-s - component-with-slot" />
+              <Component id='component-with-component-with-slot' name="c-c-s - component-with-component-with-slot" />
+              <Component id='component-with-component-with-slot-with-child' name="c-c-s-e - component-with-component-with-slot-with-child" />
             </section>
           </div>
         </div>
