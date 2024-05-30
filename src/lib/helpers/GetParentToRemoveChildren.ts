@@ -5,6 +5,7 @@ export const getParentToRemoveChildren = (parents: TDraggableElement['parents'])
   let parent: TElement<"html" | "slot" | "slot-content" | "component"> | undefined = undefined;
   let count = 0;
 
+  if (!parents || parents.length === 0) return undefined;
 
   do {
     count--;

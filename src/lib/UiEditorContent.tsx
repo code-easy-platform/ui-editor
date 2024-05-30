@@ -65,7 +65,6 @@ export const UIEditorContent = () => {
 
       select(droppedData.element.id.value);
     }
-
   }, [value, select, hideInsertBar]);
 
   const handleDragHover = useCallback((_: TDraggableElement | undefined, __: TMonitor) => {
