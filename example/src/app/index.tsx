@@ -176,6 +176,117 @@ export const App = () => {
             },
           ]),
         },
+        { // Loop 1 - Component inside it self
+          id: observe('component-with-it-self'),
+          content: observe<TElement[]>([
+            {
+              id: observe(v4()),
+              type: observe('html'),
+              tag: observe('div'),
+              name: observe('div'),
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              children: observe<TElement[]>([
+                {
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  name: observe('p'),
+                  style: observe([]),
+                  type: observe('html'),
+                  children: observe([]),
+                  attributes: observe([
+                    { name: observe('text'), value: observe('It self below:') },
+                  ]),
+                },
+                {
+                  id: observe(v4()),
+                  slots: observe([]),
+                  type: observe('component'),
+                  name: observe('Component with component with it self'),
+                  referenceComponentId: observe('component-with-it-self'),
+                },
+              ]),
+            },
+          ]),
+        },
+        { // Loop 2 - Component with component inside with this inside
+          id: observe('component-with-component-inside-with-this-inside'),
+          content: observe<TElement[]>([
+            {
+              id: observe(v4()),
+              type: observe('html'),
+              tag: observe('div'),
+              name: observe('div'),
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              children: observe<TElement[]>([
+                {
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  name: observe('p'),
+                  style: observe([]),
+                  type: observe('html'),
+                  children: observe([]),
+                  attributes: observe([
+                    { name: observe('text'), value: observe('1 - Other with it self below:') },
+                  ]),
+                },
+                {
+                  id: observe(v4()),
+                  slots: observe([]),
+                  type: observe('component'),
+                  name: observe('Component with it self'),
+                  referenceComponentId: observe('component-with-component-inside-with-this-inside-2'),
+                },
+              ]),
+            },
+          ]),
+        },
+        { // Loop 2 - Component with component inside with this inside 2
+          id: observe('component-with-component-inside-with-this-inside-2'),
+          content: observe<TElement[]>([
+            {
+              id: observe(v4()),
+              type: observe('html'),
+              tag: observe('div'),
+              name: observe('div'),
+              style: observe([
+                { name: observe('padding'), value: observe(16) },
+              ]),
+              attributes: observe([
+                { name: observe('hidden'), value: observe(false) },
+              ]),
+              children: observe<TElement[]>([
+                {
+                  id: observe(v4()),
+                  tag: observe('p'),
+                  name: observe('p'),
+                  style: observe([]),
+                  type: observe('html'),
+                  children: observe([]),
+                  attributes: observe([
+                    { name: observe('text'), value: observe('2 - Other with it self below:') },
+                  ]),
+                },
+                {
+                  id: observe(v4()),
+                  slots: observe([]),
+                  type: observe('component'),
+                  name: observe('Component with component with it self'),
+                  referenceComponentId: observe('component-with-component-inside-with-this-inside'),
+                },
+              ]),
+            },
+          ]),
+        },
       ]),
       value: observe<TElement[]>([
         {
@@ -400,6 +511,22 @@ export const App = () => {
         name: observe('component-with-component-with-slot-with-child'),
         referenceComponentId: observe('component-with-component-with-slot-with-child'),
       };
+    } else if (element === 'component-with-it-self') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('component-with-it-self'),
+        referenceComponentId: observe('component-with-it-self'),
+      };
+    } else if (element === 'component-with-component-inside-with-this-inside') {
+      return {
+        id: observe(v4()),
+        slots: observe([]),
+        type: observe('component'),
+        name: observe('component-with-component-inside-with-this-inside'),
+        referenceComponentId: observe('component-with-component-inside-with-this-inside'),
+      };
     }
 
     throw new Error("Error on create the new element");
@@ -484,6 +611,9 @@ export const App = () => {
               <Component id='component-with-slot' name="c-s - component-with-slot" />
               <Component id='component-with-component-with-slot' name="c-c-s - component-with-component-with-slot" />
               <Component id='component-with-component-with-slot-with-child' name="c-c-s-e - component-with-component-with-slot-with-child" />
+
+              <Component id='component-with-it-self' name="Loop 1  - c-c-... - component-with-it-self" />
+              <Component id='component-with-component-inside-with-this-inside' name="Loop 2 - c-e-c-e-... - component-with-component-inside-with-this-inside" />
             </section>
           </div>
         </div>
