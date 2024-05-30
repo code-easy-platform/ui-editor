@@ -14,7 +14,6 @@ export const getCustomDragLayer = (text: string, options?: IOptions): HTMLLabelE
 
   container.style.backgroundColor = options?.color || '#3e8ce4';
   container.style.color = options?.textColor || '#ffffff';
-  container.style.textTransform = 'capitalize';
   container.style.alignItems = 'center';
   container.style.borderRadius = '2px';
   container.style.fontWeight = '600';

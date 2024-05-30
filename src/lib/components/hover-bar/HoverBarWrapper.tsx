@@ -46,7 +46,7 @@ export const HoverBarWrapper: React.FC = memo(() => {
   }, [documentHorizontalScroll, documentVerticalScroll, getPosition]);
 
 
-  if (!hoveredId || hoveredId === selectedId) return null;
+  if (!hoveredId || hoveredId === selectedId || (width === 0 && height === 0 && left === 0 && top === 0)) return null;
 
   return (
     <HoverBar

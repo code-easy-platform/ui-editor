@@ -93,7 +93,7 @@ export const SelectBarWrapper: React.FC = memo(() => {
   }, [preview, name]);
 
 
-  if (!selectedId) return null;
+  if (!selectedId || (width === 0 && height === 0 && left === 0 && top === 0)) return null;
 
   return (
     <SelectBar
