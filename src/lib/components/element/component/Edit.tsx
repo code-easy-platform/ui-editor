@@ -38,6 +38,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const { hoveredId } = useHoverBar();
 
 
+  const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
   const children = useSelectorValue(({ get }) => {
     const component = get(components).find(component => get(component.id) === get(element.referenceComponentId));
@@ -82,10 +83,10 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
-      () => getCustomDragLayer('name dynamic here'),
+      () => getCustomDragLayer(name),
       (customDragLayer) => customDragLayer.remove(),
     );
-  }, [preview]);
+  }, [preview, name]);
 
   const droppableId = useRef({ id: uuid() });
   useDrop({

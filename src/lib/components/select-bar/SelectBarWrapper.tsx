@@ -87,7 +87,7 @@ export const SelectBarWrapper: React.FC = memo(() => {
   }, [selectedId, selectedElement, selectedElementParents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
-      () => getCustomDragLayer(name.toLocaleUpperCase()),
+      () => getCustomDragLayer(name),
       (customDragLayer) => customDragLayer.remove(),
     );
   }, [preview, name]);

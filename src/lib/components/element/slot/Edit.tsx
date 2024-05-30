@@ -62,10 +62,10 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
-      () => getCustomDragLayer('name dynamic here'),
+      () => getCustomDragLayer(name),
       (customDragLayer) => customDragLayer.remove(),
     );
-  }, [preview]);
+  }, [preview, name]);
 
   const droppableId = useRef({ id: uuid() });
   useDrop({

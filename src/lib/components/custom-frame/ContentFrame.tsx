@@ -8,7 +8,7 @@ interface IContentFrameProps {
   onScroll: (y: number, x: number) => void;
   onKeyDown: (event: KeyboardEvent) => void;
 }
-export const ContentFrame: React.FC<IContentFrameProps> = ({ children, onScroll, onRef }) => {
+export const ContentFrame: React.FC<IContentFrameProps> = ({ children, onScroll, onRef, onKeyDown }) => {
   const { document } = useFrame();
 
 
@@ -21,6 +21,7 @@ export const ContentFrame: React.FC<IContentFrameProps> = ({ children, onScroll,
   useEffect(() => {
     if (!document) return;
 
+    document.onkeydown = onKeyDown;
     document.onscroll = (e: any) => onScroll(e.target.documentElement.scrollTop, e.target.documentElement.scrollLeft);
   }, [document, onScroll]);
 

@@ -38,6 +38,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const [elementProps, elementSpecialProps] = useElementAttributes(element.attributes);
   const styles = useUIElementInlineStyle(element.style);
   const children = useObserverValue(element.children);
+  const name = useObserverValue(element.name);
   const tag = useObserverValue(element.tag);
   const id = useObserverValue(element.id);
 
@@ -107,10 +108,10 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
-      () => getCustomDragLayer('name dynamic here'),
+      () => getCustomDragLayer(name),
       (customDragLayer) => customDragLayer.remove(),
     );
-  }, [preview]);
+  }, [preview, name]);
 
   const droppableId = useRef({ id: uuid() });
   useDrop({
