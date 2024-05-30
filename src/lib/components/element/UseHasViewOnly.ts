@@ -24,7 +24,7 @@ export const useHasViewOnly = (element: TElement, parents: TParentElement[]) => 
       }
 
       if (get(parentElement.type) === 'component') {
-        if (!result) result = true;
+        if (result === false) result = undefined;
         else return true;
       }
     }
