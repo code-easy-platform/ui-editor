@@ -20,7 +20,6 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
 
 
   useEffect(() => {
-    console.log('effect');
     if (isHovered) effect();
   }, [isHovered]);
 };

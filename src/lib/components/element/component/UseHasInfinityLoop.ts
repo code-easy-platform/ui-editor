@@ -10,13 +10,8 @@ import { TElement, TParentElement } from '../../../types';
  * @returns If it has or not a infinity loop through components
  */
 export const useHasInfinityLoop = (element: TElement<'component'>, parents: TParentElement[]) => {
-
   /* This can prevent all types of loop in components */
   return useSelectorValue(({ get }) => {
-    return parents.some(parentItem => {
-      if (get(parentItem.type) !== 'component') return false;
-
-      return get((parentItem as TElement<'component'>).referenceComponentId) === get(element.referenceComponentId)
-    });
+    return parents.map(parent => get(parent.id)).includes(get(element.id));
   }, [element, parents]);
 }

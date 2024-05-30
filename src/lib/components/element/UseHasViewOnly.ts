@@ -12,8 +12,10 @@ import { TElement, TParentElement } from '../../types';
 export const useHasViewOnly = (element: TElement, parents: TParentElement[]) => {
 
   const isViewOnly = useSelectorValue(({ get }) => {
-    for (let index = parents.length - 1; index >= 0; index--) {
-      const parentElement = parents[index];
+    const revercedParents = [...parents].reverse();
+
+    for (let index = 0; index < revercedParents.length; index++) {
+      const parentElement = revercedParents[index];
 
       if (get(parentElement.type) === 'slot-content') {
         return false;

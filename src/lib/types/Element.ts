@@ -25,10 +25,17 @@ type THtml<D = any> = {
  * - Do not allow content
  */
 type TSlot<D = any> = {
-  /** This instance id */
+  /**
+   * This instance id
+   * > **Slot.id**
+   */
   id: IObservable<string>;
   /** This instance name */
   name: IObservable<string>;
+  /**
+   * Reference component id
+   * > **Component.id**
+   */
   componentId: IObservable<string>;
   /** If the type is slot, the slot will be only a placeholder in the screen */
   type: IObservable<'slot'>;
@@ -41,11 +48,18 @@ type TSlot<D = any> = {
  * - Allow content
  */
 type TSlotContent<D = any> = {
-  /** This instance id */
+  /**
+   * This instance id
+   * > **SlotContent.id**
+   */
   id: IObservable<string>;
   /** If the type is slot-content, the slot will accept and render elements in the screen */
   type: IObservable<'slot-content'>;
   children: IObservable<TElement[]>;
+  /**
+   * Reference slot id
+   * > **Slot.id**
+   */
   referenceSlotId: IObservable<string>;
   /** Extra data can be passed here, things like a full instance or extra information */
   customData?: D;
@@ -56,12 +70,18 @@ type TSlotContent<D = any> = {
  * - Allow content
  */
 type TComponent<D = any> = {
-  /** This instance id */
+  /**
+   * This instance id
+   * > **Component.id**
+   */
   id: IObservable<string>;
   /** This instance name */
   name: IObservable<string>;
   type: IObservable<'component'>;
-  /** Reference to id of a component */
+  /**
+   * This instance id
+   * > **Component.id**
+   */
   referenceComponentId: IObservable<string>;
   /** 
    * Here must have the content of this instance for the reference component slot

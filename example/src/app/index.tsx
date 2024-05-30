@@ -379,15 +379,19 @@ export const App = () => {
   }, []);
 
   const handleAddSlot = useCallback((element: TElement, referenceComponent: TElement<'component'>) => {
-    set(referenceComponent.slots, old => [
-      ...(old || []),
-      {
-        id: observe(v4()),
-        children: observe([]),
-        referenceSlotId: observe(element.id.value),
-        type: observe<'slot-content'>('slot-content'),
-      },
-    ]);
+    set(referenceComponent.slots, old => {
+      if (old?.some(slot => slot.referenceSlotId.value === element.id.value)) return old;
+
+      return [
+        ...(old || []),
+        {
+          id: observe(v4()),
+          children: observe([]),
+          referenceSlotId: observe(element.id.value),
+          type: observe<'slot-content'>('slot-content'),
+        },
+      ];
+    });
   }, []);
 
 
