@@ -1,5 +1,5 @@
-import { TComponent, TDropFunctionProps, TElement, TStyle } from './types';
 import { IObservable } from 'react-observing';
+import { TComponent, TDropFunctionProps, TElement, TStyle } from './types';
 
 export interface IUiEditorContextProps {
     styles: IObservable<TStyle[]>;

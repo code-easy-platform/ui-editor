@@ -1,4 +1,4 @@
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 
 /**
  *
@@ -6,4 +6,4 @@ import { TElement } from '../../../types';
  * @param parents Current element parents
  * @returns If it has or not a infinity loop through components
  */
-export declare const useHasInfinityLoop: (element: TElement<'component'>, parents: TElement[]) => boolean;
+export declare const useHasInfinityLoop: (element: TElement<'component'>, parents: TParentElement[]) => boolean;

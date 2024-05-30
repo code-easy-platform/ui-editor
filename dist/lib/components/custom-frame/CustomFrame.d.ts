@@ -1,5 +1,5 @@
-import { TStyle } from '../../types';
 import { IObservable } from 'react-observing';
+import { TStyle } from '../../types';
 
 interface ICustomFrameProps {
     resetBody: boolean;

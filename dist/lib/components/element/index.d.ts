@@ -1,8 +1,8 @@
-import { TElement } from '../../types';
+import { TElement, TParentElement } from '../../types';
 
 interface IElementProps {
     element: TElement;
-    parents: TElement[];
+    parents: TParentElement[];
 }
 export declare const Element: ({ element, parents }: IElementProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -1,5 +1,5 @@
-import { TElement } from '../../types';
 import { IObservable } from 'react-observing';
+import { TElement } from '../../types';
 
 export type TGetPosition = () => {
     top: number;

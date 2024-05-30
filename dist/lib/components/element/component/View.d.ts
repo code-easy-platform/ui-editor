@@ -1,7 +1,7 @@
-import { TElement } from '../../../types';
+import { TElement, TParentElement } from '../../../types';
 
 interface IEditProps {
-    parents: TElement[];
+    parents: TParentElement[];
     element: TElement<'component'>;
 }
 export declare const View: ({ element, parents }: IEditProps) => import("react/jsx-runtime").JSX.Element;

@@ -1,4 +1,4 @@
-import { TElement } from '../../types';
+import { TElement, TParentElement } from '../../types';
 
 /**
  *
@@ -6,4 +6,4 @@ import { TElement } from '../../types';
  * @param parents Current element parents
  * @returns If it has or not view only
  */
-export declare const useHasViewOnly: (element: TElement, parents: TElement[]) => boolean;
+export declare const useHasViewOnly: (element: TElement, parents: TParentElement[]) => boolean;

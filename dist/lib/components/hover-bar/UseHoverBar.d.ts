@@ -1,5 +1,5 @@
-import { TElement } from '../../types';
 import { TGetPosition } from './HoverBarContext';
+import { TElement } from '../../types';
 
 export declare const useHoverBar: () => {
     hover: (id: string | undefined) => void;

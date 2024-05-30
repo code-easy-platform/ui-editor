@@ -1,5 +1,5 @@
-import { TElement } from '../../types';
 import { IObservable } from 'react-observing';
+import { TElement, TParentElement } from '../../types';
 
 export type TGetPosition = () => {
     top: number;
@@ -15,7 +15,7 @@ interface SelectBarContextProps {
     documentHorizontalScroll: IObservable<number>;
     documentVerticalScroll: IObservable<number>;
     element: IObservable<undefined | TElement>;
-    parents: IObservable<undefined | TElement[]>;
+    parents: IObservable<undefined | TParentElement[]>;
     getPosition: IObservable<undefined | TGetPosition>;
     id: IObservable<undefined | string>;
     onSelect: (id: string | undefined) => void;

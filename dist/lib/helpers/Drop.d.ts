@@ -1,7 +1,7 @@
-import { TElement } from '../types';
 import { TMonitor } from 'react-use-drag-and-drop';
+import { TElement, TParentElement } from '../types';
 
-export declare const getCanDrop: (monitor: TMonitor, element: TElement, parents: TElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => boolean;
+export declare const getCanDrop: (monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => boolean;
 export declare const getDropPosition: (monitor: TMonitor, element: TElement<'component' | 'html' | 'slot' | 'slot-content'>, elementRef: React.RefObject<HTMLElement>) => {
     isOverCurrentStart: boolean;
     isOverCurrentEnd: boolean;

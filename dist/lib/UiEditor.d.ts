@@ -1,5 +1,5 @@
-import { IUiEditorContextProps } from './UiEditorContext';
 import { IObservable } from 'react-observing';
+import { IUiEditorContextProps } from './UiEditorContext';
 
 interface IUIEditorProps extends Pick<IUiEditorContextProps, 'components' | 'styles' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown' | 'onDuplicate' | 'onRemove' | 'onAddSlotContent'> {
     onHover: (id: string | undefined) => void;
