@@ -2780,7 +2780,7 @@ const Jn = /* @__PURE__ */ Gr(bt), Kn = ({ children: e, onScroll: t, onRef: r, o
     });
   }, [n, u, i]), P = ee((_, m, p, A, X, Z) => {
     var de, G, $, Q, te, ve;
-    if (console.log("data", _), !$t(m, p, A, X, Z))
+    if (!$t(m, p, A, X, Z))
       return;
     const D = yn(m, p, X);
     if (!D)
@@ -2897,7 +2897,7 @@ const Jn = /* @__PURE__ */ Gr(bt), Kn = ({ children: e, onScroll: t, onRef: r, o
 }, vo = () => {
   const e = ne({ id: $e() }), { value: t, styles: r, onDrop: n, onKeyDown: i } = Ee(), { updateSelectBarScroll: a, select: l } = _e(), { showInsertBar: u, hideInsertBar: s } = je(), { updateHoverBarScroll: d, hover: f } = Ce(), [h, O] = Qt(null), c = K(t), v = ee((_, m) => {
     var p;
-    if (s(), console.log("data", _), !!_)
+    if (s(), !!_)
       if (Object.keys(_).includes("id"))
         n({
           element: _.id,
