@@ -641,7 +641,11 @@ React keys must be passed directly to JSX without using spread:
 }
 process.env.NODE_ENV === "production" ? vt.exports = Jr() : vt.exports = Kr();
 var C = vt.exports;
-const er = Ne({}), Xr = ({ children: e, ...t }) => /* @__PURE__ */ C.jsx(er.Provider, { value: t, children: e }), Ee = () => Ge(er), tr = Ne({}), Zr = ({ children: e }) => {
+const er = Ne({});
+function Xr({ children: e, ...t }) {
+  return /* @__PURE__ */ C.jsx(er.Provider, { value: t, children: e });
+}
+const Ee = () => Ge(er), tr = Ne({}), Zr = ({ children: e }) => {
   const t = ne(ae(!1)), r = ne(ae(!1)), n = ne(ae(0)), i = ne(ae(0)), a = ne(ae(0)), l = ne(ae(0)), u = he(() => ({
     observableIsHorizontal: t.current,
     observableIsVisible: r.current,
@@ -2970,7 +2974,10 @@ const Jn = /* @__PURE__ */ Gr(bt), Kn = ({ children: e, onScroll: t, onRef: r, o
       ] })
     }
   );
-}, mo = ({ onSelect: e, onHover: t, selectedId: r, hoveredId: n, ...i }) => /* @__PURE__ */ C.jsx(Ur, { children: /* @__PURE__ */ C.jsx(Xr, { ...i, children: /* @__PURE__ */ C.jsx(Zr, { children: /* @__PURE__ */ C.jsx(en, { id: r, onSelect: e, children: /* @__PURE__ */ C.jsx(xn, { id: n, onHover: t, children: /* @__PURE__ */ C.jsx(vo, {}) }) }) }) }) });
+};
+function mo({ onSelect: e, onHover: t, selectedId: r, hoveredId: n, ...i }) {
+  return /* @__PURE__ */ C.jsx(Ur, { children: /* @__PURE__ */ C.jsx(Xr, { ...i, children: /* @__PURE__ */ C.jsx(Zr, { children: /* @__PURE__ */ C.jsx(en, { id: r, onSelect: e, children: /* @__PURE__ */ C.jsx(xn, { id: n, onHover: t, children: /* @__PURE__ */ C.jsx(vo, {}) }) }) }) }) });
+}
 export {
   mo as UIEditor
 };
