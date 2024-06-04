@@ -79,8 +79,8 @@ type TComponent<D = any> = {
   name: IObservable<string>;
   type: IObservable<'component'>;
   /**
-   * This instance id
-   * > **Component.id**
+   * Referenced component id
+   * > **ReferenceComponent.id**
    */
   referenceComponentId: IObservable<string>;
   /** 

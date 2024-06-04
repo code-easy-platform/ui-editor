@@ -4,8 +4,8 @@ import { useObserverValue, useSelectorValue } from "react-observing";
 import { useDrag } from 'react-use-drag-and-drop';
 
 import { useUiEditorContext } from '../../UiEditorContext';
+import { TDraggableElement, TElement } from '../../types';
 import { getCustomDragLayer } from '../../helpers';
-import { TDraggableElement } from '../../types';
 import { useSelectBar } from './UseSelectBar';
 import { useInsertBar } from '../insert-bar';
 import { SelectBar } from "./SelectBar";
@@ -62,7 +62,19 @@ export const SelectBarWrapper: React.FC = memo(() => {
   const handleSelectParent = useCallback(() => {
     const parent = selectedElementParents?.slice(-1).at(0);
 
-    if (parent) select(parent.id.value);
+    if (parent) {
+      if (parent.type.value === 'slot-content') {
+        const component = selectedElementParents?.find(componentParent => {
+          if (componentParent.type.value !== 'component') return false;
+
+          return (componentParent as TElement<'component'>).slots.value?.some(slot => slot.id.value === (parent as TElement<'slot-content'>).id.value);
+        });
+
+        select(component?.id.value);
+      } else {
+        select(parent.id.value);
+      }
+    }
   }, [select, selectedElementParents]);
 
   const handleRemove = useCallback(() => {
