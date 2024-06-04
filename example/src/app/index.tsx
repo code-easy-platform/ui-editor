@@ -316,6 +316,13 @@ export const App = () => {
         },
         /* {
           id: observe(v4()),
+          type: observe('slot'),
+          customData: { teste: 4 },
+          name: observe('slot'),
+          componentId: observe('slot'),
+        },
+        {
+          id: observe(v4()),
           type: observe('html'),
           tag: observe('button'),
           customData: { teste: 3 },

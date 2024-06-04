@@ -983,7 +983,7 @@ const $t = (e, t, r, n, i) => !(!n.current || e.droppableId !== i || e.draggingI
     return null;
   if (t.type.value === "slot-content" && Array.isArray(t.children.value))
     return { isOverCurrentStart: !1, isOverCurrentEnd: !1, isOverEnd: !1, isOverStart: !1 };
-  const n = t.type.value === "component" ? !1 : Array.isArray(t.children.value), i = r.current.getBoundingClientRect(), a = n ? 5 : i.height / 2, l = e.x - i.x, u = e.y - i.y, s = u >= 0 && u <= a, d = u >= i.height - a && u <= i.height, f = u >= a && u <= i.height - a, h = l >= 0 && l <= a, O = l >= i.width - a && l <= i.width, c = l >= a && l <= i.width - a;
+  const n = ["component", "slot"].includes(t.type.value) ? !1 : Array.isArray(t.children.value), i = r.current.getBoundingClientRect(), a = n ? 5 : i.height / 2, l = e.x - i.x, u = e.y - i.y, s = u >= 0 && u <= a, d = u >= i.height - a && u <= i.height, f = u >= a && u <= i.height - a, h = l >= 0 && l <= a, O = l >= i.width - a && l <= i.width, c = l >= a && l <= i.width - a;
   let v = !1, b = !1, x = !1, R = !1;
   if (n) {
     const P = d || O || s || h;
@@ -1003,7 +1003,7 @@ const $t = (e, t, r, n, i) => !(!n.current || e.droppableId !== i || e.draggingI
       height: n.height,
       top: n.top + n.height / 2
     };
-  const i = t.type.value === "component" ? !1 : Array.isArray(t.children.value), a = i ? 5 : n.height / 2, l = e.x - n.x, u = e.y - n.y, s = u >= n.height - a && u <= n.height, d = u >= a && u <= n.height - a, f = l >= 0 && l <= a, h = l >= n.width - a && l <= n.width, O = l >= a && l <= n.width - a;
+  const i = ["component", "slot"].includes(t.type.value) ? !1 : Array.isArray(t.children.value), a = i ? 5 : n.height / 2, l = e.x - n.x, u = e.y - n.y, s = u >= n.height - a && u <= n.height, d = u >= a && u <= n.height - a, f = l >= 0 && l <= a, h = l >= n.width - a && l <= n.width, O = l >= a && l <= n.width - a;
   let c = !0, v = n.top, b = n.left, x = n.width, R = n.height;
   return s && (f || h || O) ? v = n.top + n.height : d && f ? c = !1 : d && h ? (b = n.left + n.width, c = !1) : O && d && (v = n.top + (i ? n.height / 2 : n.height)), {
     top: v,

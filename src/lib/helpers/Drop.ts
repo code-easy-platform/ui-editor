@@ -25,7 +25,7 @@ export const getDropPosition = (monitor: TMonitor, element: TElement<'component'
     return { isOverCurrentStart: false, isOverCurrentEnd: false, isOverEnd: false, isOverStart: false };
   }
 
-  const allowContent = element.type.value === 'component' ? false : Array.isArray((element as TElement<'html'>).children.value);
+  const allowContent = ['component', 'slot'].includes(element.type.value) ? false : Array.isArray((element as TElement<'html'>).children.value);
 
   const targetDomRect = elementRef.current.getBoundingClientRect();
 
@@ -77,7 +77,7 @@ export const getInsertBarPosition = (monitor: TMonitor, element: TElement<'compo
     };
   }
 
-  const allowContent = element.type.value === 'component' ? false : Array.isArray((element as TElement<'html'>).children.value);
+  const allowContent = ['component', 'slot'].includes(element.type.value) ? false : Array.isArray((element as TElement<'html'>).children.value);
 
   const dragBreakSize = allowContent ? 5 : targetDomRect.height / 2;
   const draggedLeft = monitor.x - targetDomRect.x;
