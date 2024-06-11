@@ -1,6 +1,7 @@
-import { MouseEvent, RefObject, useEffect, useRef } from 'react';
+import { MouseEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
-import { useObserverValue } from 'react-observing';
+import { useObserver, useObserverValue } from 'react-observing';
+import { useFrame } from 'react-frame-component';
 
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useUiEditorContext } from '../../../UiEditorContext';
@@ -28,15 +29,24 @@ interface IEditProps {
 }
 export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
   const elementRef = useRef<HTMLElement>(null);
+  const { window, document } = useFrame();
 
+  const [text, setText] = useObserver(element.text);
   const name = useObserverValue(element.name);
-  const text = useObserverValue(element.text);
   const id = useObserverValue(element.id);
 
   const { onDragStart, onDragEnd } = useUiEditorContext();
   const { hideInsertBar } = useInsertBar();
   const { selectedId } = useSelectBar();
   const { hoveredId } = useHoverBar();
+
+
+  const [editable, setEditable] = useState(false);
+  useEffect(() => {
+    if (!elementRef.current || !editable) return;
+    elementRef.current.focus();
+    onSelectBar(element, null)
+  }, [editable, onSelectBar]);
 
 
   useMatchEffect({
@@ -49,16 +59,17 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     value: selectedId,
     matchWidthValue: element?.id,
     effect: () => onSelectBar(element, elementRef.current),
-  }, [selectedId, element]);
+  }, [selectedId, element, text]);
 
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
     id,
+    canDrag: !editable,
     element: elementRef,
     data: { element, parents, },
     start: () => { onDragStart() },
     end: () => { hideInsertBar(); onDragEnd(); },
-  }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
+  }, [id, editable, element, parents, hideInsertBar, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer(name),
@@ -76,19 +87,58 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [element, parents, onDrop, onDragOver, onDragLeave]);
 
 
+  const handleFocus = useCallback((e: React.FormEvent<HTMLSpanElement>) => {
+    if (!window || !document) return;
+
+    const selection = window.getSelection();
+    if (!selection) return;
+
+    const range = document.createRange();
+    const span = e.currentTarget;
+
+    range.selectNodeContents(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, [window, document]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+
+    if (e.code === 'Escape' || e.code === 'Enter' || e.code === 'NumpadEnter') {
+      setEditable(false);
+      onSelectBar(element, e.currentTarget)
+    }
+  }, [onSelectBar, element]);
+
+  const handleBlur = useCallback((e: React.FocusEvent<HTMLSpanElement>) => {
+    setEditable(false);
+    setText(e.currentTarget.innerText);
+    onSelectBar(element, e.currentTarget)
+  }, [onSelectBar, element]);
+
+
   return (
     <span
-      children={text}
+      contentEditable={editable}
+      dangerouslySetInnerHTML={{ __html: text }}
+
+      onBlur={handleBlur}
+      onFocus={handleFocus}
+      onKeyDown={handleKeyDown}
+      onDoubleClick={() => setEditable(true)}
+
       ref={elementRef}
       onMouseLeave={onMouseLeave}
-      onClick={e => onSelect(e, element)}
-      onMouseOver={e => onMouseOver(e, element, elementRef.current)}
+      onClick={e => !editable ? onSelect(e, element) : e.stopPropagation()}
+      onMouseOver={e => !editable ? onMouseOver(e, element, elementRef.current) : e.stopPropagation()}
       style={{
         resize: 'none',
         cursor: 'default',
-        userSelect: 'none',
         pointerEvents: 'all',
+
         opacity: isDragging ? 0.5 : undefined,
+        borderRadius: editable ? 4 : undefined,
+        boxShadow: editable ? '0 0 6px 2px orange' : undefined,
       }}
     />
   );
