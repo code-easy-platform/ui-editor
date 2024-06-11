@@ -6,6 +6,7 @@ import { v4 } from 'uuid';
 import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src';
 import { Component } from './components/Component';
 import { Html } from './components/Html';
+import { Text } from './components/Text';
 import './../styles.css';
 
 
@@ -441,10 +442,18 @@ export const App = () => {
   }, []);
 
 
-  const handleGetDropElement = useCallback((element: string | TElement): TElement<"html" | "component" | "slot"> => {
+  const handleGetDropElement = useCallback((element: string | TElement): TElement<"html" | "component" | "slot" | "text"> => {
     if (typeof element === 'object') return element;
 
-    if (element === 'button') {
+    if (element === 'text') {
+      return {
+        id: observe(v4()),
+        type: observe('text'),
+        name: observe('text'),
+        customData: { teste: 15 },
+        text: observe('Text here'),
+      };
+    } else if (element === 'button') {
       return {
         id: observe(v4()),
         type: observe('html'),
@@ -605,6 +614,8 @@ export const App = () => {
           <div className='h-[90vh] w-[10vw] border rounded'>
             <section className='p-2 flex flex-col gap-2'>
               <legend>Native</legend>
+
+              <Text />
 
               <Html tag='p' />
               <Html tag='div' />

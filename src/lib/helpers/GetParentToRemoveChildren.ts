@@ -1,8 +1,8 @@
-import { TDraggableElement, TElement } from '../types';
+import { TParentElement, TElement } from '../types';
 
 
-export const getParentToRemoveChildren = (parents: TDraggableElement['parents']): TElement<'html' | 'slot-content'> | undefined => {
-  let parent: TElement<"html" | "slot" | "slot-content" | "component"> | undefined = undefined;
+export const getParentToRemoveChildren = (parents: TParentElement[]): TElement<'html' | 'slot-content'> | undefined => {
+  let parent: TParentElement | undefined = undefined;
   let count = 0;
 
   if (!parents || parents.length === 0) return undefined;

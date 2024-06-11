@@ -11,6 +11,7 @@ import { useHoverBar } from '../hover-bar';
 import { Component } from './component';
 import { Html } from './html';
 import { Slot } from './slot';
+import { Text } from './text';
 
 
 interface IElementProps {
@@ -41,7 +42,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     hover(undefined);
   }, [select, hover]);
 
-  const handleMouseOver = useCallback((event: React.MouseEvent, element: TElement<'component' | 'html' | 'slot' | 'slot-content'>) => {
+  const handleMouseOver = useCallback((event: React.MouseEvent, element: TElement<'component' | 'html' | 'slot' | "text" | 'slot-content'>) => {
     event.stopPropagation();
 
     hover(element.id.value);
@@ -73,7 +74,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   }, [updateSelectBar, parents]);
 
 
-  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "text" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, element, parents, elementRef, droppableId);
     if (!canDrop) return hover(undefined);
 
@@ -92,7 +93,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     });
   }, [showInsertBar, hover, hideInsertBar]);
 
-  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
+  const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "text" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
     if (!canDrop) return;
 
@@ -201,6 +202,24 @@ export const Element = ({ element, parents }: IElementProps) => {
     <Slot
       parents={parents}
       element={element as TElement<'slot'>}
+
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={() => undefined}
+
+      onSelect={handleSelect}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
+
+      onHoverBar={handleHoverBar}
+      onSelectBar={handleSelectBar}
+    />
+  );
+
+  if (type === 'text') return (
+    <Text
+      parents={parents}
+      element={element as TElement<'text'>}
 
       onDrop={handleDrop}
       onDragOver={handleDragOver}
