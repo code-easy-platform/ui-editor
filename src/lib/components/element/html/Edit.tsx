@@ -35,7 +35,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
   const [forceEnable, setForceEnable] = useState(false);
 
-  const [elementProps, elementSpecialProps] = useElementAttributes(element.attributes);
+  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element.attributes);
   const styles = useUIElementInlineStyle(element.style);
   const children = useObserverValue(element.children);
   const name = useObserverValue(element.name);
@@ -79,10 +79,6 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
 
   const elementChildren = useMemo(() => {
-    if ((!children || children.length === 0) && Object.keys(elementSpecialProps).includes('text')) {
-      return elementSpecialProps.text;
-    }
-
     if (!children || children.length === 0) return null;
 
     return children.map(child => (
@@ -92,7 +88,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
         parents={[...parents, element]}
       />
     ));
-  }, [children, parents, element, elementSpecialProps.text]);
+  }, [children, parents, element]);
 
   const allowContent = useMemo(() => {
     return children !== undefined;

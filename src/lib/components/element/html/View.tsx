@@ -13,17 +13,13 @@ interface IEditProps {
   parents: TParentElement[];
 }
 export const View = ({ element, parents }: IEditProps) => {
-  const [elementProps, elementSpecialProps] = useElementAttributes(element.attributes);
+  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element.attributes);
   const styles = useUIElementInlineStyle(element.style);
   const children = useObserverValue(element.children);
   const tag = useObserverValue(element.tag);
 
 
   const elementChildren = useMemo(() => {
-    if ((!children || children.length === 0) && Object.keys(elementSpecialProps).includes('text')) {
-      return elementSpecialProps.text;
-    }
-
     if (!children || children.length === 0) return null;
 
     return children.map(child => (
@@ -33,7 +29,7 @@ export const View = ({ element, parents }: IEditProps) => {
         parents={[...parents, element]}
       />
     ));
-  }, [children, parents, element, elementSpecialProps.text]);
+  }, [children, parents, element]);
 
 
   return (

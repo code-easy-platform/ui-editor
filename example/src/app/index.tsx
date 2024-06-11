@@ -294,25 +294,20 @@ export const App = () => {
           id: observe(v4()),
           type: observe('html'),
           tag: observe('button'),
+          name: observe('button'),
           customData: { teste: 1 },
           style: observe(undefined),
-          name: observe('button'),
           attributes: observe([
             { name: observe('hidden'), value: observe(false) },
           ]),
           children: observe([
             {
-              tag: observe('a'),
               id: observe(v4()),
-              name: observe('a'),
-              type: observe('html'),
-              customData: { teste: 2 },
-              style: observe(undefined),
-              children: observe(undefined),
-              attributes: observe([
-                { name: observe('text'), value: observe('button') },
-              ]),
-            },
+              type: observe('text'),
+              name: observe('text'),
+              customData: { teste: 88 },
+              text: observe('Button'),
+            }
           ]),
         },
         /* {
@@ -460,10 +455,17 @@ export const App = () => {
         tag: observe('button'),
         customData: { teste: 3 },
         name: observe('button'),
-        children: observe(undefined),
+        children: observe([
+          {
+            id: observe(v4()),
+            type: observe('text'),
+            name: observe('text'),
+            customData: { teste: 56 },
+            text: observe('Button'),
+          }
+        ]),
         attributes: observe([
-          { name: observe('text'), value: observe('Clique me!') },
-          { name: observe('disabled'), value: observe(true) },
+          { name: observe('disabled'), value: observe(false) },
         ]),
         style: observe([
           { name: observe('backgroundColor'), value: observe('transparent') },

@@ -29,9 +29,6 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
           const attributeAsCamelCase = toCamelCase(name);
           switch (attributeAsCamelCase) {
             // Especial props
-            case 'text':
-              specialProps.text = value;
-              break;
             case 'options':
               specialProps.options = value;
               break;
