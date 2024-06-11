@@ -25,6 +25,25 @@ type THtml<D = any> = {
     customData?: D;
 };
 /**
+ * Used to render or edit a text
+ * - Do not allow content
+ */
+type TText<D = any> = {
+    /**
+     * This instance id
+     * > **Text.id**
+     */
+    id: IObservable<string>;
+    /** This instance name */
+    name: IObservable<string>;
+    /** Store the text */
+    text: IObservable<string>;
+    /** If the type is slot, the slot will be only a placeholder in the screen */
+    type: IObservable<'text'>;
+    /** Extra data can be passed here, things like a full instance or extra information */
+    customData?: D;
+};
+/**
  * Used to render a slot element
  * - Do not allow content
  */
@@ -92,6 +111,6 @@ type TComponent<D = any> = {
     /** Extra data can be passed here, things like a full instance or extra information */
     customData?: D;
 };
-export type TElement<T extends 'html' | 'component' | 'slot' | 'slot-content' = 'html' | 'component' | 'slot', D = any> = T extends 'html' ? THtml<D> : T extends 'slot' ? TSlot<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
+export type TElement<T extends 'html' | 'component' | 'slot' | 'slot-content' | 'text' = 'html' | 'component' | 'slot' | 'text', D = any> = T extends 'html' ? THtml<D> : T extends 'slot' ? TSlot<D> : T extends 'text' ? TText<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
 export type TParentElement<T extends 'html' | 'component' | 'slot-content' = 'html' | 'component' | 'slot-content', D = any> = T extends 'html' ? THtml<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
 export {};

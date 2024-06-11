@@ -1,4 +1,4 @@
-import { TElement } from './Element';
+import { TElement, TParentElement } from './Element';
 
 
 export type TExternalDraggableElement = {
@@ -7,7 +7,7 @@ export type TExternalDraggableElement = {
 
 export type TDraggableElement<E extends "html" | "component" | "slot" | "text" = "html" | "component" | "slot" | "text", D = any> = {
   element: TElement<E, D>;
-  parents: TElement<'html' | 'slot' | 'slot-content' | 'component', D>[] | null;
+  parents: TParentElement<'html' | 'component' | 'slot-content', D>[] | null;
 }
 
 export type TDropFunctionProps<D = any> = {

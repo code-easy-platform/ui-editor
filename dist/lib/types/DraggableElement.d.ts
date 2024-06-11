@@ -1,14 +1,14 @@
-import { TElement } from './Element';
+import { TElement, TParentElement } from './Element';
 
 export type TExternalDraggableElement = {
     id: string;
 };
-export type TDraggableElement<E extends "html" | "component" | "slot" = "html" | "component" | "slot", D = any> = {
+export type TDraggableElement<E extends "html" | "component" | "slot" | "text" = "html" | "component" | "slot" | "text", D = any> = {
     element: TElement<E, D>;
-    parents: TElement<'html' | 'slot' | 'slot-content' | 'component', D>[] | null;
+    parents: TParentElement<'html' | 'component' | 'slot-content', D>[] | null;
 };
 export type TDropFunctionProps<D = any> = {
-    element: TElement<"html" | "component" | "slot", D> | string;
+    element: TElement<"html" | "component" | "slot" | "text", D> | string;
     from: {
         position: number;
         element: null | 'root' | TElement<'html' | 'slot-content', D>;

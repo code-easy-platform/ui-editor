@@ -488,14 +488,20 @@ export const App = () => {
       return {
         id: observe(v4()),
         tag: observe('p'),
-        type: observe('html'),
-        customData: { teste: 4 },
-        children: observe(undefined),
-        attributes: observe([
-          { name: observe('text'), value: observe('button') },
-        ]),
         name: observe('p'),
         style: observe([]),
+        type: observe('html'),
+        attributes: observe([]),
+        customData: { teste: 4 },
+        children: observe([
+          {
+            id: observe(v4()),
+            type: observe('text'),
+            name: observe('text'),
+            customData: { teste: 56 },
+            text: observe('Paragraph'),
+          }
+        ]),
       };
     } else if (element === 'simple-component') {
       return {

@@ -47,7 +47,7 @@ export const UIEditorContent = () => {
     } else {
       const droppedData = data as TDraggableElement;
 
-      const parentToRemoveTheElement = getParentToRemoveChildren(droppedData.parents);
+      const parentToRemoveTheElement = getParentToRemoveChildren(droppedData.parents || []);
       const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
       const indexToRemove = parentToRemoveTheElement?.children.value?.findIndex(child => child.id.value === droppedData.element.id.value) ?? -1;
 

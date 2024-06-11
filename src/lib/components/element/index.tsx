@@ -137,7 +137,7 @@ export const Element = ({ element, parents }: IElementProps) => {
       const parentToRemoveTheElement = droppedData.parents?.slice(-1).at(0);
 
       const elementFrom = !parentToRemoveTheElement ? 'root' : parentToRemoveTheElement;
-      if (elementFrom !== 'root' && (elementFrom.type.value === 'component' || elementFrom.type.value === 'slot')) return;
+      if (elementFrom !== 'root' && (elementFrom.type.value === 'component')) return;
       const indexToRemove = (elementFrom === 'root' ? value : (elementFrom as TElement<'html' | 'slot-content'>).children).value?.findIndex(child => child.id.value === droppedData.element.id.value) ?? -1;
 
 
