@@ -42,7 +42,12 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
               break;
 
             default:
-              props[attributeAsCamelCase] = value;
+              if (name.startsWith('data-')) {
+                props[name] = value;
+                return;
+              } else  {
+                props[attributeAsCamelCase] = value;
+              }
               break;
           }
         });

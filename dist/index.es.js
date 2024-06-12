@@ -2444,7 +2444,11 @@ const Kn = /* @__PURE__ */ Gt(Qe), Jn = ({ children: e, onScroll: r, onRef: t, o
             i.className = f;
             break;
           default:
-            i[d] = f;
+            if (u.startsWith("data-")) {
+              i[u] = f;
+              return;
+            } else
+              i[d] = f;
             break;
         }
       }), [i, a];
