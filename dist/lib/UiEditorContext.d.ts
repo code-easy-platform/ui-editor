@@ -1,7 +1,7 @@
 import { IObservable } from 'react-observing';
 import { TComponent, TDropFunctionProps, TElement, TElementTypesDefault, TStyle } from './types';
 
-export type TValueParseFunction<D = any> = <A extends any = any, B extends any = A>(value: A, ownerName: string, type: 'attribute' | 'textContent' | 'style', element: TElement<TElementTypesDefault, D>) => B;
+export type TValueParseFunction<D = any> = (value: any, ownerName: string, type: 'attribute' | 'textContent' | 'style', element: TElement<TElementTypesDefault, D>) => any;
 export interface IUiEditorContextProps<D = any> {
     styles: IObservable<TStyle[]>;
     value: IObservable<TElement[]>;
