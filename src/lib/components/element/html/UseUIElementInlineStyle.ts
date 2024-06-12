@@ -1,15 +1,17 @@
 import { useMemo } from 'react'
 import { selector, useObserverValue } from 'react-observing';
 
+import { useUiEditorContext } from '../../../UiEditorContext';
 import { toCamelCase } from '../../../helpers';
 import { TElement } from '../../../types';
 
 
-export const useUIElementInlineStyle = (elementStyle: TElement<'html'>['style']) => {
+export const useUIElementInlineStyle = (element: TElement<'html'>) => {
+  const { onExpressionToValue } = useUiEditorContext();
 
   const stylesObservable = useMemo(() => {
     return selector(({ get }) => {
-      const style = get(elementStyle);
+      const style = get(element.style);
       if (!style) return {};
 
 
@@ -21,12 +23,12 @@ export const useUIElementInlineStyle = (elementStyle: TElement<'html'>['style'])
 
         if (!name) return;
 
-        result[toCamelCase(name)] = value;
+        result[toCamelCase(name)] = onExpressionToValue(value, name, 'style', element);
       });
 
       return result;
     });
-  }, [elementStyle]);
+  }, [element, onExpressionToValue, element]);
 
 
   return useObserverValue(stylesObservable);

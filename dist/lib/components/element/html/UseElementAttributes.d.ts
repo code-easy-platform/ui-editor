@@ -1,3 +1,3 @@
 import { TElement } from '../../../types';
 
-export declare const useElementAttributes: (attributesObservable: TElement<'html'>['attributes']) => Record<string, string | number | boolean | null | undefined>[];
+export declare const useElementAttributes: (element: TElement<'html'>) => Record<string, string | number | boolean | null | undefined>[];

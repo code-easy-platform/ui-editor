@@ -1,4 +1,4 @@
-import { MouseEvent, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
 import { useObserver, useObserverValue } from 'react-observing';
 import { useFrame } from 'react-frame-component';
@@ -35,6 +35,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
 
+  const { onExpressionToValue, onValueToExpression } = useUiEditorContext();
   const { onDragStart, onDragEnd } = useUiEditorContext();
   const { hideInsertBar } = useInsertBar();
   const { selectedId } = useSelectBar();
@@ -59,7 +60,7 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     value: selectedId,
     matchWidthValue: element?.id,
     effect: () => onSelectBar(element, elementRef.current),
-  }, [selectedId, element, text]);
+  }, [selectedId, element]);
 
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
@@ -105,22 +106,27 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
     e.stopPropagation();
 
     if (e.code === 'Escape' || e.code === 'Enter' || e.code === 'NumpadEnter') {
-      setEditable(false);
+      e.currentTarget.blur();
       onSelectBar(element, e.currentTarget)
     }
   }, [onSelectBar, element]);
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLSpanElement>) => {
     setEditable(false);
-    setText(e.currentTarget.innerText);
+    setText(String(onValueToExpression(e.currentTarget.innerText, 'text', 'textContent', element)));
     onSelectBar(element, e.currentTarget)
-  }, [onSelectBar, element]);
+  }, [onSelectBar, onValueToExpression, element]);
+
+
+  const renderedText = useMemo(() => {
+    return onExpressionToValue(text, 'text', 'textContent', element) ?? '';
+  }, [text, onExpressionToValue, element]);
 
 
   return (
     <span
       contentEditable={editable}
-      dangerouslySetInnerHTML={{ __html: text }}
+      dangerouslySetInnerHTML={{ __html: renderedText }}
 
       onBlur={handleBlur}
       onFocus={handleFocus}

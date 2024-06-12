@@ -1,16 +1,19 @@
 import { useMemo } from "react";
 import { selector, useObserverValue } from "react-observing";
 
+import { useUiEditorContext } from '../../../UiEditorContext';
 import { toCamelCase } from './../../../helpers';
 import { TElement } from '../../../types';
 
 
-export const useElementAttributes = (attributesObservable: TElement<'html'>['attributes']) => {
+export const useElementAttributes = (element: TElement<'html'>) => {
+  const { onExpressionToValue } = useUiEditorContext();
+
 
   const propsObservable = useMemo(() => {
     return selector({
       get({ get }) {
-        const attributes = get(attributesObservable);
+        const attributes = get(element.attributes);
         if (!attributes) return [{}, {}];
 
         const props: Record<string, string | number | boolean | undefined | null> = {};
@@ -24,7 +27,7 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
           if (name === 'style') return;
 
 
-          const value = get(attribute.value);
+          const value = onExpressionToValue(get(attribute.value), name, 'attribute', element);
 
           const attributeAsCamelCase = toCamelCase(name);
           switch (attributeAsCamelCase) {
@@ -45,7 +48,7 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
               if (name.startsWith('data-')) {
                 props[name] = value;
                 return;
-              } else  {
+              } else {
                 props[attributeAsCamelCase] = value;
               }
               break;
@@ -55,7 +58,7 @@ export const useElementAttributes = (attributesObservable: TElement<'html'>['att
         return [props, specialProps];
       },
     });
-  }, [attributesObservable]);
+  }, [element, onExpressionToValue]);
 
 
   return useObserverValue(propsObservable);

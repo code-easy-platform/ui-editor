@@ -1,7 +1,7 @@
 import { IObservable } from 'react-observing';
 import { IUiEditorContextProps } from './UiEditorContext';
 
-interface IUIEditorProps<D> extends Pick<IUiEditorContextProps<D>, 'components' | 'styles' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown' | 'onDuplicate' | 'onRemove' | 'onAddSlotContent'> {
+interface IUIEditorProps<D> extends Pick<IUiEditorContextProps<D>, 'components' | 'styles' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown' | 'onDuplicate' | 'onRemove' | 'onAddSlotContent' | 'onExpressionToValue' | 'onValueToExpression'> {
     onHover: (id: string | undefined) => void;
     onSelect: (id: string | undefined) => void;
     hoveredId: IObservable<string | undefined>;

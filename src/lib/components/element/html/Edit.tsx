@@ -35,9 +35,9 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
   const [forceEnable, setForceEnable] = useState(false);
 
-  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element.attributes);
-  const styles = useUIElementInlineStyle(element.style);
+  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element);
   const children = useObserverValue(element.children);
+  const styles = useUIElementInlineStyle(element);
   const name = useObserverValue(element.name);
   const tag = useObserverValue(element.tag);
   const id = useObserverValue(element.id);

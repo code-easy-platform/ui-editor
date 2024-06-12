@@ -3,7 +3,7 @@ import { DragAndDropProvider } from 'react-use-drag-and-drop';
 import { observe, set } from 'react-observing';
 import { v4 } from 'uuid';
 
-import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle } from 'ui-editor/src';
+import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle, TValueParseFunction } from 'ui-editor/src';
 import { Component } from './components/Component';
 import { Html } from './components/Html';
 import { Text } from './components/Text';
@@ -299,6 +299,7 @@ export const App = () => {
           style: observe(undefined),
           attributes: observe([
             { name: observe('hidden'), value: observe(false) },
+            { name: observe('title'), value: observe('"Some title in a button"') },
           ]),
           children: observe([
             {
@@ -306,7 +307,7 @@ export const App = () => {
               type: observe('text'),
               name: observe('text'),
               customData: { teste: 88 },
-              text: observe('Button'),
+              text: observe('"Button"'),
             }
           ]),
         },
@@ -612,6 +613,15 @@ export const App = () => {
   }, []);
 
 
+  const handleExpressionToValue: TValueParseFunction = useCallback((value, ownerName, type, element) => {
+    return eval(String(value));
+  }, []);
+
+  const handleValueToExpression: TValueParseFunction = useCallback((value, ownerName, type, element) => {
+    return `"${value}"`;
+  }, []);
+
+
   return (
     <div className='w-screen h-screen bg-paper flex justify-center items-center gap-4'>
       <DragAndDropProvider>
@@ -666,6 +676,9 @@ export const App = () => {
 
               onRemove={handleRemove}
               onDuplicate={(...rest) => console.log('duplicate', ...rest)}
+
+              onExpressionToValue={handleExpressionToValue}
+              onValueToExpression={handleValueToExpression}
             />
           </div>
         </div>

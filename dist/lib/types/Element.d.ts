@@ -111,6 +111,9 @@ type TComponent<D = any> = {
     /** Extra data can be passed here, things like a full instance or extra information */
     customData?: D;
 };
-export type TElement<T extends 'html' | 'component' | 'slot' | 'slot-content' | 'text' = 'html' | 'component' | 'slot' | 'text', D = any> = T extends 'html' ? THtml<D> : T extends 'slot' ? TSlot<D> : T extends 'text' ? TText<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
-export type TParentElement<T extends 'html' | 'component' | 'slot-content' = 'html' | 'component' | 'slot-content', D = any> = T extends 'html' ? THtml<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
+export type TElementTypesParents = 'html' | 'component' | 'slot-content';
+export type TElementTypesDefault = 'html' | 'component' | 'slot' | 'text';
+export type TElementTypesAll = 'html' | 'component' | 'slot' | 'slot-content' | 'text';
+export type TElement<T extends TElementTypesAll = TElementTypesDefault, D = any> = T extends 'html' ? THtml<D> : T extends 'slot' ? TSlot<D> : T extends 'text' ? TText<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
+export type TParentElement<T extends TElementTypesParents = TElementTypesParents, D = any> = T extends 'html' ? THtml<D> : T extends 'slot-content' ? TSlotContent<D> : TComponent<D>;
 export {};

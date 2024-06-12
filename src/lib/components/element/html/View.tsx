@@ -13,9 +13,9 @@ interface IEditProps {
   parents: TParentElement[];
 }
 export const View = ({ element, parents }: IEditProps) => {
-  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element.attributes);
-  const styles = useUIElementInlineStyle(element.style);
+  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element);
   const children = useObserverValue(element.children);
+  const styles = useUIElementInlineStyle(element);
   const tag = useObserverValue(element.tag);
 
 
