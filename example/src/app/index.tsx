@@ -3,7 +3,7 @@ import { DragAndDropProvider } from 'react-use-drag-and-drop';
 import { observe, set } from 'react-observing';
 import { v4 } from 'uuid';
 
-import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle, TValueParseFunction } from 'ui-editor/src';
+import { UIEditor, TComponent, TDropFunctionProps, TElement, TStyle, TValueParseFunction, UiOverview } from 'ui-editor/src';
 import { Component } from './components/Component';
 import { Html } from './components/Html';
 import { Text } from './components/Text';
@@ -693,7 +693,29 @@ export const App = () => {
         <div className='p-2 flex flex-col gap-2'>
           Overview
 
-          <div className='h-[90vh] w-[20vw] border rounded'>
+          <div className='h-[90vh] w-[20vw] border rounded p-1'>
+            <UiOverview
+              value={values.value}
+              styles={values.styles}
+              components={values.components}
+              onKeyDown={(...rest) => console.log('end', ...rest)}
+
+              hoveredId={hoveredId}
+              selectedId={selectedId}
+              onHover={id => set(hoveredId, id)}
+              onSelect={id => set(selectedId, id)}
+
+              onDrop={handleDrop}
+              onAddSlotContent={handleAddSlot}
+              onDragEnd={(...rest) => console.log('end', ...rest)}
+              onDragStart={(...rest) => console.log('start', ...rest)}
+
+              onRemove={handleRemove}
+              onDuplicate={(...rest) => console.log('duplicate', ...rest)}
+
+              onExpressionToValue={handleExpressionToValue}
+              onValueToExpression={handleValueToExpression}
+            />
           </div>
         </div>
       </DragAndDropProvider>
