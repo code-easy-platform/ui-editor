@@ -59,7 +59,9 @@ export const SelectBarWrapper: React.FC = memo(() => {
   }, [documentHorizontalScrollObserver, documentVerticalScrollObserver, selectBarGetPositionObserver]);
 
 
-  const handleSelectParent = useCallback(() => {
+  const handleSelectParent = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+
     const parent = selectedElementParents?.slice(-1).at(0);
 
     if (parent) {
