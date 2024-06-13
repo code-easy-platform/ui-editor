@@ -88,6 +88,11 @@ export const UIEditorContent = () => {
     updateHoverBarScroll(y, x);
   }, [updateSelectBarScroll, updateHoverBarScroll]);
 
+  const handleClick = useCallback((e: MouseEvent) => {
+    e.stopPropagation();
+    select(undefined);
+  }, [select]);
+
 
   const [{ isDraggingOver, isDraggingOverCurrent }] = useDrop<TDraggableElement>({
     drop: handleDrop,
@@ -104,7 +109,12 @@ export const UIEditorContent = () => {
       resetBody={true}
       draggingHover={isDraggingOver || isDraggingOverCurrent}
     >
-      <ContentFrame onRef={setFrameDocumentRef} onScroll={handleScroll} onKeyDown={onKeyDown}>
+      <ContentFrame
+        onClick={handleClick}
+        onKeyDown={onKeyDown}
+        onScroll={handleScroll}
+        onRef={setFrameDocumentRef}
+      >
         <InsertBar />
         <HoverBarWrapper />
         <SelectBarWrapper />

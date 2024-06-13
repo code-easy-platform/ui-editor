@@ -116,7 +116,7 @@ export const SelectBarWrapper: React.FC = memo(() => {
       left={left - 1}
       color="#4a87ee"
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', wordBreak: 'keep-all' }}>
         {name}
 
         {!isDragging && (

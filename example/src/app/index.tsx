@@ -460,9 +460,9 @@ export const App = () => {
           {
             id: observe(v4()),
             type: observe('text'),
-            name: observe('text'),
+            name: observe('Button text'),
             customData: { teste: 56 },
-            text: observe('Button'),
+            text: observe('Button text'),
           }
         ]),
         attributes: observe([
@@ -569,12 +569,13 @@ export const App = () => {
     }
 
     // É preciso calcular o position antes porque pode haver conflitos com o remover
+    const droppedElement = handleGetDropElement(element);
 
     if (to.element === 'root') {
       const position = (from.element === to.element) && (from.position < to.position) ? to.position - 1 : to.position;
 
       set(values.value, oldContent => {
-        oldContent.splice(position, 0, handleGetDropElement(element));
+        oldContent.splice(position, 0, droppedElement);
         return [...oldContent];
       });
     } else {
@@ -585,12 +586,14 @@ export const App = () => {
       set(to.element.children, oldContent => {
         if (!oldContent) return oldContent;
 
-        oldContent.splice(position, 0, handleGetDropElement(element));
+        oldContent.splice(position, 0, droppedElement);
 
         return [...oldContent];
       });
     }
-  }, [values.value, handleGetDropElement]);
+
+    set(selectedId, droppedElement.id.value);
+  }, [values.value, handleGetDropElement, selectedId]);
 
   const handleRemove = useCallback((element: TElement) => {
     console.log('remove', element);
@@ -614,7 +617,11 @@ export const App = () => {
 
 
   const handleExpressionToValue: TValueParseFunction = useCallback((value, ownerName, type, element) => {
-    return eval(String(value));
+    try {
+      return eval(String(value));
+    } catch (error) {
+      return value;
+    }
   }, []);
 
   const handleValueToExpression: TValueParseFunction = useCallback((value, ownerName, type, element) => {

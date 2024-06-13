@@ -57,7 +57,7 @@ export const HoverBarWrapper: React.FC = memo(() => {
       height={height}
       color="#ed8b5f"
     >
-      <div>
+      <div style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all' }}>
         {name}
       </div>
     </HoverBar>
