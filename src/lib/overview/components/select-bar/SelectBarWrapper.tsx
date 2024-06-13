@@ -7,7 +7,6 @@ import { useUiOverviewContext } from '../../UiOverviewContext';
 import { TDraggableElement, TElement } from '../../types';
 import { getCustomDragLayer } from '../../helpers';
 import { useSelectBar } from './UseSelectBar';
-import { useInsertBar } from '../insert-bar';
 import { SelectBar } from "./SelectBar";
 
 
@@ -16,7 +15,6 @@ export const SelectBarWrapper: React.FC = memo(() => {
 
 
   const { onDragStart, onDragEnd, onDuplicate, onRemove } = useUiOverviewContext();
-  const { hideInsertBar } = useInsertBar();
   const {
     select,
     selectedId: selectedIdObservable,
@@ -90,15 +88,15 @@ export const SelectBarWrapper: React.FC = memo(() => {
 
   const { preview, isDragging } = useDrag<TDraggableElement>({
     element: refToDrag,
+    end: () => onDragEnd(),
     id: selectedId || 'default',
     start: () => { onDragStart() },
-    end: () => { hideInsertBar(); onDragEnd(); },
     canDrag: !!selectedElement && Array.isArray(selectedElementParents),
     data: {
       element: selectedElement,
       parents: selectedElementParents
     } as TDraggableElement,
-  }, [selectedId, selectedElement, selectedElementParents, hideInsertBar, onDragStart, onDragEnd]);
+  }, [selectedId, selectedElement, selectedElementParents, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer(name),

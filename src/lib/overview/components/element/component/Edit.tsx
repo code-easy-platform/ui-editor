@@ -7,7 +7,6 @@ import { useUiOverviewContext } from '../../../UiOverviewContext';
 import { getCustomDragLayer, uuid } from '../../../helpers';
 import { useMatchEffect } from '../UseMatchEffect';
 import { useSelectBar } from '../../select-bar';
-import { useInsertBar } from '../../insert-bar';
 import { useHoverBar } from '../../hover-bar';
 import { Element } from '..';
 
@@ -33,7 +32,6 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
 
   const { onDragStart, onDragEnd, components } = useUiOverviewContext();
-  const { hideInsertBar } = useInsertBar();
   const { selectedId } = useSelectBar();
   const { hoveredId } = useHoverBar();
 
@@ -77,10 +75,10 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   const { isDragging, preview } = useDrag<TDraggableElement>({
     id,
     element: elementRef,
+    end: () => onDragEnd(),
     data: { element, parents },
     start: () => { onDragStart() },
-    end: () => { hideInsertBar(); onDragEnd(); },
-  }, [id, element, parents, hideInsertBar, onDragStart, onDragEnd]);
+  }, [id, element, parents, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer(name),

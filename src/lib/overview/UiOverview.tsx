@@ -2,7 +2,6 @@ import { IObservable } from 'react-observing';
 import { DragAndDropProvider } from "react-use-drag-and-drop";
 
 import { IUiOverviewContextProps, UiOverviewContextProvider } from './UiOverviewContext';
-import { InsertBarContextProvider } from './components/insert-bar';
 import { SelectBarContextProvider } from './components/select-bar';
 import { HoverBarContextProvider } from './components/hover-bar';
 import { UiOverviewContent } from './UiOverviewContent';
@@ -18,13 +17,11 @@ export function UiOverview<D = any>({ onSelect, onHover, selectedId, hoveredId, 
   return (
     <DragAndDropProvider>
       <UiOverviewContextProvider {...props}>
-        <InsertBarContextProvider>
-          <SelectBarContextProvider id={selectedId} onSelect={onSelect}>
-            <HoverBarContextProvider id={hoveredId} onHover={onHover}>
-              <UiOverviewContent />
-            </HoverBarContextProvider>
-          </SelectBarContextProvider>
-        </InsertBarContextProvider>
+        <SelectBarContextProvider id={selectedId} onSelect={onSelect}>
+          <HoverBarContextProvider id={hoveredId} onHover={onHover}>
+            <UiOverviewContent />
+          </HoverBarContextProvider>
+        </SelectBarContextProvider>
       </UiOverviewContextProvider>
     </DragAndDropProvider>
   );

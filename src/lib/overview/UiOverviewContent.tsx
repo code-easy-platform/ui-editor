@@ -1,33 +1,29 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { TMonitor, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
-import { SelectBarWrapper, useSelectBar } from './components/select-bar';
 import { TDraggableElement, TExternalDraggableElement } from './types';
-import { ContentFrame } from './components/custom-frame/ContentFrame';
-import { HoverBarWrapper, useHoverBar } from './components/hover-bar';
-import { CustomFrame } from './components/custom-frame/CustomFrame';
-import { InsertBar, useInsertBar } from './components/insert-bar';
 import { getParentToRemoveChildren, uuid } from './helpers';
 import { useUiOverviewContext } from './UiOverviewContext';
+import { useSelectBar } from './components/select-bar';
+import { useHoverBar } from './components/hover-bar';
+import { InsertBar } from './components/insert-bar';
 import { Element } from './components/element';
 
 
 export const UiOverviewContent = () => {
+  const frameDocumentRef = useRef<HTMLDivElement>(null);
   const droppableId = useRef({ id: uuid() });
 
-  const { value, styles, onDrop, onKeyDown } = useUiOverviewContext();
-  const { updateSelectBarScroll, select } = useSelectBar();
-  const { showInsertBar, hideInsertBar } = useInsertBar();
-  const { updateHoverBarScroll, hover } = useHoverBar();
+  const { value, onDrop } = useUiOverviewContext();
+  const { select } = useSelectBar();
+  const { hover } = useHoverBar();
 
 
-  const [frameDocumentRef, setFrameDocumentRef] = useState<Document | null>(null);
   const content = useObserverValue(value);
 
 
   const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement | undefined, _: TMonitor) => {
-    hideInsertBar();
     if (!data) return;
 
     if (Object.keys(data).includes('id')) {
@@ -65,76 +61,44 @@ export const UiOverviewContent = () => {
 
       select(droppedData.element.id.value);
     }
-  }, [value, select, hideInsertBar]);
+  }, [value, select]);
 
-  const handleDragHover = useCallback((_: TDraggableElement | undefined, __: TMonitor) => {
-    const lastElementChild = frameDocumentRef?.lastElementChild;
-    if (!lastElementChild) return;
 
-    const targeCoords = lastElementChild.getBoundingClientRect();
-
-    showInsertBar({
-      isVisible: true,
-      isHorizontal: true,
-      left: targeCoords.left,
-      width: targeCoords.width,
-      height: targeCoords.height,
-      top: !lastElementChild ? targeCoords.top : targeCoords.top + targeCoords.height,
-    });
-  }, [frameDocumentRef?.lastElementChild, showInsertBar]);
-
-  const handleScroll = useCallback((y: number, x: number) => {
-    updateSelectBarScroll(y, x);
-    updateHoverBarScroll(y, x);
-  }, [updateSelectBarScroll, updateHoverBarScroll]);
-
-  const handleClick = useCallback((e: MouseEvent) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     select(undefined);
   }, [select]);
 
 
-  const [{ isDraggingOver, isDraggingOverCurrent }] = useDrop<TDraggableElement>({
+  const [{ isDraggingOver }] = useDrop<TDraggableElement>({
     drop: handleDrop,
-    hover: handleDragHover,
+    element: frameDocumentRef,
     id: droppableId.current.id,
-    element: { current: frameDocumentRef },
-    leave: () => { hideInsertBar(); hover(undefined); },
-  }, [handleDrop, handleDragHover, hideInsertBar]);
+    leave: () => hover(undefined),
+  }, [handleDrop]);
 
 
   return (
-    <CustomFrame
-      styles={styles}
-      resetBody={true}
-      draggingHover={isDraggingOver || isDraggingOverCurrent}
+    <div
+      onClick={handleClick}
+      ref={frameDocumentRef}
+      className='flex-1 h-full w-full'
     >
-      <ContentFrame
-        onClick={handleClick}
-        onKeyDown={onKeyDown}
-        onScroll={handleScroll}
-        onRef={setFrameDocumentRef}
-      >
-        <InsertBar />
-        <HoverBarWrapper />
-        <SelectBarWrapper />
+      {content.map((element) => (
+        <Element
+          parents={[]}
+          element={element}
+          key={element.id.value}
+        />
+      ))}
 
-        {content.map((element) => (
-          <Element
-            parents={[]}
-            element={element}
-            key={element.id.value}
-          />
-        ))}
+      {content.length === 0 && (
+        <p>
+          Drag and drop here to start
+        </p>
+      )}
 
-        {content.length === 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: "center", margin: 24, padding: 24, backgroundColor: 'lightgray', borderRadius: 8, outline: 'none' }}>
-            <span style={{ fontFamily: 'sans-serif', fontSize: 14, opacity: 0.5, userSelect: 'none', outline: 'none' }}>
-              Drag and drop here to start
-            </span>
-          </div>
-        )}
-      </ContentFrame>
-    </CustomFrame>
+      {isDraggingOver && <InsertBar />}
+    </div>
   );
 }

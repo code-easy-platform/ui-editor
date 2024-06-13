@@ -3,9 +3,8 @@ import { useObserverValue } from 'react-observing';
 import { TMonitor } from 'react-use-drag-and-drop';
 
 import { TDraggableElement, TElement, TExternalDraggableElement, TParentElement } from '../../types';
-import { getCanDrop, getDropPosition, getInsertBarPosition } from '../../helpers';
 import { useUiOverviewContext } from '../../UiOverviewContext';
-import { useInsertBar } from '../insert-bar';
+import { getCanDrop, getDropPosition } from '../../helpers';
 import { useSelectBar } from '../select-bar';
 import { useHoverBar } from '../hover-bar';
 import { Component } from './component';
@@ -21,7 +20,6 @@ interface IElementProps {
 export const Element = ({ element, parents }: IElementProps) => {
   const type = useObserverValue(element.type);
 
-  const { showInsertBar, hideInsertBar } = useInsertBar();
   const { select, updateSelectBar } = useSelectBar();
   const { onDrop, value } = useUiOverviewContext();
   const { hover, updateHoverBar } = useHoverBar();
@@ -79,19 +77,7 @@ export const Element = ({ element, parents }: IElementProps) => {
     if (!canDrop) return hover(undefined);
 
     hover(element.id.value);
-
-    const insertBarPosition = getInsertBarPosition(monitor, element, elementRef);
-    if (!insertBarPosition) return hideInsertBar();
-
-    showInsertBar({
-      isVisible: true,
-      top: insertBarPosition.top,
-      left: insertBarPosition.left,
-      width: insertBarPosition.width,
-      height: insertBarPosition.height,
-      isHorizontal: insertBarPosition.isHorizontal,
-    });
-  }, [showInsertBar, hover, hideInsertBar]);
+  }, [hover]);
 
   const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "text" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
     const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
@@ -174,9 +160,7 @@ export const Element = ({ element, parents }: IElementProps) => {
 
       select(droppedData.element.id.value);
     }
-
-    hideInsertBar();
-  }, [select, onDrop, hideInsertBar]);
+  }, [select, onDrop]);
 
 
   if (type === 'component') return (
