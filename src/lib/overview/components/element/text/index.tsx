@@ -4,7 +4,6 @@ import { TMonitor } from 'react-use-drag-and-drop';
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useHasViewOnly } from '../UseHasViewOnly';
 import { Edit } from './Edit';
-import { View } from './View';
 
 
 interface ITextProps {
@@ -26,12 +25,7 @@ export const Text = ({ element, parents, ...rest }: ITextProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
 
 
-  if (hasViewOnly) return (
-    <View
-      element={element}
-      parents={parents}
-    />
-  );
+  if (hasViewOnly) return null;
 
   return (
     <Edit

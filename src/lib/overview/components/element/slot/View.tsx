@@ -1,5 +1,5 @@
-import { useSlotContent } from './UseSlotContent';
 import { TElement, TParentElement } from '../../../types';
+import { useSlotContent } from './UseSlotContent';
 import { Element } from '..';
 
 
@@ -11,15 +11,13 @@ export const View = ({ element, parents }: IViewProps) => {
   const [content = [], currentContentSlot] = useSlotContent(element, parents);
 
 
-  return (
-    <div style={{ outline: 'none' }}>
-      {currentContentSlot && content.map((contentItem) => (
-        <Element
-          element={contentItem}
-          key={contentItem.id.value}
-          parents={[...parents, currentContentSlot]}
-        />
-      ))}
-    </div>
-  );
+  if (!currentContentSlot) return null;
+
+  return content.map((contentItem) => (
+    <Element
+      element={contentItem}
+      key={contentItem.id.value}
+      parents={[...parents, currentContentSlot]}
+    />
+  ));
 };

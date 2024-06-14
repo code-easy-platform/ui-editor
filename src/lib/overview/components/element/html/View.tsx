@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { useObserverValue } from 'react-observing';
 
-import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
-import { useElementAttributes } from './UseElementAttributes';
 import { TElement, TParentElement } from '../../../types';
-import { DynamicTag } from './DynamicTag';
 import { Element } from '../';
 
 
@@ -13,10 +10,7 @@ interface IEditProps {
   parents: TParentElement[];
 }
 export const View = ({ element, parents }: IEditProps) => {
-  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element);
   const children = useObserverValue(element.children);
-  const styles = useUIElementInlineStyle(element);
-  const tag = useObserverValue(element.tag);
 
 
   const elementChildren = useMemo(() => {
@@ -32,20 +26,5 @@ export const View = ({ element, parents }: IEditProps) => {
   }, [children, parents, element]);
 
 
-  return (
-    <DynamicTag
-      tag={tag}
-      children={elementChildren}
-      {...(elementProps !== undefined ? elementProps : {})}
-      style={{
-        ...styles,
-
-        resize: 'none',
-        outline: 'none',
-        cursor: 'default',
-        userSelect: 'none',
-        pointerEvents: 'none',
-      }}
-    />
-  );
+  return elementChildren;
 };

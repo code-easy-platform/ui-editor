@@ -1,16 +1,13 @@
-import { MouseEvent, RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, RefObject, useEffect, useMemo, useRef } from 'react';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
-import { useUIElementInlineStyle } from './UseUIElementInlineStyle';
-import { useElementAttributes } from './UseElementAttributes';
 import { useUiOverviewContext } from '../../../UiOverviewContext';
 import { getCustomDragLayer, uuid } from '../../../helpers';
 import { useMatchEffect } from '../UseMatchEffect';
 import { useSelectBar } from '../../select-bar';
 import { useHoverBar } from '../../hover-bar';
-import { DynamicTag } from './DynamicTag';
 import { Element } from '..';
 
 
@@ -30,15 +27,10 @@ interface IEditProps {
   onSelectBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
 }
 export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  const [forceEnable, setForceEnable] = useState(false);
-
-  const [elementProps, /* elementSpecialProps */] = useElementAttributes(element);
   const children = useObserverValue(element.children);
-  const styles = useUIElementInlineStyle(element);
   const name = useObserverValue(element.name);
-  const tag = useObserverValue(element.tag);
   const id = useObserverValue(element.id);
 
   const { onDragStart, onDragEnd } = useUiOverviewContext();
@@ -59,23 +51,6 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [selectedId, element]);
 
 
-  useEffect(() => {
-    setForceEnable(old => {
-      const hovered = hoveredId.value === id;
-      return hovered === old ? old : !old;
-    });
-
-    const subscription = hoveredId.subscribe(targetId => {
-      setForceEnable(old => {
-        const hovered = targetId === id;
-        return hovered === old ? old : !old;
-      });
-    });
-
-    return () => subscription.unsubscribe();
-  }, [id, hoveredId]);
-
-
   const elementChildren = useMemo(() => {
     if (!children || children.length === 0) return null;
 
@@ -87,10 +62,6 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
       />
     ));
   }, [children, parents, element]);
-
-  const allowContent = useMemo(() => {
-    return children !== undefined;
-  }, [children]);
 
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
@@ -118,30 +89,19 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
 
   return (
-    <DynamicTag
-      readOnly
-      tag={tag}
-      ref={elementRef}
-      children={elementChildren}
-      onMouseLeave={onMouseLeave}
-      onClick={e => onSelect(e, element)}
-      onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      {...(elementProps !== undefined
-        ? { ...elementProps, ...(forceEnable ? { disabled: false } : {}) }
-        : {}
-      )}
-      style={{
-        ...styles,
+    <>
+      <div
+        ref={elementRef}
+        data-dragging={isDragging}
+        className='data-[dragging=true]:opacity-50'
+        style={{ paddingLeft: parents.length * 8 }}
 
-        resize: 'none',
-        cursor: 'default',
-        userSelect: 'none',
-        pointerEvents: 'all',
+        onMouseLeave={onMouseLeave}
+        onClick={e => onSelect(e, element)}
+        onMouseOver={e => onMouseOver(e, element, elementRef.current)}
+      >{name}</div>
 
-        opacity: isDragging ? 0.5 : typeof styles.opacity === 'number' ? Number(styles.opacity) : undefined,
-        minWidth: elementChildren === null && allowContent ? 40 : typeof styles.minWidth === 'number' ? Number(styles.minWidth) : undefined,
-        minHeight: elementChildren === null && allowContent ? 40 : typeof styles.minHeight === 'number' ? Number(styles.minHeight) : undefined,
-      }}
-    />
+      {elementChildren}
+    </>
   );
 };

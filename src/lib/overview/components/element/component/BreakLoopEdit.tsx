@@ -47,16 +47,6 @@ export const BreakLoopEdit = ({ element, onHoverBar, onSelectBar, onMouseLeave, 
       onMouseLeave={onMouseLeave}
       onClick={e => onSelect(e, element)}
       onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      style={{
-        outline: 'none',
-        cursor: 'default',
-        userSelect: 'none',
-        pointerEvents: 'all',
-        fontFamily: 'sans-serif',
-        border: '2px solid orange',
-      }}
-    >
-      This component "<b style={{ fontWeight: 'bold', outline: 'none', pointerEvents: 'none' }}>{name}</b>" introduces a infinite loop.
-    </div>
+    >{name}(Infinity loop)</div>
   );
 };

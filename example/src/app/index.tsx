@@ -62,14 +62,20 @@ export const App = () => {
                 {
                   id: observe(v4()),
                   tag: observe('p'),
-                  type: observe('html'),
-                  children: observe([]),
-                  customData: { teste: 4 },
-                  attributes: observe([
-                    { name: observe('text'), value: observe('Slot below:') },
-                  ]),
                   name: observe('p'),
                   style: observe([]),
+                  type: observe('html'),
+                  attributes: observe([]),
+                  customData: { teste: 4 },
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"Slot below:"'),
+                    }
+                  ]),
                 },
                 {
                   id: observe('slot-component-with-slot'),
@@ -99,14 +105,20 @@ export const App = () => {
                 {
                   id: observe(v4()),
                   tag: observe('p'),
-                  type: observe('html'),
-                  children: observe([]),
-                  customData: { teste: 4 },
-                  attributes: observe([
-                    { name: observe('text'), value: observe('Component with slot below:') },
-                  ]),
                   name: observe('p'),
                   style: observe([]),
+                  type: observe('html'),
+                  customData: { teste: 4 },
+                  attributes: observe([]),
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"Component with slot below:"'),
+                    }
+                  ]),
                 },
                 {
                   id: observe(v4()),
@@ -137,13 +149,19 @@ export const App = () => {
                 {
                   id: observe(v4()),
                   tag: observe('p'),
-                  type: observe('html'),
-                  children: observe([]),
                   name: observe('p'),
                   style: observe([]),
+                  type: observe('html'),
+                  attributes: observe([]),
                   customData: { teste: 4 },
-                  attributes: observe([
-                    { name: observe('text'), value: observe('Component with slot with child below:') },
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"Component with slot with children below:"'),
+                    }
                   ]),
                 },
                 {
@@ -160,13 +178,19 @@ export const App = () => {
                         {
                           id: observe(v4()),
                           tag: observe('p'),
-                          type: observe('html'),
-                          children: observe([]),
                           name: observe('p'),
                           style: observe([]),
+                          type: observe('html'),
+                          attributes: observe([]),
                           customData: { teste: 4 },
-                          attributes: observe([
-                            { name: observe('text'), value: observe('Child of a component with slot in a component') },
+                          children: observe([
+                            {
+                              id: observe(v4()),
+                              type: observe('text'),
+                              name: observe('text'),
+                              customData: { teste: 88 },
+                              text: observe('"Child of a component with slot in a component:"'),
+                            }
                           ]),
                         },
                       ]),
@@ -198,9 +222,15 @@ export const App = () => {
                   name: observe('p'),
                   style: observe([]),
                   type: observe('html'),
-                  children: observe([]),
-                  attributes: observe([
-                    { name: observe('text'), value: observe('It self below:') },
+                  attributes: observe([]),
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"It self below:"'),
+                    }
                   ]),
                 },
                 {
@@ -235,9 +265,15 @@ export const App = () => {
                   name: observe('p'),
                   style: observe([]),
                   type: observe('html'),
-                  children: observe([]),
-                  attributes: observe([
-                    { name: observe('text'), value: observe('1 - Other with it self below:') },
+                  attributes: observe([]),
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"1 - Other with it self below:"'),
+                    }
                   ]),
                 },
                 {
@@ -272,9 +308,15 @@ export const App = () => {
                   name: observe('p'),
                   style: observe([]),
                   type: observe('html'),
-                  children: observe([]),
-                  attributes: observe([
-                    { name: observe('text'), value: observe('2 - Other with it self below:') },
+                  attributes: observe([]),
+                  children: observe([
+                    {
+                      id: observe(v4()),
+                      type: observe('text'),
+                      name: observe('text'),
+                      customData: { teste: 88 },
+                      text: observe('"2 - Other with it self below:"'),
+                    }
                   ]),
                 },
                 {

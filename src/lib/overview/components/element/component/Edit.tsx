@@ -97,13 +97,20 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
 
   return (
-    <div
-      ref={elementRef}
-      onMouseLeave={onMouseLeave}
-      onClick={e => onSelect(e, element)}
-      onDoubleClick={e => onDoubleClick(e, element)}
-      onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      style={{ cursor: 'default', userSelect: 'none', pointerEvents: 'all', opacity: isDragging ? 0.5 : undefined }}
-    >{elementChildren}</div>
+    <>
+      <div
+        ref={elementRef}
+        data-dragging={isDragging}
+        className='data-[dragging=true]:opacity-50'
+        style={{ paddingLeft: parents.length * 8 }}
+
+        onMouseLeave={onMouseLeave}
+        onClick={e => onSelect(e, element)}
+        onDoubleClick={e => onDoubleClick(e, element)}
+        onMouseOver={e => onMouseOver(e, element, elementRef.current)}
+      >{name}</div>
+
+      {elementChildren}
+    </>
   );
 };

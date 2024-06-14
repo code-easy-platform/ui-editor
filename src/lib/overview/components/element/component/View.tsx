@@ -21,15 +21,11 @@ export const View = ({ element, parents }: IEditProps) => {
   }, [components, element]);
 
 
-  return (
-    <div style={{ outline: 'none', pointerEvents: 'none' }}>
-      {content.map((contentItem) => (
-        <Element
-          element={contentItem}
-          key={contentItem.id.value}
-          parents={[...parents, element]}
-        />
-      ))}
-    </div>
-  );
+  return content.map((contentItem) => (
+    <Element
+      element={contentItem}
+      key={contentItem.id.value}
+      parents={[...parents, element]}
+    />
+  ));
 };

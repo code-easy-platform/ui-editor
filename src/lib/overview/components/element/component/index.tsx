@@ -4,7 +4,6 @@ import { TMonitor } from 'react-use-drag-and-drop';
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useHasInfinityLoop } from './UseHasInfinityLoop';
 import { useHasViewOnly } from '../UseHasViewOnly';
-import { BreakLoopView } from './BreakLoopView';
 import { BreakLoopEdit } from './BreakLoopEdit';
 import { Edit } from './Edit';
 import { View } from './View';
@@ -33,7 +32,7 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
 
   if (hasInfinityLoop) {
     /* When infinite loop, when have only view for break loop */
-    if (hasViewOnly) return <BreakLoopView element={element} />;
+    if (hasViewOnly) return null;
 
     return <BreakLoopEdit
       element={element}

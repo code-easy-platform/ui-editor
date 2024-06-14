@@ -76,25 +76,17 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
 
   return (
-    <div
-      ref={elementRef}
-      onMouseLeave={onMouseLeave}
-      onClick={e => onSelect(e, element)}
-      onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      style={{
-        display: 'flex',
-        minWidth: '40px',
-        minHeight: '40px',
-        cursor: 'default',
-        userSelect: 'none',
-        alignItems: 'center',
-        pointerEvents: 'all',
-        justifyContent: 'center',
-        fontFamily: 'sans-serif',
-        backgroundColor: '#8080803b',
-        border: '2px dashed #8080803b',
-        opacity: isDragging ? 0.5 : undefined,
-      }}
-    >Slot "{name}"</div>
+    <>
+      <div
+        ref={elementRef}
+        data-dragging={isDragging}
+        className='data-[dragging=true]:opacity-50'
+        style={{ paddingLeft: parents.length * 8 }}
+
+        onMouseLeave={onMouseLeave}
+        onClick={e => onSelect(e, element)}
+        onMouseOver={e => onMouseOver(e, element, elementRef.current)}
+      >{name}</div>
+    </>
   );
 };

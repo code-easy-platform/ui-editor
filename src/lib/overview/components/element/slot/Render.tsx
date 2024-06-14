@@ -1,5 +1,6 @@
 import { MouseEvent, RefObject, useRef } from 'react';
 import { TMonitor, useDrop } from 'react-use-drag-and-drop';
+import { useObserverValue } from 'react-observing';
 
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useMatchEffect } from '../UseMatchEffect';
@@ -24,6 +25,8 @@ interface IRenderProps {
 }
 export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop, onHoverBar }: IRenderProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
+
+  const name = useObserverValue(element.name);
 
 
   const [content = [], currentSlotContent] = useSlotContent(element, parents);
@@ -51,12 +54,15 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
 
 
   return (
-    <div
-      ref={elementRef}
-      onMouseLeave={onMouseLeave}
-      style={{ cursor: 'default', userSelect: 'none', pointerEvents: 'all', outline: 'none', }}
-      onMouseOver={e => currentSlotContent ? onMouseOver(e, currentSlotContent, elementRef.current) : undefined}
-    >
+    <>
+      <div
+        ref={elementRef}
+        style={{ paddingLeft: parents.length * 8 }}
+
+        onMouseLeave={onMouseLeave}
+        onMouseOver={e => currentSlotContent ? onMouseOver(e, currentSlotContent, elementRef.current) : undefined}
+      >{name}</div>
+
       {currentSlotContent && content.length > 0 && content.map((contentItem) => (
         <Element
           key={contentItem.id.value}
@@ -64,23 +70,6 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
           parents={[...parents, currentSlotContent]}
         />
       ))}
-      {content.length === 0 && (
-        <div
-          style={{
-            opacity: 0.5,
-            display: 'flex',
-            minWidth: '40px',
-            minHeight: '40px',
-            alignItems: 'center',
-            pointerEvents: 'none',
-            justifyContent: 'center',
-            fontFamily: 'sans-serif',
-            backgroundColor: '#80808020',
-          }}
-        >
-          Drag and drop something here...
-        </div>
-      )}
-    </div>
+    </>
   );
 };

@@ -1,7 +1,6 @@
-import { MouseEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, RefObject, useEffect, useRef } from 'react';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
-import { useObserver, useObserverValue } from 'react-observing';
-import { useFrame } from 'react-frame-component';
+import { useObserverValue } from 'react-observing';
 
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 import { useUiOverviewContext } from '../../../UiOverviewContext';
@@ -27,25 +26,14 @@ interface IEditProps {
   onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
 export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
-  const elementRef = useRef<HTMLElement>(null);
-  const { window, document } = useFrame();
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  const [text, setText] = useObserver(element.text);
   const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
 
-  const { onExpressionToValue, onValueToExpression } = useUiOverviewContext();
   const { onDragStart, onDragEnd } = useUiOverviewContext();
   const { selectedId } = useSelectBar();
   const { hoveredId } = useHoverBar();
-
-
-  const [editable, setEditable] = useState(false);
-  useEffect(() => {
-    if (!elementRef.current || !editable) return;
-    elementRef.current.focus();
-    onSelectBar(element, null)
-  }, [editable, onSelectBar]);
 
 
   useMatchEffect({
@@ -63,12 +51,11 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
     id,
-    canDrag: !editable,
     element: elementRef,
     end: () => onDragEnd(),
     data: { element, parents, },
     start: () => { onDragStart() },
-  }, [id, editable, element, parents, onDragStart, onDragEnd]);
+  }, [id, element, parents, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
       () => getCustomDragLayer(name),
@@ -86,64 +73,16 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
   }, [element, parents, onDrop, onDragOver, onDragLeave]);
 
 
-  const handleFocus = useCallback((e: React.FormEvent<HTMLSpanElement>) => {
-    if (!window || !document) return;
-
-    const selection = window.getSelection();
-    if (!selection) return;
-
-    const range = document.createRange();
-    const span = e.currentTarget;
-
-    range.selectNodeContents(span);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }, [window, document]);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLSpanElement>) => {
-    e.stopPropagation();
-
-    if (e.code === 'Escape' || e.code === 'Enter' || e.code === 'NumpadEnter') {
-      e.currentTarget.blur();
-      onSelectBar(element, e.currentTarget)
-    }
-  }, [onSelectBar, element]);
-
-  const handleBlur = useCallback((e: React.FocusEvent<HTMLSpanElement>) => {
-    setEditable(false);
-    setText(String(onValueToExpression(e.currentTarget.innerText, 'text', 'textContent', element)));
-    onSelectBar(element, e.currentTarget)
-  }, [onSelectBar, onValueToExpression, element]);
-
-
-  const renderedText = useMemo(() => {
-    return onExpressionToValue(text, 'text', 'textContent', element) ?? '';
-  }, [text, onExpressionToValue, element]);
-
-
   return (
-    <span
-      contentEditable={editable}
-      dangerouslySetInnerHTML={{ __html: renderedText }}
-
-      onBlur={handleBlur}
-      onFocus={handleFocus}
-      onKeyDown={handleKeyDown}
-      onDoubleClick={() => setEditable(true)}
-
+    <div
       ref={elementRef}
-      onMouseLeave={onMouseLeave}
-      onClick={e => !editable ? onSelect(e, element) : e.stopPropagation()}
-      onMouseOver={e => !editable ? onMouseOver(e, element, elementRef.current) : e.stopPropagation()}
-      style={{
-        resize: 'none',
-        cursor: 'default',
-        pointerEvents: 'all',
+      data-dragging={isDragging}
+      className='data-[dragging=true]:opacity-50'
+      style={{ paddingLeft: parents.length * 8 }}
 
-        opacity: isDragging ? 0.5 : undefined,
-        borderRadius: editable ? 4 : undefined,
-        boxShadow: editable ? '0 0 6px 2px orange' : undefined,
-      }}
-    />
+      onMouseLeave={onMouseLeave}
+      onClick={e => onSelect(e, element)}
+      onMouseOver={e => onMouseOver(e, element, elementRef.current)}
+    >{name}</div>
   );
 };
