@@ -14,5 +14,5 @@ interface ITextProps {
     onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Text: ({ element, parents, ...rest }: ITextProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Text: ({ element, parents, ...rest }: ITextProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};

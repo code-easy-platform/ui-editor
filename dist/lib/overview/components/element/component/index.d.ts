@@ -15,5 +15,5 @@ interface IComponentProps {
     onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Component: ({ element, parents, ...rest }: IComponentProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Component: ({ element, parents, ...rest }: IComponentProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};
