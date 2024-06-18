@@ -20,9 +20,9 @@ interface IElementProps {
 export const Element = ({ element, parents }: IElementProps) => {
   const type = useObserverValue(element.type);
 
-  const { select, updateSelectBar } = useSelectBar();
   const { onDrop, value } = useUiOverviewContext();
-  const { hover, updateHoverBar } = useHoverBar();
+  const { select } = useSelectBar();
+  const { hover } = useHoverBar();
 
 
   const handleSelect = useCallback((event: React.MouseEvent, element: TElement) => {
@@ -51,25 +51,6 @@ export const Element = ({ element, parents }: IElementProps) => {
 
     hover(undefined);
   }, [hover]);
-
-
-  const handleHoverBar = useCallback((element: TElement, htmlElement: HTMLElement | null) => {
-    updateHoverBar(element, () => ({
-      top: htmlElement?.offsetTop || 0,
-      left: htmlElement?.offsetLeft || 0,
-      width: htmlElement?.getBoundingClientRect().width || 0,
-      height: htmlElement?.getBoundingClientRect().height || 0,
-    }));
-  }, [updateHoverBar]);
-
-  const handleSelectBar = useCallback((element: TElement, htmlElement: HTMLElement | null) => {
-    updateSelectBar(element, parents, () => ({
-      top: htmlElement?.offsetTop || 0,
-      left: htmlElement?.offsetLeft || 0,
-      width: htmlElement?.getBoundingClientRect().width || 0,
-      height: htmlElement?.getBoundingClientRect().height || 0,
-    }));
-  }, [updateSelectBar, parents]);
 
 
   const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "text" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
@@ -177,8 +158,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={handleHoverBar}
-      onSelectBar={handleSelectBar}
+      onHoverBar={() => null}
+      onSelectBar={() => null}
     />
   );
 
@@ -195,8 +176,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={handleHoverBar}
-      onSelectBar={handleSelectBar}
+      onHoverBar={() => null}
+      onSelectBar={() => null}
     />
   );
 
@@ -213,8 +194,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={handleHoverBar}
-      onSelectBar={handleSelectBar}
+      onHoverBar={() => null}
+      onSelectBar={() => null}
     />
   );
 
@@ -231,8 +212,8 @@ export const Element = ({ element, parents }: IElementProps) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
 
-      onHoverBar={handleHoverBar}
-      onSelectBar={handleSelectBar}
+      onHoverBar={() => null}
+      onSelectBar={() => null}
     />
   );
 };
