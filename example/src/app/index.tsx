@@ -738,9 +738,8 @@ export const App = () => {
           <div className='h-[90vh] w-[20vw] border rounded p-1'>
             <UiOverview
               value={values.value}
-              styles={values.styles}
               components={values.components}
-              onKeyDown={(...rest) => console.log('end', ...rest)}
+              onKeyDown={(...rest) => console.log('overview:end', ...rest)}
 
               hoveredId={hoveredId}
               selectedId={selectedId}
@@ -748,15 +747,8 @@ export const App = () => {
               onSelect={id => set(selectedId, id)}
 
               onDrop={handleDrop}
-              onAddSlotContent={handleAddSlot}
               onDragEnd={(...rest) => console.log('end', ...rest)}
               onDragStart={(...rest) => console.log('start', ...rest)}
-
-              onRemove={handleRemove}
-              onDuplicate={(...rest) => console.log('duplicate', ...rest)}
-
-              onExpressionToValue={handleExpressionToValue}
-              onValueToExpression={handleValueToExpression}
             />
           </div>
         </div>

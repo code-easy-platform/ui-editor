@@ -7,7 +7,7 @@ import { HoverBarContextProvider } from './components/hover-bar';
 import { UiOverviewContent } from './UiOverviewContent';
 
 
-interface IUiOverviewProps<D> extends Pick<IUiOverviewContextProps<D>, 'components' | 'styles' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown' | 'onDuplicate' | 'onRemove' | 'onAddSlotContent' | 'onExpressionToValue' | 'onValueToExpression'> {
+interface IUiOverviewProps<D> extends Pick<IUiOverviewContextProps<D>, 'components' | 'value' | 'onDragStart' | 'onDragEnd' | 'onDrop' | 'onKeyDown'> {
   onHover: (id: string | undefined) => void;
   onSelect: (id: string | undefined) => void;
   hoveredId: IObservable<string | undefined>;

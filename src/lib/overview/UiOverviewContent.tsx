@@ -15,7 +15,7 @@ export const UiOverviewContent = () => {
   const frameDocumentRef = useRef<HTMLDivElement>(null);
   const droppableId = useRef({ id: uuid() });
 
-  const { value, onDrop } = useUiOverviewContext();
+  const { value, onDrop, onKeyDown } = useUiOverviewContext();
   const { select } = useSelectBar();
   const { hover } = useHoverBar();
 
@@ -80,9 +80,11 @@ export const UiOverviewContent = () => {
 
   return (
     <div
+      tabIndex={0}
+      onKeyDown={onKeyDown}
       onClick={handleClick}
       ref={frameDocumentRef}
-      className='flex-1 h-full w-full'
+      className='flex-1 h-full w-full outline-none'
     >
       {content.map((element) => (
         <Element

@@ -1,13 +1,9 @@
 import { useSelectorValue } from 'react-observing';
 
-import { useUiOverviewContext } from '../../../UiOverviewContext';
 import { TElement, TParentElement } from '../../../types';
 
 
 export const useSlotContent = (element: TElement<'slot'>, parents: TParentElement[]): [] | [TElement[], TElement<'slot-content'>] => {
-  const { onAddSlotContent } = useUiOverviewContext();
-
-
   return useSelectorValue(({ get }) => {
     const referenceComponent = [...parents].reverse()
       .filter(parent => get(parent.type) === 'component')
@@ -16,11 +12,8 @@ export const useSlotContent = (element: TElement<'slot'>, parents: TParentElemen
     if (!referenceComponent) return [];
 
     const currentSlot = get(referenceComponent.slots)?.find(slot => get(slot.referenceSlotId) === get(element.id));
-    if (!currentSlot) {
-      setTimeout(() => onAddSlotContent(element, referenceComponent), 0);
-      return [];
-    }
+    if (!currentSlot) return [];
 
     return [get(currentSlot.children), currentSlot];
-  }, [parents, element, onAddSlotContent]);
+  }, [parents, element]);
 }
