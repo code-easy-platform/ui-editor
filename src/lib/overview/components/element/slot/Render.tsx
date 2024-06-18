@@ -7,10 +7,12 @@ import { useMatchEffect } from '../UseMatchEffect';
 import { useSlotContent } from './UseSlotContent';
 import { useHoverBar } from '../../hover-bar';
 import { uuid } from '../../../helpers';
+import { Item } from '../../item/Item';
 import { Element } from '..';
 
 
 interface IRenderProps {
+  paddingLeft: number;
   element: TElement<'slot'>;
   parents: TParentElement[];
 
@@ -23,7 +25,7 @@ interface IRenderProps {
 
   onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop, onHoverBar }: IRenderProps) => {
+export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop, onHoverBar }: IRenderProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const name = useObserverValue(element.name);
@@ -61,12 +63,15 @@ export const Render = ({ element, parents, onMouseOver, onMouseLeave, onDragLeav
 
         onMouseLeave={onMouseLeave}
         onMouseOver={e => currentSlotContent ? onMouseOver(e, currentSlotContent, elementRef.current) : undefined}
-      >{name}</div>
+      >
+        <Item label={name} paddingLeft={paddingLeft} />
+      </div>
 
       {currentSlotContent && content.length > 0 && content.map((contentItem) => (
         <Element
           key={contentItem.id.value}
           element={contentItem}
+          paddingLeft={paddingLeft + 8}
           parents={[...parents, currentSlotContent]}
         />
       ))}

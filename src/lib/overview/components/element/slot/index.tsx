@@ -10,6 +10,7 @@ import { View } from './View';
 
 
 interface ISlotProps {
+  paddingLeft: number;
   element: TElement<'slot'>;
   parents: TParentElement[];
 
@@ -24,7 +25,7 @@ interface ISlotProps {
   onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export const Slot = ({ element, parents, ...rest }: ISlotProps) => {
+export const Slot = ({ element, parents, paddingLeft, ...rest }: ISlotProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
   const isRender = useSlotRender(element, parents);
 
@@ -33,6 +34,7 @@ export const Slot = ({ element, parents, ...rest }: ISlotProps) => {
     <Render
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
 
       onDrop={rest.onDrop}
       onDragOver={rest.onDragOver}
@@ -49,6 +51,7 @@ export const Slot = ({ element, parents, ...rest }: ISlotProps) => {
     <View
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
     />
   );
 
@@ -56,6 +59,7 @@ export const Slot = ({ element, parents, ...rest }: ISlotProps) => {
     <Edit
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
 
       onDrop={rest.onDrop}
       onDragOver={rest.onDragOver}

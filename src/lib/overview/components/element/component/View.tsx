@@ -6,10 +6,11 @@ import { Element } from '..';
 
 
 interface IEditProps {
+  paddingLeft: number;
   parents: TParentElement[];
   element: TElement<'component'>;
 }
-export const View = ({ element, parents }: IEditProps) => {
+export const View = ({ element, parents, paddingLeft }: IEditProps) => {
   const { components } = useUiOverviewContext();
 
 
@@ -24,6 +25,7 @@ export const View = ({ element, parents }: IEditProps) => {
   return content.map((contentItem) => (
     <Element
       element={contentItem}
+      paddingLeft={paddingLeft}
       key={contentItem.id.value}
       parents={[...parents, element]}
     />

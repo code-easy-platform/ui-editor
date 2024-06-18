@@ -3,6 +3,7 @@ import { TMonitor } from 'react-use-drag-and-drop';
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 
 interface ITextProps {
+    paddingLeft: number;
     element: TElement<'text'>;
     parents: TParentElement[];
     onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'text'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
@@ -14,5 +15,5 @@ interface ITextProps {
     onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Text: ({ element, parents, ...rest }: ITextProps) => import("react/jsx-runtime").JSX.Element | null;
+export declare const Text: ({ element, parents, paddingLeft, ...rest }: ITextProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};

@@ -7,6 +7,7 @@ import { Edit } from './Edit';
 
 
 interface ITextProps {
+  paddingLeft: number;
   element: TElement<'text'>;
   parents: TParentElement[];
 
@@ -21,7 +22,7 @@ interface ITextProps {
   onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
-export const Text = ({ element, parents, ...rest }: ITextProps) => {
+export const Text = ({ element, parents, paddingLeft, ...rest }: ITextProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
 
 
@@ -31,6 +32,7 @@ export const Text = ({ element, parents, ...rest }: ITextProps) => {
     <Edit
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
 
       onDrop={rest.onDrop}
       onDragOver={rest.onDragOver}

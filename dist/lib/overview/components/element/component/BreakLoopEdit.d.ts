@@ -2,6 +2,7 @@ import { MouseEvent } from 'react';
 import { TElement } from '../../../types';
 
 interface IBreakLoopEditProps {
+    paddingLeft: number;
     element: TElement<'component'>;
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
@@ -9,5 +10,5 @@ interface IBreakLoopEditProps {
     onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const BreakLoopEdit: ({ element, onHoverBar, onSelectBar, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => import("react/jsx-runtime").JSX.Element;
+export declare const BreakLoopEdit: ({ element, paddingLeft, onHoverBar, onSelectBar, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => import("react/jsx-runtime").JSX.Element;
 export {};

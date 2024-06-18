@@ -3,6 +3,7 @@ import { TMonitor } from 'react-use-drag-and-drop';
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 
 interface IEditProps {
+    paddingLeft: number;
     element: TElement<'slot'>;
     parents: TParentElement[];
     onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
@@ -14,5 +15,5 @@ interface IEditProps {
     onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Edit: ({ element, parents, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Edit: ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => import("react/jsx-runtime").JSX.Element;
 export {};

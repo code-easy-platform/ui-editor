@@ -6,10 +6,11 @@ import { Element } from '../';
 
 
 interface IEditProps {
+  paddingLeft: number;
   element: TElement<'html'>;
   parents: TParentElement[];
 }
-export const View = ({ element, parents }: IEditProps) => {
+export const View = ({ element, parents, paddingLeft }: IEditProps) => {
   const children = useObserverValue(element.children);
 
 
@@ -20,10 +21,11 @@ export const View = ({ element, parents }: IEditProps) => {
       <Element
         element={child}
         key={child.id.value}
+        paddingLeft={paddingLeft}
         parents={[...parents, element]}
       />
     ));
-  }, [children, parents, element]);
+  }, [children, parents, element, paddingLeft]);
 
 
   return elementChildren;

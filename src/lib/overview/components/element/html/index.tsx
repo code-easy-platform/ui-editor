@@ -8,6 +8,7 @@ import { View } from './View';
 
 
 interface IHtmlProps {
+  paddingLeft: number;
   element: TElement<'html'>;
   parents: TParentElement[];
 
@@ -22,7 +23,7 @@ interface IHtmlProps {
   onHoverBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
 }
-export const Html = ({ element, parents, ...rest }: IHtmlProps) => {
+export const Html = ({ element, parents, paddingLeft, ...rest }: IHtmlProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
 
 
@@ -30,6 +31,7 @@ export const Html = ({ element, parents, ...rest }: IHtmlProps) => {
     <View
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
     />
   );
 
@@ -37,6 +39,7 @@ export const Html = ({ element, parents, ...rest }: IHtmlProps) => {
     <Edit
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
 
       onDrop={rest.onDrop}
       onDragOver={rest.onDragOver}

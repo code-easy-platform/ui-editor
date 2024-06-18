@@ -10,6 +10,7 @@ import { View } from './View';
 
 
 interface IComponentProps {
+  paddingLeft: number;
   element: TElement<'component'>;
   parents: TParentElement[];
 
@@ -25,7 +26,7 @@ interface IComponentProps {
   onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export const Component = ({ element, parents, ...rest }: IComponentProps) => {
+export const Component = ({ element, parents, paddingLeft, ...rest }: IComponentProps) => {
   const hasInfinityLoop = useHasInfinityLoop(element, parents);
   const hasViewOnly = useHasViewOnly(element, parents);
 
@@ -36,6 +37,7 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
 
     return <BreakLoopEdit
       element={element}
+      paddingLeft={paddingLeft}
 
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
@@ -50,6 +52,7 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
     <View
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
     />
   );
 
@@ -58,6 +61,7 @@ export const Component = ({ element, parents, ...rest }: IComponentProps) => {
     <Edit
       element={element}
       parents={parents}
+      paddingLeft={paddingLeft}
 
       onDrop={rest.onDrop}
       onDragOver={rest.onDragOver}

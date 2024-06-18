@@ -15,9 +15,10 @@ import { Text } from './text';
 
 interface IElementProps {
   element: TElement;
+  paddingLeft: number;
   parents: TParentElement[];
 }
-export const Element = ({ element, parents }: IElementProps) => {
+export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
   const type = useObserverValue(element.type);
 
   const { onDrop, value } = useUiOverviewContext();
@@ -147,6 +148,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   if (type === 'component') return (
     <Component
       parents={parents}
+      paddingLeft={paddingLeft}
       element={element as TElement<'component'>}
 
       onDrop={handleDrop}
@@ -166,6 +168,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   if (type === 'slot') return (
     <Slot
       parents={parents}
+      paddingLeft={paddingLeft}
       element={element as TElement<'slot'>}
 
       onDrop={handleDrop}
@@ -184,6 +187,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   if (type === 'text') return (
     <Text
       parents={parents}
+      paddingLeft={paddingLeft}
       element={element as TElement<'text'>}
 
       onDrop={handleDrop}
@@ -202,6 +206,7 @@ export const Element = ({ element, parents }: IElementProps) => {
   return (
     <Html
       parents={parents}
+      paddingLeft={paddingLeft}
       element={element as TElement<'html'>}
 
       onDrop={handleDrop}

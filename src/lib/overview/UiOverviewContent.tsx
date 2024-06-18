@@ -89,6 +89,7 @@ export const UiOverviewContent = () => {
       {content.map((element) => (
         <Element
           parents={[]}
+          paddingLeft={4}
           element={element}
           key={element.id.value}
         />

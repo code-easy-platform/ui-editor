@@ -3,6 +3,7 @@ import { TMonitor } from 'react-use-drag-and-drop';
 import { TDraggableElement, TElement, TParentElement } from '../../../types';
 
 interface ISlotProps {
+    paddingLeft: number;
     element: TElement<'slot'>;
     parents: TParentElement[];
     onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot' | 'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
@@ -14,5 +15,5 @@ interface ISlotProps {
     onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
     onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Slot: ({ element, parents, ...rest }: ISlotProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Slot: ({ element, parents, paddingLeft, ...rest }: ISlotProps) => import("react/jsx-runtime").JSX.Element;
 export {};

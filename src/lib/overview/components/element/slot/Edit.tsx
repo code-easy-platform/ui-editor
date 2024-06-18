@@ -8,9 +8,11 @@ import { getCustomDragLayer, uuid } from '../../../helpers';
 import { useMatchEffect } from '../UseMatchEffect';
 import { useSelectBar } from '../../select-bar';
 import { useHoverBar } from '../../hover-bar';
+import { Item } from '../../item/Item';
 
 
 interface IEditProps {
+  paddingLeft: number;
   element: TElement<'slot'>;
   parents: TParentElement[];
 
@@ -25,7 +27,7 @@ interface IEditProps {
   onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
+export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
 
@@ -81,12 +83,13 @@ export const Edit = ({ element, parents, onMouseOver, onMouseLeave, onSelect, on
         ref={elementRef}
         data-dragging={isDragging}
         className='data-[dragging=true]:opacity-50'
-        style={{ paddingLeft: parents.length * 8 }}
 
         onMouseLeave={onMouseLeave}
         onClick={e => onSelect(e, element)}
         onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-      >{name}</div>
+      >
+        <Item label={name} paddingLeft={paddingLeft} />
+      </div>
     </>
   );
 };

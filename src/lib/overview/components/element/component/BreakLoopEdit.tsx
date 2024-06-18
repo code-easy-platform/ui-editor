@@ -5,9 +5,11 @@ import { useMatchEffect } from '../UseMatchEffect';
 import { useSelectBar } from '../../select-bar';
 import { useHoverBar } from '../../hover-bar';
 import { TElement } from '../../../types';
+import { Item } from '../../item/Item';
 
 
 interface IBreakLoopEditProps {
+  paddingLeft: number;
   element: TElement<'component'>;
 
   onMouseLeave: (event: MouseEvent) => void;
@@ -17,7 +19,7 @@ interface IBreakLoopEditProps {
   onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
   onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export const BreakLoopEdit = ({ element, onHoverBar, onSelectBar, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => {
+export const BreakLoopEdit = ({ element, paddingLeft, onHoverBar, onSelectBar, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
 
@@ -47,6 +49,8 @@ export const BreakLoopEdit = ({ element, onHoverBar, onSelectBar, onMouseLeave, 
       onMouseLeave={onMouseLeave}
       onClick={e => onSelect(e, element)}
       onMouseOver={e => onMouseOver(e, element, elementRef.current)}
-    >{name}(Infinity loop)</div>
+    >
+      <Item label={name + '(Infinity loop)'} paddingLeft={paddingLeft} />
+    </div>
   );
 };
