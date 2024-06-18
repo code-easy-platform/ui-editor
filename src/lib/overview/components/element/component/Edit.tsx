@@ -25,11 +25,8 @@ interface IEditProps {
   onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
   onDoubleClick: (event: React.MouseEvent, element: TElement<'component'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar, onDoubleClick }: IEditProps) => {
+export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onDoubleClick }: IEditProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
 
@@ -48,16 +45,14 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   }, [components, element]);
 
 
-  useMatchEffect({
+  const isHovered = useMatchEffect({
     value: hoveredId,
     matchWidthValue: element?.id,
-    effect: () => onHoverBar(element, elementRef.current),
   }, [hoveredId, element]);
 
-  useMatchEffect({
+  const isSelected = useMatchEffect({
     value: selectedId,
     matchWidthValue: element?.id,
-    effect: () => onSelectBar(element, elementRef.current),
   }, [selectedId, element]);
 
 
@@ -111,7 +106,12 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
         onDoubleClick={e => onDoubleClick(e, element)}
         onMouseOver={e => onMouseOver(e, element, elementRef.current)}
       >
-        <Item label={name} paddingLeft={paddingLeft} />
+        <Item
+          label={name}
+          hover={isHovered}
+          select={isSelected}
+          paddingLeft={paddingLeft}
+        />
       </div>
 
       {elementChildren}

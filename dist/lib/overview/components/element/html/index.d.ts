@@ -12,8 +12,6 @@ interface IHtmlProps {
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'html'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
 }
 export declare const Html: ({ element, parents, paddingLeft, ...rest }: IHtmlProps) => import("react/jsx-runtime").JSX.Element;
 export {};

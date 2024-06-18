@@ -23,11 +23,8 @@ interface IEditProps {
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'text'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
-export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => {
+export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop }: IEditProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const name = useObserverValue(element.name);
@@ -38,16 +35,14 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   const { hoveredId } = useHoverBar();
 
 
-  useMatchEffect({
+  const isHovered = useMatchEffect({
     value: hoveredId,
     matchWidthValue: element?.id,
-    effect: () => onHoverBar(element, elementRef.current),
   }, [hoveredId, element]);
 
-  useMatchEffect({
+  const isSelected = useMatchEffect({
     value: selectedId,
     matchWidthValue: element?.id,
-    effect: () => onSelectBar(element, elementRef.current),
   }, [selectedId, element]);
 
 
@@ -85,7 +80,12 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
       onClick={e => onSelect(e, element)}
       onMouseOver={e => onMouseOver(e, element, elementRef.current)}
     >
-      <Item label={name} paddingLeft={paddingLeft} />
+      <Item
+        label={name}
+        hover={isHovered}
+        select={isSelected}
+        paddingLeft={paddingLeft}
+      />
     </div>
   );
 };

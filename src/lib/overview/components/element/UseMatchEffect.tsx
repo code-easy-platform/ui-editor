@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 
 interface IUseMatchEffectProps {
-  effect: () => void;
+  effect?: () => void;
   value?: IObservable<string | undefined>;
   matchWidthValue?: IObservable<string | undefined>;
 }
@@ -20,6 +20,8 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
 
 
   useEffect(() => {
-    if (isHovered) effect();
+    if (isHovered) effect?.();
   }, [isHovered]);
+
+  return isHovered;
 };

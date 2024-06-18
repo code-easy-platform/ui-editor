@@ -13,8 +13,6 @@ interface IComponentProps {
     onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
     onDoubleClick: (event: React.MouseEvent, element: TElement<'component'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
 export declare const Component: ({ element, parents, paddingLeft, ...rest }: IComponentProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};

@@ -12,8 +12,6 @@ interface ITextProps {
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'text'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
 export declare const Text: ({ element, parents, paddingLeft, ...rest }: ITextProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};

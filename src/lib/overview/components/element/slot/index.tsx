@@ -21,9 +21,6 @@ interface ISlotProps {
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'slot'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'slot' | 'slot-content'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
 export const Slot = ({ element, parents, paddingLeft, ...rest }: ISlotProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
@@ -42,8 +39,6 @@ export const Slot = ({ element, parents, paddingLeft, ...rest }: ISlotProps) => 
 
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
     />
   );
 
@@ -68,9 +63,6 @@ export const Slot = ({ element, parents, paddingLeft, ...rest }: ISlotProps) => 
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
-      onSelectBar={rest.onSelectBar}
     />
   );
 }

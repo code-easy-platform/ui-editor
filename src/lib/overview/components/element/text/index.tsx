@@ -18,9 +18,6 @@ interface ITextProps {
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'text'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'text'>, htmlElement: HTMLElement | null) => void;
 }
 export const Text = ({ element, parents, paddingLeft, ...rest }: ITextProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
@@ -41,9 +38,6 @@ export const Text = ({ element, parents, paddingLeft, ...rest }: ITextProps) => 
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
-      onSelectBar={rest.onSelectBar}
     />
   );
 }

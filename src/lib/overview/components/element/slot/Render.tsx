@@ -22,10 +22,8 @@ interface IRenderProps {
 
   onMouseLeave: (event: MouseEvent) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'slot-content'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop, onHoverBar }: IRenderProps) => {
+export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop }: IRenderProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const name = useObserverValue(element.name);
@@ -35,14 +33,10 @@ export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeav
   const { hoveredId } = useHoverBar();
 
 
-  useMatchEffect({
+  const isHovered = useMatchEffect({
     value: hoveredId,
     matchWidthValue: currentSlotContent?.id,
-    effect() {
-      if (!currentSlotContent) return;
-      onHoverBar(element, elementRef.current);
-    },
-  }, [hoveredId, currentSlotContent?.id, element]);
+  }, [hoveredId, currentSlotContent]);
 
 
   const droppableId = useRef({ id: uuid() });
@@ -59,19 +53,22 @@ export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeav
     <>
       <div
         ref={elementRef}
-        style={{ paddingLeft: parents.length * 8 }}
-
         onMouseLeave={onMouseLeave}
         onMouseOver={e => currentSlotContent ? onMouseOver(e, currentSlotContent, elementRef.current) : undefined}
       >
-        <Item label={name} paddingLeft={paddingLeft} />
+        <Item
+          label={name}
+          select={false}
+          hover={isHovered}
+          paddingLeft={paddingLeft + 8}
+        />
       </div>
 
       {currentSlotContent && content.length > 0 && content.map((contentItem) => (
         <Element
           key={contentItem.id.value}
           element={contentItem}
-          paddingLeft={paddingLeft + 8}
+          paddingLeft={paddingLeft + 16}
           parents={[...parents, currentSlotContent]}
         />
       ))}

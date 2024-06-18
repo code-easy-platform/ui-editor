@@ -12,8 +12,6 @@ interface ISlotProps {
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'slot'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'slot' | 'slot-content'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
 export declare const Slot: ({ element, parents, paddingLeft, ...rest }: ISlotProps) => import("react/jsx-runtime").JSX.Element;
 export {};

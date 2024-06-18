@@ -7,8 +7,6 @@ interface IBreakLoopEditProps {
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const BreakLoopEdit: ({ element, paddingLeft, onHoverBar, onSelectBar, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => import("react/jsx-runtime").JSX.Element;
+export declare const BreakLoopEdit: ({ element, paddingLeft, onMouseLeave, onMouseOver, onSelect }: IBreakLoopEditProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -11,7 +11,6 @@ interface IRenderProps {
     onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
     onMouseLeave: (event: MouseEvent) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'slot-content'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'slot'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Render: ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop, onHoverBar }: IRenderProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Render: ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop }: IRenderProps) => import("react/jsx-runtime").JSX.Element;
 export {};

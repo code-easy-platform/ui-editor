@@ -19,9 +19,6 @@ interface IHtmlProps {
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'html'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
 }
 export const Html = ({ element, parents, paddingLeft, ...rest }: IHtmlProps) => {
   const hasViewOnly = useHasViewOnly(element, parents);
@@ -48,9 +45,6 @@ export const Html = ({ element, parents, paddingLeft, ...rest }: IHtmlProps) => 
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
-      onSelectBar={rest.onSelectBar}
     />
   );
 }

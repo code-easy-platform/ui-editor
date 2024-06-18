@@ -159,9 +159,6 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
-
-      onHoverBar={() => null}
-      onSelectBar={() => null}
     />
   );
 
@@ -178,9 +175,6 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
-
-      onHoverBar={() => null}
-      onSelectBar={() => null}
     />
   );
 
@@ -197,9 +191,6 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
-
-      onHoverBar={() => null}
-      onSelectBar={() => null}
     />
   );
 
@@ -216,9 +207,6 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
-
-      onHoverBar={() => null}
-      onSelectBar={() => null}
     />
   );
 };

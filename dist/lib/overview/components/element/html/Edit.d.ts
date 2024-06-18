@@ -12,8 +12,6 @@ interface IEditProps {
     onMouseLeave: (event: MouseEvent) => void;
     onSelect: (event: MouseEvent, element: TElement<'html'>) => void;
     onMouseOver: (event: MouseEvent, element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-    onHoverBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
-    onSelectBar: (element: TElement<'html'>, htmlElement: HTMLElement | null) => void;
 }
-export declare const Edit: ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop, onHoverBar, onSelectBar }: IEditProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Edit: ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onSelect, onDragLeave, onDragOver, onDrop }: IEditProps) => import("react/jsx-runtime").JSX.Element;
 export {};

@@ -22,9 +22,6 @@ interface IComponentProps {
   onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
   onDoubleClick: (event: React.MouseEvent, element: TElement<'component'>) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-
-  onHoverBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
-  onSelectBar: (element: TElement<'component'>, htmlElement: HTMLElement | null) => void;
 }
 export const Component = ({ element, parents, paddingLeft, ...rest }: IComponentProps) => {
   const hasInfinityLoop = useHasInfinityLoop(element, parents);
@@ -42,9 +39,6 @@ export const Component = ({ element, parents, paddingLeft, ...rest }: IComponent
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
-      onSelectBar={rest.onSelectBar}
     />;
   }
 
@@ -71,9 +65,6 @@ export const Component = ({ element, parents, paddingLeft, ...rest }: IComponent
       onSelect={rest.onSelect}
       onMouseOver={rest.onMouseOver}
       onMouseLeave={rest.onMouseLeave}
-
-      onHoverBar={rest.onHoverBar}
-      onSelectBar={rest.onSelectBar}
     />
   );
 }
