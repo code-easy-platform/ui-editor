@@ -1,4 +1,4 @@
-import { MouseEvent, RefObject, useRef } from 'react';
+import { MouseEvent, RefObject, useRef, useState } from 'react';
 import { TMonitor, useDrop } from 'react-use-drag-and-drop';
 import { useObserverValue } from 'react-observing';
 
@@ -17,8 +17,8 @@ interface IRenderProps {
   parents: TParentElement[];
 
   onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => null;
+  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'slot-content'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => 'start' | 'end' | 'center' | null;
 
   onMouseLeave: (event: MouseEvent) => void;
   onMouseOver: (event: MouseEvent, element: TElement<'slot-content'>, htmlElement: HTMLElement | null) => void;
@@ -26,6 +26,7 @@ interface IRenderProps {
 export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave, onDragLeave, onDragOver, onDrop }: IRenderProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
+  const [dropPositionAt, setDropPositionAt] = useState<'start' | 'end' | 'center' | null>(null);
   const name = useObserverValue(element.name);
 
 
@@ -40,12 +41,12 @@ export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeav
 
 
   const droppableId = useRef({ id: uuid() });
-  useDrop({
+  const [{ isDraggingOver }] = useDrop({
     element: elementRef,
     id: droppableId.current.id,
-    drop: (data, monitor) => currentSlotContent ? onDrop(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
-    hover: (data, monitor) => currentSlotContent ? onDragOver(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
-    leave: (data, monitor) => currentSlotContent ? onDragLeave(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : undefined,
+    drop: (data, monitor) => currentSlotContent ? onDrop(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : null,
+    hover: (data, monitor) => setDropPositionAt(currentSlotContent ? onDragOver(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : null),
+    leave: (data, monitor) => setDropPositionAt(currentSlotContent ? onDragLeave(data, monitor, currentSlotContent, parents, elementRef, droppableId.current.id) : null),
   }, [currentSlotContent, parents, onDrop, onDragOver, onDragLeave]);
 
 
@@ -59,7 +60,10 @@ export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeav
         <Item
           label={name}
           select={false}
+          dragging={false}
           hover={isHovered}
+          dragOver={isDraggingOver}
+          insertBarAt={dropPositionAt}
           paddingLeft={paddingLeft + 8}
         />
       </div>

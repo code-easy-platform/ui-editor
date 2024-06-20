@@ -54,11 +54,22 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
   }, [hover]);
 
 
-  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, element: TElement<"html" | "slot" | "component" | "text" | "slot-content">, parents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
-    const canDrop = getCanDrop(monitor, element, parents, elementRef, droppableId);
-    if (!canDrop) return hover(undefined);
+  const handleDragOver = useCallback((_: TDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "text" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string): 'start' | 'end' | 'center' | null => {
+    const canDrop = getCanDrop(monitor, elementDropTarget, elementDropTargetParents, elementRef, droppableId);
+    if (!canDrop) {
+      hover(undefined);
+      return null;
+    }
+
+    const dropPosition = getDropPosition(monitor, elementDropTarget, elementRef);
+    if (!dropPosition) {
+      hover(undefined);
+      return null;
+    }
 
     hover(element.id.value);
+
+    return dropPosition;
   }, [hover]);
 
   const handleDrop = useCallback((data: TDraggableElement | TExternalDraggableElement, monitor: TMonitor, elementDropTarget: TElement<"html" | "slot" | "component" | "text" | "slot-content">, elementDropTargetParents: TParentElement[], elementRef: React.RefObject<HTMLElement>, droppableId: string) => {
@@ -68,7 +79,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
     const dropPosition = getDropPosition(monitor, elementDropTarget, elementRef);
     if (!dropPosition) return;
 
-    const isDropToParent = dropPosition.isOverStart || dropPosition.isOverEnd;
+    const hasChildren = ['html', 'slot-content'].includes(elementDropTarget.type.value) && (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || 0 > 0
+    const isDropToParent = dropPosition === 'start' || (dropPosition === 'end' && !hasChildren);
     if (!isDropToParent && elementDropTarget.type.value === 'component') return;
 
 
@@ -84,19 +96,19 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
           from: { position: -1, element: null },
           to: {
             element: parent ? parent : 'root',
-            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+            position: dropPosition === 'start' ? indexToAdd : indexToAdd + 1,
           }
         });
       } else {
-        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
+        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || 0;
 
         onDrop({
           element: droppedData.id,
           from: { position: -1, element: null },
           to: {
+            position: dropPosition === 'end' ? 0 : indexToAdd,
             element: elementDropTarget as TElement<'html' | 'slot-content'>,
-            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
-          }
+          },
         });
       }
     } else {
@@ -121,11 +133,11 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
           },
           to: {
             element: parent ? parent : 'root',
-            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
+            position: dropPosition === 'start' ? indexToAdd : indexToAdd + 1,
           }
         });
       } else {
-        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || -1;
+        const indexToAdd = (elementDropTarget as TElement<'html' | 'slot-content'>).children.value?.length || 0;
 
         onDrop({
           element: droppedData.element,
@@ -134,8 +146,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
             element: elementFrom as TElement<'html' | 'slot-content'>,
           },
           to: {
+            position: hasChildren ? 0 : indexToAdd,
             element: elementDropTarget as TElement<'html' | 'slot-content'>,
-            position: dropPosition.isOverStart ? indexToAdd : indexToAdd + 1,
           }
         });
       }
@@ -152,8 +164,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       element={element as TElement<'component'>}
 
       onDrop={handleDrop}
+      onDragLeave={() => null}
       onDragOver={handleDragOver}
-      onDragLeave={() => undefined}
       onDoubleClick={handleDoubleClick}
 
       onSelect={handleSelect}
@@ -169,8 +181,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       element={element as TElement<'slot'>}
 
       onDrop={handleDrop}
+      onDragLeave={() => null}
       onDragOver={handleDragOver}
-      onDragLeave={() => undefined}
 
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
@@ -185,8 +197,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       element={element as TElement<'text'>}
 
       onDrop={handleDrop}
+      onDragLeave={() => null}
       onDragOver={handleDragOver}
-      onDragLeave={() => undefined}
 
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}
@@ -201,8 +213,8 @@ export const Element = ({ element, parents, paddingLeft }: IElementProps) => {
       element={element as TElement<'html'>}
 
       onDrop={handleDrop}
+      onDragLeave={() => null}
       onDragOver={handleDragOver}
-      onDragLeave={() => undefined}
 
       onSelect={handleSelect}
       onMouseOver={handleMouseOver}

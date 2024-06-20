@@ -1,4 +1,4 @@
-import { MouseEvent, RefObject, useEffect, useMemo, useRef } from 'react';
+import { MouseEvent, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { useObserverValue, useSelectorValue } from 'react-observing';
 import { TMonitor, useDrag, useDrop } from 'react-use-drag-and-drop';
 
@@ -18,8 +18,8 @@ interface IEditProps {
   parents: TParentElement[];
 
   onDrop: (data: TDraggableElement, monitor: TMonitor, element: TElement<'component'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'component'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
-  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'component'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => void;
+  onDragLeave: (data: TDraggableElement, monitor: TMonitor, element: TElement<'component'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => null;
+  onDragOver: (data: TDraggableElement, monitor: TMonitor, element: TElement<'component'>, parents: TParentElement[], elementRef: RefObject<HTMLElement>, droppableId: string) => 'start' | 'end' | 'center' | null;
 
   onMouseLeave: (event: MouseEvent) => void;
   onSelect: (event: MouseEvent, element: TElement<'component'>) => void;
@@ -35,6 +35,7 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   const { hoveredId } = useHoverBar();
 
 
+  const [dropPositionAt, setDropPositionAt] = useState<'start' | 'end' | 'center' | null>(null);
   const name = useObserverValue(element.name);
   const id = useObserverValue(element.id);
   const children = useSelectorValue(({ get }) => {
@@ -85,12 +86,12 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   }, [preview, name]);
 
   const droppableId = useRef({ id: uuid() });
-  useDrop({
+  const [{ isDraggingOver }] = useDrop({
     element: elementRef,
     id: droppableId.current.id,
     drop: (data, monitor) => onDrop(data, monitor, element, parents, elementRef, droppableId.current.id),
-    hover: (data, monitor) => onDragOver(data, monitor, element, parents, elementRef, droppableId.current.id),
-    leave: (data, monitor) => onDragLeave(data, monitor, element, parents, elementRef, droppableId.current.id),
+    hover: (data, monitor) => setDropPositionAt(onDragOver(data, monitor, element, parents, elementRef, droppableId.current.id)),
+    leave: (data, monitor) => setDropPositionAt(onDragLeave(data, monitor, element, parents, elementRef, droppableId.current.id)),
   }, [element, parents, onDrop, onDragOver, onDragLeave]);
 
 
@@ -110,7 +111,10 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
           label={name}
           hover={isHovered}
           select={isSelected}
+          dragging={isDragging}
+          dragOver={isDraggingOver}
           paddingLeft={paddingLeft}
+          insertBarAt={dropPositionAt}
         />
       </div>
 
