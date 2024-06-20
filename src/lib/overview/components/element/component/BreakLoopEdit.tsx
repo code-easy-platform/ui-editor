@@ -46,7 +46,10 @@ export const BreakLoopEdit = ({ element, paddingLeft, onMouseLeave, onMouseOver,
       onMouseOver={e => onMouseOver(e, element, elementRef.current)}
     >
       <Item
+        dragOver={false}
+        dragging={false}
         hover={isHovered}
+        insertBarAt={null}
         select={isSelected}
         paddingLeft={paddingLeft}
         label={name + '(Infinity loop)'}
