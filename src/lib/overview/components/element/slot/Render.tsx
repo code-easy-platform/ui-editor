@@ -37,7 +37,7 @@ export const Render = ({ element, parents, paddingLeft, onMouseOver, onMouseLeav
   const isHovered = useMatchEffect({
     value: hoveredId,
     matchWidthValue: currentSlotContent?.id,
-  }, [hoveredId, currentSlotContent]);
+  });
 
 
   const droppableId = useRef({ id: uuid() });

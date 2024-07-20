@@ -1,27 +1,44 @@
-import { IObservable, useSelectorValue } from 'react-observing'
-import { useEffect } from 'react';
+import { IObservable } from 'react-observing'
+import { useCallback, useEffect, useState } from 'react';
 
 
 interface IUseMatchEffectProps {
-  effect?: () => void;
   value?: IObservable<string | undefined>;
   matchWidthValue?: IObservable<string | undefined>;
 }
-export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchWitchValueObservable, effect }: IUseMatchEffectProps, deps: readonly any[]) => {
-  const isHovered = useSelectorValue(({ get }) => {
-    if (!valueObservable) return false;
-    const value = get(valueObservable);
-    
-    if (!matchWitchValueObservable) return false;
-    const matchWitchValue = get(matchWitchValueObservable);
+export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchWitchValueObservable }: IUseMatchEffectProps) => {
+  const [match, setMatch] = useState(false);
 
-    return value === matchWitchValue;
-  }, [...deps]);
 
+  const handleSet = useCallback((value: boolean) => {
+    setMatch(old => old === value ? old : value);
+  }, []);
 
   useEffect(() => {
-    if (isHovered) effect?.();
-  }, [isHovered]);
+    if (valueObservable?.value === undefined) {
+      handleSet(false);
+      return;
+    }
+    if (matchWitchValueObservable?.value === undefined) {
+      handleSet(false);
+      return;
+    }
 
-  return isHovered;
+    handleSet(valueObservable.value === matchWitchValueObservable.value);
+  }, [handleSet, valueObservable?.value, matchWitchValueObservable?.value]);
+
+  useEffect(() => {
+    if (valueObservable?.value === undefined) return;
+    if (matchWitchValueObservable?.value === undefined) return;
+
+    const valueSubscription = valueObservable.subscribe(value => handleSet(value === matchWitchValueObservable.value));
+    const matchWitchValueSubscription = matchWitchValueObservable.subscribe(value => handleSet(value === valueObservable.value));
+
+    return () => {
+      valueSubscription.unsubscribe();
+      matchWitchValueSubscription.unsubscribe();
+    };
+  }, [handleSet, valueObservable, matchWitchValueObservable]);
+
+  return match;
 };

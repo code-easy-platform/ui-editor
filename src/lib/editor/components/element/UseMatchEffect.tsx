@@ -1,5 +1,5 @@
-import { IObservable, useSelectorValue } from 'react-observing'
-import { useEffect } from 'react';
+import { IObservable, observe } from 'react-observing'
+import { useCallback, useEffect, useRef } from 'react';
 
 
 interface IUseMatchEffectProps {
@@ -8,18 +8,49 @@ interface IUseMatchEffectProps {
   matchWidthValue?: IObservable<string | undefined>;
 }
 export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchWitchValueObservable, effect }: IUseMatchEffectProps, deps: readonly any[]) => {
-  const isHovered = useSelectorValue(({ get }) => {
-    if (!valueObservable) return false;
-    const value = get(valueObservable);
-    
-    if (!matchWitchValueObservable) return false;
-    const matchWitchValue = get(matchWitchValueObservable);
+  const observableMatch = useRef(observe(false));
 
-    return value === matchWitchValue;
-  }, [...deps]);
+
+  const handleSet = useCallback((value: boolean) => {
+    if (observableMatch.current.value !== value) {
+      observableMatch.current.value = value;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (valueObservable?.value === undefined) {
+      handleSet(false);
+      return;
+    }
+    if (matchWitchValueObservable?.value === undefined) {
+      handleSet(false);
+      return;
+    }
+
+    handleSet(valueObservable.value === matchWitchValueObservable.value);
+  }, [handleSet, valueObservable?.value, matchWitchValueObservable?.value]);
+
+  useEffect(() => {
+    if (valueObservable?.value === undefined) return;
+    if (matchWitchValueObservable?.value === undefined) return;
+
+    const valueSubscription = valueObservable.subscribe(value => handleSet(value === matchWitchValueObservable.value));
+    const matchWitchValueSubscription = matchWitchValueObservable.subscribe(value => handleSet(value === valueObservable.value));
+
+    return () => {
+      valueSubscription.unsubscribe();
+      matchWitchValueSubscription.unsubscribe();
+    };
+  }, [handleSet, valueObservable, matchWitchValueObservable]);
 
 
   useEffect(() => {
-    if (isHovered) effect();
-  }, [isHovered]);
+    if (observableMatch.current.value) effect();
+
+    const subscription = observableMatch.current.subscribe(value => {
+      if (value) effect();
+    });
+
+    return () => subscription.unsubscribe();
+  }, [...deps]);
 };

@@ -39,12 +39,12 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   const isHovered = useMatchEffect({
     value: hoveredId,
     matchWidthValue: element?.id,
-  }, [hoveredId, element]);
+  });
 
   const isSelected = useMatchEffect({
     value: selectedId,
     matchWidthValue: element?.id,
-  }, [selectedId, element]);
+  });
 
 
   const { isDragging, preview } = useDrag<TDraggableElement>({
