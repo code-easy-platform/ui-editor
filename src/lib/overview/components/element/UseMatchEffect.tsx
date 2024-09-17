@@ -14,12 +14,13 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
     setMatch(old => old === value ? old : value);
   }, []);
 
+
   useEffect(() => {
-    if (valueObservable?.value === undefined) {
+    if (valueObservable === undefined) {
       handleSet(false);
       return;
     }
-    if (matchWitchValueObservable?.value === undefined) {
+    if (matchWitchValueObservable === undefined) {
       handleSet(false);
       return;
     }
@@ -28,8 +29,8 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
   }, [handleSet, valueObservable?.value, matchWitchValueObservable?.value]);
 
   useEffect(() => {
-    if (valueObservable?.value === undefined) return;
-    if (matchWitchValueObservable?.value === undefined) return;
+    if (valueObservable === undefined) return;
+    if (matchWitchValueObservable === undefined) return;
 
     const valueSubscription = valueObservable.subscribe(value => handleSet(value === matchWitchValueObservable.value));
     const matchWitchValueSubscription = matchWitchValueObservable.subscribe(value => handleSet(value === valueObservable.value));
@@ -39,6 +40,7 @@ export const useMatchEffect = ({ value: valueObservable, matchWidthValue: matchW
       matchWitchValueSubscription.unsubscribe();
     };
   }, [handleSet, valueObservable, matchWitchValueObservable]);
+
 
   return match;
 };
