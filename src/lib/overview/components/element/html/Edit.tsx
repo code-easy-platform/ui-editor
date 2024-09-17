@@ -66,9 +66,9 @@ export const Edit = ({ element, parents, paddingLeft, onMouseOver, onMouseLeave,
   const { isDragging, preview } = useDrag<TDraggableElement>({
     id,
     element: elementRef,
-    data: { element, parents, },
-    start: () => { onDragStart() },
     end: () => onDragEnd(),
+    start: () => onDragStart(),
+    data: { element, parents, },
   }, [id, element, parents, onDragStart, onDragEnd]);
   useEffect(() => {
     preview(
